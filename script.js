@@ -124,7 +124,7 @@ const initMobileNav = () => {
             // Close mobile menu
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
-            
+
             // Reset body scroll
             const savedScrollY = document.body.getAttribute('data-scroll-position') || 0;
             document.body.style.overflow = '';
@@ -133,7 +133,7 @@ const initMobileNav = () => {
             document.body.style.top = '';
             document.body.removeAttribute('data-scroll-position');
             window.scrollTo(0, parseInt(savedScrollY));
-            
+
             // Reset hamburger bars
             const bars = navToggle.querySelectorAll('.bar');
             bars.forEach(bar => {
@@ -164,36 +164,41 @@ const initSmoothScroll = () => {
     });
 };
 
-// Optimized navbar background change - Always sticky
+// Enhanced navbar - Always sticky and visible
 const initNavbarScroll = () => {
     const navbar = document.querySelector('.navbar');
     if (!navbar) return;
 
-    // Ensure navbar is always visible and properly styled
-    navbar.style.position = 'fixed';
-    navbar.style.top = '0';
-    navbar.style.left = '0';
-    navbar.style.right = '0';
-    navbar.style.width = '100%';
-    navbar.style.zIndex = '10000';
-    navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-    navbar.style.backdropFilter = 'blur(15px)';
-    navbar.style.webkitBackdropFilter = 'blur(15px)';
-    navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-
-    const updateNavbar = throttle(() => {
-        // Always keep navbar visible and styled consistently
+    // Force navbar to stay fixed and visible always
+    const enforceNavbarPosition = () => {
         navbar.style.position = 'fixed';
         navbar.style.top = '0';
+        navbar.style.left = '0';
+        navbar.style.right = '0';
+        navbar.style.width = '100%';
+        navbar.style.zIndex = '10000';
         navbar.style.background = 'rgba(255, 255, 255, 0.98)';
         navbar.style.backdropFilter = 'blur(15px)';
         navbar.style.webkitBackdropFilter = 'blur(15px)';
         navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-        navbar.style.zIndex = '10000';
-    }, 16);
+        navbar.style.transform = 'translateY(0)';
+        navbar.style.opacity = '1';
+        navbar.style.visibility = 'visible';
+        navbar.style.display = 'block';
+    };
+
+    // Apply immediately and continuously
+    enforceNavbarPosition();
+
+    // Use multiple event listeners to ensure navbar stays visible
+    const updateNavbar = throttle(enforceNavbarPosition, 16);
 
     window.addEventListener('scroll', updateNavbar, { passive: true });
     window.addEventListener('resize', updateNavbar, { passive: true });
+    window.addEventListener('orientationchange', updateNavbar, { passive: true });
+
+    // Additional safety check every 500ms
+    setInterval(enforceNavbarPosition, 500);
 };
 
 // Optimized floating elements animation
