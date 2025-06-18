@@ -1,0 +1,707 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="FAL.png">
+    <title>Admin Dashboard - DropTechify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+
+        .menu-item i {
+            margin-right: 1rem;
+            width: 20px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 2rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-header h1 {
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .content-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Overview */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Forms */
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-card h3 {
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Data Tables */
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .table-content {
+            padding: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Toast Messages */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 1rem 1.5rem;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-shield-alt"></i> Admin Panel</h2>
+                <p>DropTechify Management</p>
+            </div>
+            
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="menu-item" data-section="projects">
+                    <i class="fas fa-briefcase"></i> Manage Projects
+                </a>
+                <a href="#" class="menu-item" data-section="reviews">
+                    <i class="fas fa-star"></i> Manage Reviews
+                </a>
+                <a href="#" class="menu-item" data-section="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+            
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="page-title">Dashboard Overview</h1>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section class="content-section active" id="dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-projects">0</div>
+                        <div class="stat-label">Total Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-reviews">0</div>
+                        <div class="stat-label">Client Reviews</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Recent Activity</h3>
+                    </div>
+                    <div class="table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Dec 15, 2024</td>
+                                    <td>Project Added</td>
+                                    <td>Email Scraper Tool</td>
+                                    <td><span style="color: #28a745;">✅ Published</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 14, 2024</td>
+                                    <td>Review Added</td>
+                                    <td>5-star review from Sarah Johnson</td>
+                                    <td><span style="color: #28a745;">✅ Published</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 13, 2024</td>
+                                    <td>Project Updated</td>
+                                    <td>WhatsApp Bot images updated</td>
+                                    <td><span style="color: #28a745;">✅ Published</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section class="content-section" id="projects-section">
+                <div class="form-card">
+                    <h3><i class="fas fa-plus"></i> Add New Project</h3>
+                    <form id="project-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="project-title">Project Title</label>
+                                <input type="text" id="project-title" name="title" required placeholder="Enter project title">
+                            </div>
+                            <div class="form-group">
+                                <label for="project-category">Category</label>
+                                <select id="project-category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="python">Python Development</option>
+                                    <option value="web-scraping">Web Scraping</option>
+                                    <option value="bot">Bot Development</option>
+                                    <option value="web-dev">Web Development</option>
+                                    <option value="automation">Automation</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="project-duration">Duration</label>
+                                <input type="text" id="project-duration" name="duration" placeholder="e.g., 2 weeks">
+                            </div>
+                            <div class="form-group">
+                                <label for="project-rating">Rating</label>
+                                <select id="project-rating" name="rating">
+                                    <option value="5">⭐⭐⭐⭐⭐ (5.0)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4.0)</option>
+                                    <option value="3">⭐⭐⭐ (3.0)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="project-description">Project Description</label>
+                            <textarea id="project-description" name="description" required placeholder="Describe the project in detail..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="project-tech">Technologies Used (comma separated)</label>
+                            <input type="text" id="project-tech" name="technologies" placeholder="Python, Flask, Selenium, etc.">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="project-image">Project Image URL</label>
+                            <input type="url" id="project-image" name="image" placeholder="https://example.com/image.jpg">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Add Project
+                        </button>
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Existing Projects</h3>
+                    </div>
+                    <div class="table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Rating</th>
+                                    <th>Duration</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projects-table-body">
+                                <tr>
+                                    <td>Email Scraper Tool</td>
+                                    <td>Web Scraping</td>
+                                    <td>⭐⭐⭐⭐⭐</td>
+                                    <td>2 weeks</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>WhatsApp Bot</td>
+                                    <td>Bot Development</td>
+                                    <td>⭐⭐⭐⭐⭐</td>
+                                    <td>3 weeks</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reviews Section -->
+            <section class="content-section" id="reviews-section">
+                <div class="form-card">
+                    <h3><i class="fas fa-plus"></i> Add New Review</h3>
+                    <form id="review-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reviewer-name">Reviewer Name</label>
+                                <input type="text" id="reviewer-name" name="name" required placeholder="Client name">
+                            </div>
+                            <div class="form-group">
+                                <label for="reviewer-rating">Rating</label>
+                                <select id="reviewer-rating" name="rating" required>
+                                    <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                                    <option value="3">⭐⭐⭐ (3 Stars)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reviewer-position">Position</label>
+                                <input type="text" id="reviewer-position" name="position" placeholder="e.g., CEO, Marketing Director">
+                            </div>
+                            <div class="form-group">
+                                <label for="reviewer-company">Company</label>
+                                <input type="text" id="reviewer-company" name="company" placeholder="Company name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="review-text">Review Text</label>
+                            <textarea id="review-text" name="text" required placeholder="Enter the review text..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Add Review
+                        </button>
+                    </form>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Existing Reviews</h3>
+                    </div>
+                    <div class="table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Reviewer</th>
+                                    <th>Company</th>
+                                    <th>Rating</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviews-table-body">
+                                <tr>
+                                    <td>Sarah Johnson</td>
+                                    <td>GrowthLab Marketing</td>
+                                    <td>⭐⭐⭐⭐⭐</td>
+                                    <td>Dec 15, 2024</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-sm btn-secondary">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="content-section" id="settings-section">
+                <div class="form-card">
+                    <h3><i class="fas fa-cog"></i> Site Settings</h3>
+                    <div class="form-group">
+                        <label for="site-title">Site Title</label>
+                        <input type="text" id="site-title" value="DropTechify - Empowering Digital Solutions">
+                    </div>
+                    <div class="form-group">
+                        <label for="site-description">Site Description</label>
+                        <textarea id="site-description">Professional automation, scraping, and web development services for global businesses.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Contact Email</label>
+                        <input type="email" id="contact-email" value="droptechify@gmail.com">
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

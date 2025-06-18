@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="FAL.png">
+    <title id="project-title">Project Details - Droptechify</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><h2>Droptechify</h2></a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="portfolio.html" class="nav-link">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#book-now" class="nav-link btn btn-book-nav">Book Now</a>
+                </li>
+            </ul>
+            <div class="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Detail Section -->
+    <section class="project-detail">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb" data-aos="fade-up">
+                <a href="index.html">Home</a>
+                <span class="separator">/</span>
+                <a href="portfolio.html">Portfolio</a>
+                <span class="separator">/</span>
+                <span id="breadcrumb-title">Project Details</span>
+            </div>
+
+            <!-- Project Header -->
+            <div class="project-header" data-aos="fade-up">
+                <div class="project-header-content">
+                    <h1 id="detail-project-title">Project Title</h1>
+                    <div class="project-meta">
+                        <div class="project-rating">
+                            <span class="stars" id="detail-project-rating">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-text" id="detail-rating-text">(5.0)</span>
+                        </div>
+                        <div class="project-info">
+                            <span class="project-duration" id="detail-project-duration">
+                                <i class="fas fa-clock"></i> Duration
+                            </span>
+                            <span class="project-category" id="detail-project-category">Category</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-actions">
+                    <a href="index.html#book-now" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Start Similar Project
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project Gallery -->
+            <div class="project-gallery" data-aos="fade-up">
+                <div class="main-image">
+                    <img id="main-project-image" src="" alt="Project Image">
+                </div>
+                <div class="gallery-thumbnails" id="image-thumbnails">
+                    <!-- Thumbnails will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Project Content -->
+            <div class="project-content-section">
+                <div class="project-main-content">
+                    <!-- Project Overview -->
+                    <div class="content-block" data-aos="fade-up">
+                        <h2>Project Overview</h2>
+                        <div id="project-overview">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Key Features -->
+                    <div class="content-block" data-aos="fade-up">
+                        <h2>Key Features</h2>
+                        <ul id="project-features" class="feature-list">
+                            <!-- Features will be populated by JavaScript -->
+                        </ul>
+                    </div>
+
+                    <!-- Technology Stack -->
+                    <div class="content-block" data-aos="fade-up">
+                        <h2>Technology Stack</h2>
+                        <div class="tech-stack-detail" id="tech-stack-detail">
+                            <!-- Tech stack will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Client Feedback -->
+                    <div class="content-block" data-aos="fade-up" id="client-feedback-section">
+                        <h2>Client Feedback</h2>
+                        <div class="client-testimonial" id="client-testimonial">
+                            <!-- Testimonial will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Project Results -->
+                    <div class="content-block" data-aos="fade-up">
+                        <h2>Project Results</h2>
+                        <div id="project-results">
+                            <!-- Results will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Sidebar -->
+                <div class="project-sidebar">
+                    <div class="sidebar-block" data-aos="fade-up">
+                        <h3>Project Details</h3>
+                        <div class="detail-item">
+                            <strong>Client:</strong>
+                            <span id="detail-client">Confidential</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Industry:</strong>
+                            <span id="detail-industry">Technology</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Timeline:</strong>
+                            <span id="detail-timeline">Timeline</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Team Size:</strong>
+                            <span id="detail-team">1 Developer</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-block" data-aos="fade-up">
+                        <h3>Technologies Used</h3>
+                        <div class="tech-list" id="sidebar-tech-list">
+                            <!-- Tech list will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="sidebar-block cta-block" data-aos="fade-up">
+                        <h3>Interested in Similar Project?</h3>
+                        <p>Get a custom quote for your project requirements.</p>
+                        <a href="index.html#book-now" class="btn btn-primary btn-full">
+                            <i class="fas fa-paper-plane"></i> Get Quote
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Navigation -->
+            <div class="project-navigation" data-aos="fade-up">
+                <button class="nav-btn prev-btn" id="prev-project" onclick="navigateProject('prev')">
+                    <div class="nav-btn-content">
+                        <i class="fas fa-chevron-left"></i>
+                        <div class="nav-text">
+                            <span class="nav-label">Previous Project</span>
+                            <span class="nav-title" id="prev-project-title">Project Title</span>
+                        </div>
+                    </div>
+                </button>
+                <a href="portfolio.html" class="btn btn-secondary">
+                    <i class="fas fa-grid"></i> All Projects
+                </a>
+                <button class="nav-btn next-btn" id="next-project" onclick="navigateProject('next')">
+                    <div class="nav-btn-content">
+                        <div class="nav-text">
+                            <span class="nav-label">Next Project</span>
+                            <span class="nav-title" id="next-project-title">Project Title</span>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Droptechify</h3>
+                    <p>Smart Automation. Smart Results.</p>
+                    <div class="social-links">
+                        <a href="https://www.upwork.com/freelancers/~017b30088039d8ddbc?mp_source=share" target="_blank" title="Upwork"><i class="fas fa-briefcase"></i></a>
+                        <a href="https://www.linkedin.com/in/abdul-kabeer-mughal-003902246" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://clutch.co/profile/droptechify" target="_blank" title="Clutch"><i class="fas fa-star"></i></a>
+                        <a href="https://www.facebook.com/share/19uKfqsFCX/" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="https://wa.me/923030273718" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:droptechify@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="index.html#services">Python Development</a></li>
+                        <li><a href="index.html#services">Web Scraping</a></li>
+                        <li><a href="index.html#services">Bot Development</a></li>
+                        <li><a href="index.html#services">Web Development</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Droptechify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="project-detail.js"></script>
+</body>
+</html>

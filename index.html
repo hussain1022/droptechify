@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+        <link rel="icon" type="image/png" href="FAL.png" />
+        <link rel="apple-touch-icon" href="FAL.png" />
+        <title>DropTechify - Empowering Digital Solutions</title>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <link
+            href="https://unpkg.com/aos@2.3.1/dist/aos.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>DropTechify</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#services" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item portfolio-dropdown">
+                        <a href="#" class="nav-link"
+                            >Portfolio <i class="fas fa-chevron-down"></i
+                        ></a>
+                        <div class="dropdown-menu">
+                            <a href="portfolio.html" class="dropdown-item">
+                                <i class="fas fa-briefcase"></i> Our Projects
+                            </a>
+                            <a href="reviews.html" class="dropdown-item">
+                                <i class="fas fa-star"></i> Client Reviews
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-container">
+                <div class="hero-content" data-aos="fade-up">
+                    <h1 class="hero-title">Empowering Digital Solutions</h1>
+                    <h2 class="hero-subtitle">DropTechify</h2>
+                    <p class="hero-description">
+                        We provide expert automation, scraping, and web services
+                        for global businesses. Transform your digital presence
+                        with cutting-edge technology solutions.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary">
+                            <i class="fas fa-percent"></i> Claim 30% OFF Now
+                        </a>
+                        <a href="portfolio.html" class="btn btn-secondary"
+                            >View Our Work</a
+                        >
+                    </div>
+                </div>
+                <div class="hero-animation" data-aos="fade-left">
+                    <div class="floating-elements">
+                        <div class="floating-element element-1">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="floating-element element-2">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="floating-element element-3">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="floating-element element-4">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="services">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Our Services</h2>
+                    <p>
+                        Comprehensive digital solutions tailored to your
+                        business needs
+                    </p>
+                </div>
+                <div class="services-grid">
+                    <div
+                        class="service-card"
+                        data-aos="fade-up"
+                        data-aos-delay="100"
+                    >
+                        <div class="service-icon">
+                            <i class="fas fa-spider"></i>
+                        </div>
+                        <h3>Web Scraping & Automation</h3>
+                        <p>
+                            Smart bots that extract, clean & organize data for
+                            you. Automate repetitive tasks and get the data you
+                            need efficiently.
+                        </p>
+                    </div>
+                    <div
+                        class="service-card"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                    >
+                        <div class="service-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Web Development</h3>
+                        <p>
+                            Custom-built responsive websites using modern stacks
+                            like Python, Django, Flask. From simple sites to
+                            complex web applications.
+                        </p>
+                    </div>
+                    <div
+                        class="service-card"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                    >
+                        <div class="service-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI & Chatbot Integration</h3>
+                        <p>
+                            Leverage AI for smarter communication and workflow
+                            automation. Build intelligent chatbots that enhance
+                            customer experience.
+                        </p>
+                    </div>
+                    <div
+                        class="service-card"
+                        data-aos="fade-up"
+                        data-aos-delay="400"
+                    >
+                        <div class="service-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Custom Software</h3>
+                        <p>
+                            Tailored desktop/web tools that scale with your
+                            business needs. From simple scripts to complex
+                            enterprise solutions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack Section -->
+        <section class="tech-stack-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Our Technology Stack</h2>
+                    <p>
+                        We leverage cutting-edge technologies to deliver robust
+                        and scalable solutions
+                    </p>
+                </div>
+                <div class="tech-categories">
+                    <div
+                        class="tech-category"
+                        data-aos="fade-up"
+                        data-aos-delay="100"
+                    >
+                        <div class="tech-category-header">
+                            <i class="fas fa-code"></i>
+                            <h3>Programming Languages</h3>
+                        </div>
+                        <div class="tech-icons">
+                            <div class="tech-item">
+                                <i class="fab fa-python"></i>
+                                <span>Python</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fab fa-js-square"></i>
+                                <span>JavaScript</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fab fa-html5"></i>
+                                <span>HTML5</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fab fa-css3-alt"></i>
+                                <span>CSS3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="tech-category"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                    >
+                        <div class="tech-category-header">
+                            <i class="fas fa-database"></i>
+                            <h3>Frameworks & Tools</h3>
+                        </div>
+                        <div class="tech-icons">
+                            <div class="tech-item">
+                                <i class="fas fa-globe"></i>
+                                <span>Flask</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-server"></i>
+                                <span>Django</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-robot"></i>
+                                <span>Selenium</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Pandas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="tech-category"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                    >
+                        <div class="tech-category-header">
+                            <i class="fas fa-cloud"></i>
+                            <h3>Cloud & DevOps</h3>
+                        </div>
+                        <div class="tech-icons">
+                            <div class="tech-item">
+                                <i class="fab fa-aws"></i>
+                                <span>AWS</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fab fa-docker"></i>
+                                <span>Docker</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fab fa-github"></i>
+                                <span>GitHub</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-fire"></i>
+                                <span>Firebase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="process-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Our Development Process</h2>
+                    <p>
+                        A proven methodology that ensures successful project
+                        delivery every time
+                    </p>
+                </div>
+                <div class="process-steps">
+                    <div
+                        class="process-step"
+                        data-aos="fade-up"
+                        data-aos-delay="100"
+                    >
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Discovery & Planning</h3>
+                            <p>
+                                We analyze your requirements and create a
+                                detailed project roadmap with clear milestones
+                                and deliverables.
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="process-step"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                    >
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Development & Testing</h3>
+                            <p>
+                                Our expert developers build your solution using
+                                best practices while maintaining constant
+                                communication.
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="process-step"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                    >
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Deployment & Support</h3>
+                            <p>
+                                We deploy your solution and provide ongoing
+                                support to ensure optimal performance and
+                                scalability.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>About DropTechify</h2>
+                    <p>Your trusted partner in digital transformation</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-text" data-aos="fade-right">
+                        <h3>Who We Are</h3>
+                        <p>
+                            DropTechify is a tech company focused on automation,
+                            scraping, AI, and digital solutions. We aim to
+                            deliver modern, efficient, and scalable systems for
+                            startups and enterprises worldwide.
+                        </p>
+
+                        <p>
+                            Our team specializes in creating custom solutions
+                            that streamline business processes, automate
+                            repetitive tasks, and harness the power of data to
+                            drive growth and efficiency.
+                        </p>
+
+                        <h3>Why Choose Us</h3>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="fas fa-check"></i> Expert-level
+                                technical skills across multiple technologies
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i> Quick delivery
+                                without compromising quality
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i> 24/7 support and
+                                maintenance
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i> Scalable solutions
+                                that grow with your business
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i> Competitive pricing
+                                with transparent costs
+                            </li>
+                        </ul>
+
+                        <div class="social-profiles">
+                            <h4>Connect With Us</h4>
+                            <div class="profile-links">
+                                <a
+                                    href="https://www.upwork.com/freelancers/~017b30088039d8ddbc?mp_source=share"
+                                    target="_blank"
+                                    class="profile-link upwork"
+                                >
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>Upwork Profile</span>
+                                </a>
+                                <a
+                                    href="https://www.linkedin.com/in/abdul-kabeer-mughal-003902246"
+                                    target="_blank"
+                                    class="profile-link linkedin"
+                                >
+                                    <i class="fab fa-linkedin"></i>
+                                    <span>LinkedIn</span>
+                                </a>
+                                <a
+                                    href="https://clutch.co/profile/droptechify"
+                                    target="_blank"
+                                    class="profile-link clutch"
+                                >
+                                    <i class="fas fa-star"></i>
+                                    <span>Clutch Reviews</span>
+                                </a>
+                                <a
+                                    href="https://www.facebook.com/share/19uKfqsFCX/"
+                                    target="_blank"
+                                    class="profile-link facebook"
+                                >
+                                    <i class="fab fa-facebook"></i>
+                                    <span>Facebook Page</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-stats" data-aos="fade-left">
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Projects Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">98%</div>
+                            <div class="stat-label">Client Satisfaction</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Support Available</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3+</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews" class="reviews-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>What Our Clients Say</h2>
+                    <p>Real testimonials from satisfied customers worldwide</p>
+                </div>
+                <div
+                    class="reviews-grid"
+                    id="homepage-reviews"
+                    data-aos="fade-up"
+                    data-aos-delay="200"
+                >
+                    <!-- Reviews will be loaded dynamically -->
+                </div>
+                <div
+                    class="text-center"
+                    style="margin-top: 3rem"
+                    data-aos="fade-up"
+                    data-aos-delay="400"
+                >
+                    <a href="reviews.html" class="btn btn-outline"
+                        >View All Reviews</a
+                    >
+                    <a
+                        href="#contact"
+                        class="btn btn-primary"
+                        style="margin-left: 1rem"
+                    >
+                        <i class="fas fa-percent"></i> Claim 30% OFF
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Get in Touch</h2>
+                    <p>Ready to start your project? Let's discuss your needs</p>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-info" data-aos="fade-right">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <p>droptechify@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>WhatsApp</h3>
+                                <p>+923030273718</p>
+                            </div>
+                        </div>
+                        <div class="contact-cta">
+                            <a
+                                href="https://wa.me/923030273718?text=Hi! I'd like to discuss a project with DropTechify. Can we schedule a consultation?"
+                                target="_blank"
+                                class="btn btn-whatsapp"
+                            >
+                                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                            </a>
+                            <a
+                                href="mailto:droptechify@gmail.com?subject=Project Inquiry&body=Hi DropTechify team, I'm interested in your services. Please contact me to discuss my project requirements."
+                                class="btn btn-secondary"
+                            >
+                                <i class="fas fa-envelope"></i> Send Email
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-form" data-aos="fade-left">
+                        <div class="form-header">
+                            <h3>Get a Free Quote</h3>
+                            <p>
+                                We provide customized pricing based on your
+                                budget & project scope. Get your personalized
+                                quote within 24 hours.
+                            </p>
+                        </div>
+                        <form
+                            id="contactForm"
+                            action="https://formspree.io/f/xdklqvap"
+                            method="POST"
+                        >
+                            <input
+                                type="hidden"
+                                name="_subject"
+                                value="New Project Inquiry from DropTechify Website"
+                            />
+                            <input
+                                type="hidden"
+                                name="_next"
+                                value="https://droptechify.com/thank-you"
+                            />
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Your Name"
+                                        required
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Your Email"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input
+                                    type="text"
+                                    name="company"
+                                    placeholder="Company Name (Optional)"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <select name="service" required>
+                                    <option value="">
+                                        Select Service Needed
+                                    </option>
+                                    <option value="web-scraping">
+                                        Web Scraping & Data Extraction
+                                    </option>
+                                    <option value="web-development">
+                                        Web Development
+                                    </option>
+                                    <option value="automation">
+                                        Process Automation
+                                    </option>
+                                    <option value="ai-chatbot">
+                                        AI & Chatbot Integration
+                                    </option>
+                                    <option value="custom-software">
+                                        Custom Software Development
+                                    </option>
+                                    <option value="consultation">
+                                        Technical Consultation
+                                    </option>
+                                    <option value="other">
+                                        Other (Please specify)
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <select name="budget" required>
+                                    <option value="">
+                                        Project Budget Range
+                                    </option>
+                                    <option value="under-500">
+                                        Under $500
+                                    </option>
+                                    <option value="500-1000">
+                                        $500 - $1,000
+                                    </option>
+                                    <option value="1000-2500">
+                                        $1,000 - $2,500
+                                    </option>
+                                    <option value="2500-5000">
+                                        $2,500 - $5,000
+                                    </option>
+                                    <option value="5000-plus">$5,000+</option>
+                                    <option value="discuss">
+                                        Let's Discuss
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea
+                                    name="message"
+                                    placeholder="Describe your project requirements, goals, and any specific features you need..."
+                                    rows="6"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-submit"
+                                >
+                                    <i class="fas fa-percent"></i> Get My 30%
+                                    Discount Quote
+                                </button>
+                                <a
+                                    href="https://wa.me/923030273718?text=Hi! I'd like to discuss a project with DropTechify. Can we schedule a consultation?"
+                                    target="_blank"
+                                    class="btn btn-whatsapp"
+                                >
+                                    <i class="fab fa-whatsapp"></i> Quick
+                                    WhatsApp Chat
+                                </a>
+                            </div>
+
+                            <div class="form-note">
+                                <small
+                                    >We'll respond within 4 hours | Free
+                                    consultation call included</small
+                                >
+                            </div>
+                        </form>
+
+                        <div
+                            id="form-success"
+                            class="form-message success"
+                            style="display: none"
+                        >
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Thank you for your inquiry!</h4>
+                            <p>
+                                We've received your project details and will get
+                                back to you within 4 hours with a custom
+                                proposal.
+                            </p>
+                        </div>
+
+                        <div
+                            id="form-error"
+                            class="form-message error"
+                            style="display: none"
+                        >
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h4>Oops! Something went wrong.</h4>
+                            <p>
+                                Please try again or contact us directly via
+                                WhatsApp.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>DropTechify</h3>
+                        <p>Empowering Digital Solutions</p>
+                        <div class="social-links">
+                            <a
+                                href="https://www.linkedin.com/in/abdul-kabeer-mughal-003902246"
+                                target="_blank"
+                                title="LinkedIn"
+                                ><i class="fab fa-linkedin"></i
+                            ></a>
+                            <a
+                                href="https://clutch.co/profile/droptechify"
+                                target="_blank"
+                                title="Clutch"
+                                ><i class="fas fa-star"></i
+                            ></a>
+                            <a
+                                href="https://www.facebook.com/share/19uKfqsFCX/"
+                                target="_blank"
+                                title="Facebook"
+                                ><i class="fab fa-facebook"></i
+                            ></a>
+                            <a
+                                href="https://www.upwork.com/freelancers/~017b30088039d8ddbc?mp_source=share"
+                                target="_blank"
+                                title="Upwork"
+                                ><i class="fas fa-briefcase"></i
+                            ></a>
+                            <a
+                                href="https://wa.me/923030273718"
+                                target="_blank"
+                                title="WhatsApp"
+                                ><i class="fab fa-whatsapp"></i
+                            ></a>
+                            <a href="mailto:droptechify@gmail.com" title="Email"
+                                ><i class="fas fa-envelope"></i
+                            ></a>
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#services">Services</a></li>
+                            <li><a href="portfolio.html">Portfolio</a></li>
+                            <li><a href="reviews.html">Reviews</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Services</h4>
+                        <ul>
+                            <li>Web Scraping & Automation</li>
+                            <li>Web Development</li>
+                            <li>AI & Chatbot Integration</li>
+                            <li>Custom Software Solutions</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 DropTechify. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Portfolio Modals -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal1')"
+                    >&times;</span
+                >
+                <div class="modal-project">
+                    <h2>Advanced Email Scraper Tool</h2>
+                    <div class="modal-gallery">
+                        <img
+                            src="https://via.placeholder.com/700x400/667eea/ffffff?text=Email+Scraper+Tool+Demo"
+                            alt="Email Scraper Interface"
+                        />
+                    </div>
+                    <div class="modal-details">
+                        <h3>Project Overview</h3>
+                        <p>
+                            A comprehensive email scraping solution that
+                            extracts emails from multiple sources including
+                            websites, Google, LinkedIn, and Hunter.io with
+                            advanced filtering and bulk processing capabilities.
+                        </p>
+
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li>
+                                Multi-source email extraction (Website, Google,
+                                LinkedIn, Hunter.io)
+                            </li>
+                            <li>
+                                Bulk upload processing with CSV/Excel support
+                            </li>
+                            <li>Personalized email detection and filtering</li>
+                            <li>Real-time progress tracking</li>
+                            <li>Export results in multiple formats</li>
+                            <li>Admin dashboard for management</li>
+                        </ul>
+
+                        <h3>Technologies Used</h3>
+                        <p>
+                            Python, Selenium, BeautifulSoup, Pandas, Flask,
+                            SQLite, HTML/CSS/JavaScript
+                        </p>
+
+                        <h3>Results</h3>
+                        <p>
+                            Successfully processes 10,000+ emails per hour with
+                            95% accuracy rate. Client reported 300% increase in
+                            lead generation efficiency.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal2" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal2')"
+                    >&times;</span
+                >
+                <div class="modal-project">
+                    <h2>Email Miner Admin Dashboard</h2>
+                    <div class="modal-gallery">
+                        <img
+                            src="https://via.placeholder.com/700x400/764ba2/ffffff?text=Admin+Dashboard+Interface"
+                            alt="Admin Dashboard"
+                        />
+                    </div>
+                    <div class="modal-details">
+                        <h3>Project Overview</h3>
+                        <p>
+                            A comprehensive admin panel for managing email
+                            mining operations with user authentication,
+                            real-time analytics, and complete system control.
+                        </p>
+
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li>Secure admin authentication system</li>
+                            <li>Real-time email mining statistics</li>
+                            <li>User management and permissions</li>
+                            <li>API settings and configuration</li>
+                            <li>System health monitoring</li>
+                            <li>Data export and backup functionality</li>
+                        </ul>
+
+                        <h3>Technologies Used</h3>
+                        <p>
+                            Flask, SQLAlchemy, Bootstrap, Chart.js, JWT
+                            Authentication, PostgreSQL
+                        </p>
+
+                        <h3>Results</h3>
+                        <p>
+                            Reduced system management time by 80% and improved
+                            operational visibility with comprehensive analytics
+                            and monitoring.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal3" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal3')"
+                    >&times;</span
+                >
+                <div class="modal-project">
+                    <h2>Data Processing Hub</h2>
+                    <div class="modal-gallery">
+                        <img
+                            src="https://via.placeholder.com/700x400/28a745/ffffff?text=Data+Processing+Platform"
+                            alt="Data Processing Hub"
+                        />
+                    </div>
+                    <div class="modal-details">
+                        <h3>Project Overview</h3>
+                        <p>
+                            An advanced data processing platform that integrates
+                            multiple data sources, processes large datasets, and
+                            provides automated workflow management for
+                            enterprise clients.
+                        </p>
+
+                        <h3>Key Features</h3>
+                        <ul>
+                            <li>Multi-source data integration</li>
+                            <li>Automated workflow processing</li>
+                            <li>Large-scale CSV/Excel handling</li>
+                            <li>API integration capabilities</li>
+                            <li>Real-time data validation</li>
+                            <li>Scheduled processing jobs</li>
+                        </ul>
+
+                        <h3>Technologies Used</h3>
+                        <p>
+                            Python, Pandas, Celery, Redis, PostgreSQL, REST
+                            APIs, Docker
+                        </p>
+
+                        <h3>Results</h3>
+                        <p>
+                            Processes 1M+ records daily with 99.9% accuracy.
+                            Reduced manual data processing time from days to
+                            hours.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script src="script.js"></script>
+        <script src="chatbot.js"></script>
+        <script>
+            // Ensure chatbot initializes
+            document.addEventListener("DOMContentLoaded", function () {
+                setTimeout(() => {
+                    if (!document.getElementById("chat-button")) {
+                        console.log("Initializing chatbot...");
+                        new DropTechifyChatbot();
+                    }
+                }, 1000);
+            });
+        </script>
+    </body>
+</html>
