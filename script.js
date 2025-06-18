@@ -176,6 +176,7 @@ const initNavbarScroll = () => {
         navbar.style.left = '0';
         navbar.style.right = '0';
         navbar.style.width = '100%';
+        navbar.style.maxWidth = '100vw';
         navbar.style.zIndex = '10000';
         navbar.style.background = 'rgba(255, 255, 255, 0.98)';
         navbar.style.backdropFilter = 'blur(15px)';
@@ -185,6 +186,8 @@ const initNavbarScroll = () => {
         navbar.style.opacity = '1';
         navbar.style.visibility = 'visible';
         navbar.style.display = 'block';
+        navbar.style.overflow = 'visible';
+        navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
     };
 
     // Apply immediately and continuously
