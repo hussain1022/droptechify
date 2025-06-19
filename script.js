@@ -167,49 +167,20 @@ const initSmoothScroll = () => {
 // Enhanced navbar - Always sticky and visible
 const initNavbarScroll = () => {
     const navbar = document.querySelector('.navbar');
-    const navContainer = document.querySelector('.nav-container');
     if (!navbar) return;
 
-    // Force navbar to stay fixed and visible always
-    const enforceNavbarPosition = () => {
-        navbar.style.position = 'fixed';
-        navbar.style.top = '0';
-        navbar.style.left = '0';
-        navbar.style.right = '0';
-        navbar.style.width = '100%';
-        navbar.style.maxWidth = '100vw';
-        navbar.style.zIndex = '10000';
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.backdropFilter = 'blur(15px)';
-        navbar.style.webkitBackdropFilter = 'blur(15px)';
-        navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-        navbar.style.transform = 'translateY(0)';
-        navbar.style.opacity = '1';
-        navbar.style.visibility = 'visible';
-        navbar.style.display = 'block';
-        navbar.style.overflow = 'hidden';
-        navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
-        
-        // Fix container overflow issues
-        if (navContainer) {
-            navContainer.style.overflow = 'hidden';
-            navContainer.style.maxWidth = '100%';
-            navContainer.style.boxSizing = 'border-box';
+    // Simple scroll effect for navbar
+    const updateNavbar = throttle(() => {
+        if (window.scrollY > 100) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
         }
-    };
-
-    // Apply immediately and continuously
-    enforceNavbarPosition();
-
-    // Use multiple event listeners to ensure navbar stays visible
-    const updateNavbar = throttle(enforceNavbarPosition, 16);
+    }, 16);
 
     window.addEventListener('scroll', updateNavbar, { passive: true });
-    window.addEventListener('resize', updateNavbar, { passive: true });
-    window.addEventListener('orientationchange', updateNavbar, { passive: true });
-
-    // Additional safety check every 500ms
-    setInterval(enforceNavbarPosition, 500);
 };
 
 // Optimized floating elements animation
