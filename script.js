@@ -167,6 +167,7 @@ const initSmoothScroll = () => {
 // Enhanced navbar - Always sticky and visible
 const initNavbarScroll = () => {
     const navbar = document.querySelector('.navbar');
+    const navContainer = document.querySelector('.nav-container');
     if (!navbar) return;
 
     // Force navbar to stay fixed and visible always
@@ -186,8 +187,15 @@ const initNavbarScroll = () => {
         navbar.style.opacity = '1';
         navbar.style.visibility = 'visible';
         navbar.style.display = 'block';
-        navbar.style.overflow = 'visible';
+        navbar.style.overflow = 'hidden';
         navbar.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
+        
+        // Fix container overflow issues
+        if (navContainer) {
+            navContainer.style.overflow = 'hidden';
+            navContainer.style.maxWidth = '100%';
+            navContainer.style.boxSizing = 'border-box';
+        }
     };
 
     // Apply immediately and continuously
