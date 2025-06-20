@@ -20,7 +20,7 @@ body {
     padding: 0;
 }
 
-/* Remove all unwanted scrollbars */
+/* Optimized scrollbars */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -36,6 +36,30 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #764ba2;
+}
+
+/* Performance optimizations */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+    content-visibility: auto;
+    contain-intrinsic-size: 300px;
+}
+
+.service-card, .tech-category, .review-card {
+    contain: layout style paint;
+}
+
+/* Reduce motion for better performance */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 /* Container */
@@ -179,7 +203,7 @@ body {
         flex-direction: column;
         background: transparent;
         border: none;
-        padding: 8px;
+        padding: 10px;
         border-radius: 8px;
         margin-left: auto;
         margin-right: 0;
@@ -190,6 +214,10 @@ body {
         cursor: pointer;
         z-index: 10001;
         transition: all 0.3s ease;
+        min-width: 44px;
+        min-height: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .nav-toggle .bar {
@@ -197,9 +225,11 @@ body {
         height: 3px;
         background: #333;
         margin: 3px 0;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         border-radius: 2px;
         transform-origin: center;
+        display: block;
+        position: relative;
     }
 
     .nav-toggle.active .bar:nth-child(1) {
@@ -1219,13 +1249,13 @@ body.modal-open {
         padding: 0 15px;
         word-wrap: break-word;
     }
-    
+
     /* Prevent horizontal scroll */
     * {
         max-width: 100%;
         box-sizing: border-box;
     }
-    
+
     /* Fix text overflow */
     p, h1, h2, h3, h4, h5, h6 {
         word-wrap: break-word;
@@ -1411,13 +1441,13 @@ body.modal-open {
         gap: 1rem;
         align-items: center;
     }
-    
+
     .contact-details h3 {
         font-size: 1rem;
         margin-bottom: 0.2rem;
         font-weight: 600;
     }
-    
+
     .contact-details p {
         font-size: 0.9rem;
         word-wrap: break-word;
