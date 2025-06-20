@@ -47,10 +47,46 @@ body {
 img {
     content-visibility: auto;
     contain-intrinsic-size: 300px;
+    loading: lazy;
+    will-change: transform;
 }
 
 .service-card, .tech-category, .review-card {
     contain: layout style paint;
+    will-change: transform;
+}
+
+/* GPU acceleration for animations */
+.nav-menu, .nav-toggle, .floating-element, .service-card, .tech-item {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Optimize CSS animations */
+@media (prefers-reduced-motion: no-preference) {
+    * {
+        animation-fill-mode: both;
+    }
+}
+
+/* Critical rendering optimizations */
+.hero, .navbar {
+    contain: layout style paint;
+}
+
+/* Preload hover states */
+.btn:hover, .service-card:hover, .tech-item:hover {
+    will-change: transform;
+}
+
+/* Remove will-change after animation */
+.btn, .service-card, .tech-item {
+    transition: transform 0.3s ease, will-change 0.3s ease;
+}
+
+.btn:not(:hover), .service-card:not(:hover), .tech-item:not(:hover) {
+    will-change: auto;
 }
 
 /* Reduce motion for better performance */
@@ -203,21 +239,37 @@ img {
         flex-direction: column;
         background: transparent;
         border: none;
-        padding: 10px;
+        padding: 12px;
         border-radius: 8px;
         margin-left: auto;
         margin-right: 0;
-        position: absolute;
+        position: fixed;
         right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 15px;
         cursor: pointer;
         z-index: 10001;
         transition: all 0.3s ease;
-        min-width: 44px;
-        min-height: 44px;
+        min-width: 48px;
+        min-height: 48px;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        outline: none;
+        border: 2px solid transparent;
+    }
+
+    .nav-toggle:focus {
+        outline: 2px solid #667eea;
+        outline-offset: 2px;
+    }
+
+    .nav-toggle:active {
+        transform: scale(0.95);
     }
 
     .nav-toggle .bar {
@@ -251,20 +303,29 @@ img {
         right: -100%;
         width: 100%;
         height: 100vh;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
-        backdrop-filter: blur(25px);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.98) 0%, rgba(118, 75, 162, 0.98) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         padding: 2rem;
         gap: 1rem;
         z-index: 10000;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        will-change: transform;
+        transform: translateZ(0);
     }
 
     .nav-menu.active {
         right: 0;
+        visibility: visible;
+    }
+
+    .nav-menu:not(.active) {
+        visibility: hidden;
     }
 
     .nav-menu li {
