@@ -167,6 +167,7 @@ body {
 @media (max-width: 768px) {
     .nav-container {
         padding: 0 15px;
+        position: relative;
     }
 
     .nav-logo h2 {
@@ -179,7 +180,12 @@ body {
         border: 2px solid #667eea;
         padding: 8px;
         border-radius: 8px;
-        margin-left: 15px;
+        margin-left: auto;
+        margin-right: 0;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .nav-toggle:hover {
@@ -973,6 +979,27 @@ section {
     background: #333;
     color: white;
     padding: 3rem 0 1rem;
+    margin-top: 0;
+    position: relative;
+    z-index: 10;
+}
+
+/* Ensure no extra content below footer */
+.footer::after {
+    content: '';
+    display: block;
+    clear: both;
+    height: 0;
+}
+
+/* Remove any margin/padding that might cause extra space */
+.footer * {
+    margin-bottom: 0;
+}
+
+.footer .footer-bottom {
+    margin-bottom: 0;
+    padding-bottom: 1rem;
 }
 
 .footer-content {
@@ -1211,9 +1238,23 @@ section {
 
     .contact-item {
         padding: 1.2rem;
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row;
+        text-align: left;
         gap: 1rem;
+        align-items: center;
+    }
+    
+    .contact-details h3 {
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+        font-weight: 600;
+    }
+    
+    .contact-details p {
+        font-size: 0.9rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.4;
     }
 
     .contact-form {
@@ -1522,6 +1563,25 @@ section {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+}
+
+/* Chatbot notification badge */
+#chat-button::before {
+    content: '1';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
 }
 
 #chat-button:hover {
