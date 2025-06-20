@@ -247,22 +247,25 @@ body.menu-open {
         flex-direction: column;
         background: transparent;
         border: none;
-        padding: 10px;
+        padding: 12px;
         border-radius: 8px;
         cursor: pointer;
         z-index: 10002;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         justify-content: center;
         align-items: center;
         position: relative;
         -webkit-tap-highlight-color: transparent;
         touch-action: manipulation;
+        outline: none;
+        user-select: none;
     }
 
     .nav-toggle:active {
-        transform: scale(0.95);
+        transform: scale(0.9);
+        background: rgba(102, 126, 234, 0.15);
     }
 
     .nav-toggle:hover {
@@ -270,17 +273,18 @@ body.menu-open {
     }
 
     .nav-toggle .bar {
-        width: 26px;
+        width: 28px;
         height: 3px;
         background: #333;
-        margin: 2px 0;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        margin: 3px 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 2px;
         transform-origin: center;
+        display: block;
     }
 
     .nav-toggle.active .bar:nth-child(1) {
-        transform: rotate(45deg) translate(6px, 6px);
+        transform: rotate(45deg) translate(7px, 7px);
         background: white;
     }
 
@@ -290,8 +294,12 @@ body.menu-open {
     }
 
     .nav-toggle.active .bar:nth-child(3) {
-        transform: rotate(-45deg) translate(6px, -6px);
+        transform: rotate(-45deg) translate(7px, -7px);
         background: white;
+    }
+
+    .nav-toggle.active:hover {
+        background: rgba(255, 255, 255, 0.1);
     }
 
     .nav-menu {
@@ -308,19 +316,21 @@ body.menu-open {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         padding: 4rem 2rem;
         gap: 1rem;
         z-index: 10001;
         opacity: 0;
         visibility: hidden;
-        transform: translateX(100%);
+        transform: translateY(-100%);
+        pointer-events: none;
     }
 
     .nav-menu.active {
         opacity: 1;
         visibility: visible;
-        transform: translateX(0);
+        transform: translateY(0);
+        pointer-events: all;
     }
 
     .nav-menu::before {
@@ -349,36 +359,49 @@ body.menu-open {
         top: 2rem;
         right: 2rem;
         color: white;
-        font-size: 1.8rem;
+        font-size: 2rem;
         cursor: pointer;
         z-index: 10003;
-        padding: 0.8rem;
+        padding: 1rem;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        width: 50px;
-        height: 50px;
+        background: rgba(255, 255, 255, 0.25);
+        width: 60px;
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         -webkit-tap-highlight-color: transparent;
         touch-action: manipulation;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .nav-menu::after:hover {
-        background: rgba(255, 255, 255, 0.3);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: scale(1.1);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        font-weight: bold;
+        opacity: 0;
+        transform: scale(0.8);
     }
 
     .nav-menu.active::after {
-        animation: pulse 2s infinite;
+        opacity: 1;
+        transform: scale(1);
+        animation: fadeInScale 0.5s ease-out 0.2s forwards;
     }
 
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+    .nav-menu::after:hover,
+    .nav-menu::after:active {
+        background: rgba(255, 255, 255, 0.4);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes fadeInScale {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
     .nav-menu li {
