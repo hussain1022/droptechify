@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
     <style>
         .coming-soon-section {
             min-height: 80vh;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -28,18 +29,18 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="50" cy="50" r="2" fill="rgba(102,126,234,0.1)"/></pattern></defs><rect width="1000" height="1000" fill="url(%23pattern)"/></svg>');
-            animation: drift 20s linear infinite;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="120" height="120"><path d="M60 10 L110 60 L60 110 L10 60 Z" fill="none" stroke="rgba(255,193,7,0.1)" stroke-width="2"/></pattern></defs><rect width="1000" height="1000" fill="url(%23pattern)"/></svg>');
+            animation: rotate 30s linear infinite;
         }
 
-        @keyframes drift {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(-100px) translateY(-100px); }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .coming-soon-container {
             text-align: center;
-            max-width: 600px;
+            max-width: 650px;
             position: relative;
             z-index: 2;
         }
@@ -47,19 +48,19 @@
         .coming-soon-icon {
             width: 120px;
             height: 120px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
             border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 2rem;
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
-            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 20px 60px rgba(255, 193, 7, 0.3);
+            animation: bounce 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .coming-soon-icon i {
@@ -72,7 +73,7 @@
             font-weight: 800;
             color: #1a1a1a;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -92,79 +93,83 @@
             line-height: 1.8;
         }
 
-        .progress-indicator {
+        .portfolio-preview {
             background: white;
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
             margin-bottom: 3rem;
+            border-left: 5px solid #ffc107;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            width: 85%;
-            border-radius: 4px;
-            animation: progress 3s ease-in-out infinite;
-        }
-
-        @keyframes progress {
-            0%, 100% { width: 85%; }
-            50% { width: 90%; }
-        }
-
-        .progress-text {
-            font-size: 0.9rem;
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .features-preview {
+        .preview-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
-        .feature-item {
-            background: white;
+        .preview-item {
+            background: #f8f9fa;
             padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            text-align: center;
             transition: all 0.3s ease;
         }
 
-        .feature-item:hover {
+        .preview-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .feature-item i {
+        .preview-item i {
             font-size: 2rem;
-            color: #667eea;
+            color: #ffc107;
             margin-bottom: 1rem;
         }
 
-        .feature-item h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .preview-item h4 {
             color: #333;
             margin-bottom: 0.5rem;
         }
 
-        .feature-item p {
+        .preview-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
             font-size: 0.9rem;
             color: #666;
-            line-height: 1.5;
+            font-weight: 500;
         }
 
         .cta-buttons {
@@ -174,8 +179,8 @@
             flex-wrap: wrap;
         }
 
-        .btn-notify {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .btn-primary {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
             color: white;
             padding: 1rem 2rem;
             border: none;
@@ -188,15 +193,15 @@
             gap: 0.5rem;
         }
 
-        .btn-notify:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
         }
 
         .btn-secondary {
             background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #ffc107;
+            border: 2px solid #ffc107;
             padding: 1rem 2rem;
             border-radius: 50px;
             font-weight: 600;
@@ -208,7 +213,7 @@
         }
 
         .btn-secondary:hover {
-            background: #667eea;
+            background: #ffc107;
             color: white;
             transform: translateY(-2px);
         }
@@ -227,8 +232,12 @@
                 font-size: 2.5rem;
             }
 
-            .features-preview {
-                grid-template-columns: 1fr;
+            .portfolio-preview {
+                padding: 2rem;
+            }
+
+            .stats-preview {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .cta-buttons {
@@ -282,7 +291,7 @@
     <section class="coming-soon-section">
         <div class="coming-soon-container" data-aos="fade-up">
             <div class="coming-soon-icon" data-aos="zoom-in" data-aos-delay="200">
-                <i class="fas fa-rocket"></i>
+                <i class="fas fa-briefcase"></i>
             </div>
 
             <h1 class="coming-soon-title" data-aos="fade-up" data-aos-delay="300">
@@ -290,41 +299,61 @@
             </h1>
 
             <p class="coming-soon-subtitle" data-aos="fade-up" data-aos-delay="400">
-                We're preparing an amazing showcase of our latest work
+                We're preparing our best work to showcase here
             </p>
 
             <p class="coming-soon-description" data-aos="fade-up" data-aos-delay="500">
-                Our team is currently curating our best projects to showcase the quality and innovation we bring to every client. From web scraping solutions to custom automation tools, get ready to see what makes DropTechify stand out.
+                Our portfolio section will feature detailed case studies of successful automation projects, web scraping solutions, and custom software we've built for clients worldwide. Each project will include technical details, challenges solved, and results achieved.
             </p>
 
-            <div class="progress-indicator" data-aos="fade-up" data-aos-delay="600">
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
+            <div class="portfolio-preview" data-aos="fade-up" data-aos-delay="600">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: #333;">Preview: Types of Projects</h3>
+                <div class="preview-grid">
+                    <div class="preview-item">
+                        <i class="fas fa-spider"></i>
+                        <h4>Web Scraping</h4>
+                        <p>Advanced data extraction tools</p>
+                    </div>
+                    <div class="preview-item">
+                        <i class="fas fa-robot"></i>
+                        <h4>Automation Bots</h4>
+                        <p>Smart workflow automation</p>
+                    </div>
+                    <div class="preview-item">
+                        <i class="fas fa-globe"></i>
+                        <h4>Web Applications</h4>
+                        <p>Custom web solutions</p>
+                    </div>
+                    <div class="preview-item">
+                        <i class="fas fa-brain"></i>
+                        <h4>AI Integration</h4>
+                        <p>Intelligent chatbots & AI tools</p>
+                    </div>
                 </div>
-                <p class="progress-text">Portfolio setup: 85% complete</p>
             </div>
 
-            <div class="features-preview" data-aos="fade-up" data-aos-delay="700">
-                <div class="feature-item">
-                    <i class="fas fa-code"></i>
-                    <h4>Code Quality</h4>
-                    <p>Clean, documented, and scalable solutions</p>
+            <div class="stats-preview" data-aos="fade-up" data-aos-delay="700">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Projects Completed</div>
                 </div>
-                <div class="feature-item">
-                    <i class="fas fa-chart-line"></i>
-                    <h4>Performance</h4>
-                    <p>Optimized for speed and efficiency</p>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Success Rate</div>
                 </div>
-                <div class="feature-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <h4>Security</h4>
-                    <p>Built with best security practices</p>
+                <div class="stat-item">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
                 </div>
             </div>
 
             <div class="cta-buttons" data-aos="fade-up" data-aos-delay="800">
-                <a href="index.html#contact" class="btn-notify">
-                    <i class="fas fa-bell"></i> Get Notified
+                <a href="index.html#contact" class="btn-primary">
+                    <i class="fas fa-rocket"></i> Start Your Project
                 </a>
                 <a href="index.html" class="btn-secondary">
                     <i class="fas fa-home"></i> Back to Home
@@ -445,13 +474,13 @@
         function loadProjects(projects) {
             const container = document.getElementById('dynamic-projects');
             container.innerHTML = `
-                <section class="portfolio-main" style="padding: 8rem 0 5rem;">
+                <section class="portfolio-main" style="padding: 8rem 0 5rem; background: #f8f9fa;">
                     <div class="container">
                         <div class="section-header">
                             <h2>Our Projects</h2>
-                            <p>Showcasing our latest work and achievements</p>
+                            <p>Explore our successful automation and development solutions</p>
                         </div>
-                        <div class="portfolio-projects-grid" id="projects-grid">
+                        <div class="portfolio-grid" id="projects-grid">
                         </div>
                     </div>
                 </section>
@@ -469,28 +498,32 @@
             const card = document.createElement('div');
             card.className = 'portfolio-project-card';
 
-            const rating = '⭐'.repeat(project.rating || 5);
+            const dateAdded = project.dateAdded ? new Date(project.dateAdded.seconds * 1000).toLocaleDateString() : 'Recent';
+            const techBadges = project.technologies ? project.technologies.split(',').map(tech => 
+                `<span class="tech-badge">${tech.trim()}</span>`).join('') : '';
 
             card.innerHTML = `
-                <div class="project-image">
-                    <img src="${project.image || 'https://via.placeholder.com/400x220/667eea/ffffff?text=Project+Image'}" alt="${project.title}">
+                <div class="project-gallery">
+                    <div class="project-image-main">
+                        <img src="${project.imageUrl || 'https://via.placeholder.com/400x250/667eea/ffffff?text=Project+Image'}" alt="${project.title}">
+                    </div>
                     <div class="project-overlay">
                         <i class="fas fa-eye" style="color: white; font-size: 2rem;"></i>
                     </div>
                 </div>
                 <div class="project-content">
                     <h3>${project.title}</h3>
-                    <div class="project-rating">
-                        <div class="stars">${rating}</div>
-                        <span class="rating-text">(${project.rating || 5}.0)</span>
-                    </div>
                     <p>${project.description}</p>
+                    <div class="project-rating">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <span>${project.rating || 5}/5</span>
+                    </div>
+                    <div class="tech-stack">
+                        ${techBadges}
+                    </div>
                     <div class="project-meta">
-                        <div class="project-duration">
-                            <i class="fas fa-clock"></i>
-                            <span>${project.duration || 'N/A'}</span>
-                        </div>
-                        <div class="project-category">${project.category}</div>
+                        <span class="project-category">${project.category || 'Web Development'}</span>
+                        <span>${dateAdded}</span>
                     </div>
                 </div>
             `;
