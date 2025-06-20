@@ -39,7 +39,7 @@ if (typeof AOS !== 'undefined') {
     });
 }
 
-// Enhanced Mobile Navigation - Fully Fixed Implementation
+// Enhanced Mobile Navigation - Clean Implementation
 const initMobileNav = () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -58,6 +58,20 @@ const initMobileNav = () => {
     document.body.classList.remove('menu-open');
 
     let isMenuOpen = false;
+
+    // Add close button to menu
+    const closeButton = document.createElement('button');
+    closeButton.className = 'nav-close-btn';
+    closeButton.innerHTML = '×';
+    closeButton.setAttribute('aria-label', 'Close menu');
+    
+    // Remove any existing close button first
+    const existingCloseBtn = navMenu.querySelector('.nav-close-btn');
+    if (existingCloseBtn) {
+        existingCloseBtn.remove();
+    }
+    
+    navMenu.appendChild(closeButton);
 
     // Enhanced toggle function
     const toggleMenu = (forceClose = false) => {
@@ -86,19 +100,21 @@ const initMobileNav = () => {
     const handleToggleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation();
         console.log('Nav toggle clicked!');
         toggleMenu();
     };
 
-    // Multiple event listeners for better mobile support
-    navToggle.addEventListener('click', handleToggleClick, { passive: false });
-    navToggle.addEventListener('touchstart', handleToggleClick, { passive: false });
-    
-    // Prevent double-tap issues on mobile
-    navToggle.addEventListener('touchend', (e) => {
+    // Add event listeners
+    navToggle.addEventListener('click', handleToggleClick);
+    navToggle.addEventListener('touchstart', handleToggleClick, { passive: true });
+
+    // Close button event listener
+    closeButton.addEventListener('click', (e) => {
         e.preventDefault();
-    }, { passive: false });
+        e.stopPropagation();
+        console.log('Close button clicked');
+        toggleMenu(true);
+    });
 
     // Close menu when clicking nav links
     navLinks.forEach(link => {
@@ -106,42 +122,14 @@ const initMobileNav = () => {
             console.log('Nav link clicked, closing menu');
             toggleMenu(true);
         });
-        
-        // Add touch support for nav links
-        link.addEventListener('touchstart', (e) => {
-            setTimeout(() => toggleMenu(true), 100);
-        });
     });
 
     // Close menu when clicking dropdown items
-    const updateDropdownListeners = () => {
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
-                console.log('Dropdown item clicked, closing menu');
-                toggleMenu(true);
-            });
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            console.log('Dropdown item clicked, closing menu');
+            toggleMenu(true);
         });
-    };
-    updateDropdownListeners();
-
-    // Close menu when clicking the close button (✖)
-    navMenu.addEventListener('click', (e) => {
-        // Check if clicked on the close button area
-        const rect = navMenu.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const clickY = e.clientY - rect.top;
-        
-        // Close button is positioned at top-right
-        if (clickX > rect.width - 80 && clickY < 80) {
-            console.log('Close button clicked');
-            toggleMenu(true);
-        }
-        
-        // Also close if clicking on the background overlay
-        if (e.target === navMenu) {
-            console.log('Background clicked, closing menu');
-            toggleMenu(true);
-        }
     });
 
     // Close menu when clicking outside
