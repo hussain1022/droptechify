@@ -1001,8 +1001,8 @@ section {
 }
 
 .footer .footer-bottom {
-    margin-bottom: 0;
-    padding: 2rem 0 1rem;
+    margin-bottom: 0 !important;
+    padding: 2rem 0 1.5rem !important;
     border-top: 1px solid #555;
 }
 
@@ -1023,6 +1023,11 @@ html, body {
 /* Ensure no content appears after footer */
 .footer ~ * {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* Force clean page ending */
@@ -1030,9 +1035,30 @@ html, body {
     margin-bottom: 0 !important;
 }
 
-.footer .footer-bottom {
-    margin-bottom: 0 !important;
-    padding-bottom: 1.5rem !important;
+/* Hide any modal or popup content that might appear after footer */
+.modal, .project-modal, #modal1, #modal2, #modal3 {
+    position: fixed !important;
+    z-index: 20000 !important;
+}
+
+/* Ensure modals don't interfere with page flow */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Hide any orphaned content */
+.modal-project, .modal-content, .project-details {
+    position: relative;
+    z-index: inherit;
+}
+
+/* Prevent any content bleeding after footer */
+.footer + *, 
+.footer ~ *:not(.modal):not(.project-modal):not(#modal1):not(#modal2):not(#modal3) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
 .footer-content {
