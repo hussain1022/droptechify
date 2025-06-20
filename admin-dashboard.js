@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ User authenticated, initializing dashboard...');
     // Initialize dashboard
     initializeDashboard();
+    
+    // Initialize Firebase connection
+    initializeFirebaseSync();
 });
 
 // Initialize dashboard functionality
@@ -146,26 +149,46 @@ async function handleProjectSubmit(e) {
     console.log('📋 Project data:', projectData);
 
     try {
+        // Show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        submitBtn.disabled = true;
+
         if (editingProjectId) {
             // Update existing project
             const projectRef = doc(db, 'projects', editingProjectId);
             await updateDoc(projectRef, projectData);
-            showToast('Project updated successfully!', 'success');
+            showToast('✅ Project updated successfully! Check live website.', 'success');
             editingProjectId = null;
-            document.querySelector('#project-form button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Add Project';
-            console.log('✅ Project updated');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Project';
+            console.log('✅ Project updated in Firebase');
         } else {
             // Add new project
-            await addDoc(collection(db, 'projects'), projectData);
-            showToast('Project added successfully!', 'success');
-            console.log('✅ Project added');
+            const docRef = await addDoc(collection(db, 'projects'), projectData);
+            showToast('✅ Project added successfully! Live on website now.', 'success');
+            console.log('✅ Project added to Firebase with ID:', docRef.id);
         }
 
-        // Clear form
+        // Clear form and restore button
         e.target.reset();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        
+        // Force refresh data
+        setTimeout(() => {
+            loadProjectsData();
+            updateStats();
+        }, 1000);
+        
     } catch (error) {
         console.error('❌ Error saving project:', error);
-        showToast('Error saving project. Please try again.', 'error');
+        showToast('❌ Error saving project. Please check connection and try again.', 'error');
+        
+        // Restore button
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Project';
+        submitBtn.disabled = false;
     }
 }
 
@@ -188,26 +211,46 @@ async function handleReviewSubmit(e) {
     console.log('📋 Review data:', reviewData);
 
     try {
+        // Show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        submitBtn.disabled = true;
+
         if (editingReviewId) {
             // Update existing review
             const reviewRef = doc(db, 'reviews', editingReviewId);
             await updateDoc(reviewRef, reviewData);
-            showToast('Review updated successfully!', 'success');
+            showToast('✅ Review updated successfully! Check live website.', 'success');
             editingReviewId = null;
-            document.querySelector('#review-form button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Add Review';
-            console.log('✅ Review updated');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Review';
+            console.log('✅ Review updated in Firebase');
         } else {
             // Add new review
-            await addDoc(collection(db, 'reviews'), reviewData);
-            showToast('Review added successfully!', 'success');
-            console.log('✅ Review added');
+            const docRef = await addDoc(collection(db, 'reviews'), reviewData);
+            showToast('✅ Review added successfully! Live on website now.', 'success');
+            console.log('✅ Review added to Firebase with ID:', docRef.id);
         }
 
-        // Clear form
+        // Clear form and restore button
         e.target.reset();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        
+        // Force refresh data
+        setTimeout(() => {
+            loadReviewsData();
+            updateStats();
+        }, 1000);
+        
     } catch (error) {
         console.error('❌ Error saving review:', error);
-        showToast('Error saving review. Please try again.', 'error');
+        showToast('❌ Error saving review. Please check connection and try again.', 'error');
+        
+        // Restore button
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Review';
+        submitBtn.disabled = false;
     }
 }
 
@@ -494,6 +537,39 @@ function logout() {
         sessionStorage.removeItem('adminLoggedIn');
         sessionStorage.removeItem('adminEmail');
         window.location.href = 'admin-login.html';
+    }
+}
+
+// Initialize Firebase sync
+function initializeFirebaseSync() {
+    console.log('🔄 Initializing Firebase sync...');
+    
+    // Test Firebase connection
+    testFirebaseConnection();
+    
+    // Load initial data
+    loadDataWithRealTime();
+    
+    console.log('✅ Firebase sync initialized successfully!');
+}
+
+// Test Firebase connection
+async function testFirebaseConnection() {
+    try {
+        console.log('🧪 Testing Firebase connection...');
+        const testQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
+        const snapshot = await getDocs(testQuery);
+        console.log('✅ Firebase connection successful. Projects count:', snapshot.size);
+        
+        const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
+        const reviewsSnapshot = await getDocs(reviewsQuery);
+        console.log('✅ Firebase connection successful. Reviews count:', reviewsSnapshot.size);
+        
+        return true;
+    } catch (error) {
+        console.error('❌ Firebase connection failed:', error);
+        showToast('Firebase connection failed. Please check your connection.', 'error');
+        return false;
     }
 }
 
