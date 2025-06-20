@@ -758,7 +758,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>&copy; 2024 DropTechify. All rights reserved.</p>
+                    <p>&copy; 2024 DropTechify. All rights reserved. | Designed with ❤️ for global success</p>
                 </div>
             </div>
         </footer>
@@ -927,6 +927,19 @@
                         new DropTechifyChatbot();
                     }
                 }, 1000);
+
+                // Clean up any orphaned content after footer
+                setTimeout(() => {
+                    const footer = document.querySelector('.footer');
+                    if (footer) {
+                        let nextElement = footer.nextElementSibling;
+                        while (nextElement) {
+                            const elementToRemove = nextElement;
+                            nextElement = nextElement.nextElementSibling;
+                            elementToRemove.remove();
+                        }
+                    }
+                }, 2000);
             });
         </script>
     </body>
