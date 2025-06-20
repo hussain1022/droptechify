@@ -928,18 +928,40 @@
                     }
                 }, 1000);
 
-                // Clean up any orphaned content after footer
-                setTimeout(() => {
+                // Aggressive cleanup of any content after footer
+                function cleanupAfterFooter() {
                     const footer = document.querySelector('.footer');
                     if (footer) {
+                        // Remove any sibling elements after footer
                         let nextElement = footer.nextElementSibling;
                         while (nextElement) {
                             const elementToRemove = nextElement;
                             nextElement = nextElement.nextElementSibling;
-                            elementToRemove.remove();
+                            if (!elementToRemove.classList.contains('modal') && 
+                                !elementToRemove.classList.contains('project-modal') &&
+                                !elementToRemove.id.includes('modal')) {
+                                elementToRemove.remove();
+                            }
                         }
+                        
+                        // Hide any visible project details outside modals
+                        const projectDetails = document.querySelectorAll('.modal-project:not(.modal .modal-project)');
+                        projectDetails.forEach(detail => {
+                            if (!detail.closest('.modal')) {
+                                detail.style.display = 'none';
+                            }
+                        });
                     }
-                }, 2000);
+                }
+
+                // Run cleanup multiple times to ensure clean page
+                setTimeout(cleanupAfterFooter, 1000);
+                setTimeout(cleanupAfterFooter, 3000);
+                setTimeout(cleanupAfterFooter, 5000);
+                
+                // Run cleanup on any DOM changes
+                const observer = new MutationObserver(cleanupAfterFooter);
+                observer.observe(document.body, { childList: true, subtree: true });
             });
         </script>
     </body>
