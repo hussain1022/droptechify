@@ -984,6 +984,7 @@ section {
     z-index: 10;
     width: 100%;
     overflow: hidden;
+    clear: both;
 }
 
 /* Ensure no extra content below footer */
@@ -1017,6 +1018,21 @@ body::after {
 html, body {
     overflow-x: hidden;
     position: relative;
+}
+
+/* Ensure no content appears after footer */
+.footer ~ * {
+    display: none !important;
+}
+
+/* Force clean page ending */
+.footer {
+    margin-bottom: 0 !important;
+}
+
+.footer .footer-bottom {
+    margin-bottom: 0 !important;
+    padding-bottom: 1.5rem !important;
 }
 
 .footer-content {
