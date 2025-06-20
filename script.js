@@ -31,14 +31,15 @@ function throttle(func, limit) {
 // Initialize AOS with performance optimization
 if (typeof AOS !== 'undefined') {
     AOS.init({
-        duration: 600,
+        duration: 400,
         once: true,
-        offset: 50,
-        disable: window.innerWidth < 768 // Disable on mobile for better performance
+        offset: 30,
+        disable: window.innerWidth < 768, // Disable on mobile for better performance
+        startEvent: 'DOMContentLoaded'
     });
 }
 
-// Enhanced Mobile Navigation
+// Enhanced Mobile Navigation - Fixed
 const initMobileNav = () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -52,88 +53,54 @@ const initMobileNav = () => {
 
     const toggleMenu = (forceClose = false) => {
         const isActive = navMenu.classList.contains('active');
-        const scrollY = window.scrollY;
 
-        if (forceClose || !isActive) {
-            if (!forceClose && !isActive) {
-                // Opening menu
-                navMenu.classList.add('active');
-                navToggle.classList.add('active');
-                
-                // Prevent body scroll
-                document.body.style.overflow = 'hidden';
-                document.body.style.position = 'fixed';
-                document.body.style.width = '100%';
-                document.body.style.top = `-${scrollY}px`;
-                document.body.setAttribute('data-scroll-position', scrollY);
-            }
-        } else {
+        if (forceClose || isActive) {
             // Closing menu
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
-            
-            // Restore body scroll
-            const savedScrollY = document.body.getAttribute('data-scroll-position') || 0;
             document.body.style.overflow = '';
             document.body.style.position = '';
             document.body.style.top = '';
             document.body.style.width = '';
-            document.body.removeAttribute('data-scroll-position');
-            window.scrollTo(0, parseInt(savedScrollY));
-        }
-
-        if (forceClose) {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            
-            // Restore body scroll
-            const savedScrollY = document.body.getAttribute('data-scroll-position') || 0;
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
-            document.body.removeAttribute('data-scroll-position');
-            window.scrollTo(0, parseInt(savedScrollY));
+        } else {
+            // Opening menu
+            navMenu.classList.add('active');
+            navToggle.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
     };
 
-    // Handle hamburger button click
+    // Handle hamburger button click - Fixed
     navToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
         e.preventDefault();
+        e.stopPropagation();
         toggleMenu();
+        console.log('Mobile menu toggled');
     });
 
-    // Handle touch events for better mobile experience
-    navToggle.addEventListener('touchstart', (e) => {
+    // Handle touch events for mobile
+    navToggle.addEventListener('touchend', (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        toggleMenu();
     });
 
     // Close menu when clicking nav links
     navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
+        link.addEventListener('click', () => {
             if (navMenu.classList.contains('active')) {
-                // Small delay for better UX
-                setTimeout(() => toggleMenu(true), 150);
+                setTimeout(() => toggleMenu(true), 100);
             }
         });
     });
 
     // Close menu when clicking dropdown items
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', (e) => {
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
             if (navMenu.classList.contains('active')) {
-                setTimeout(() => toggleMenu(true), 150);
+                setTimeout(() => toggleMenu(true), 100);
             }
         });
-    });
-
-    // Close menu when clicking close button (::before pseudo-element)
-    navMenu.addEventListener('click', (e) => {
-        if (e.target === navMenu) {
-            toggleMenu(true);
-        }
     });
 
     // Close menu when clicking outside
@@ -158,26 +125,6 @@ const initMobileNav = () => {
             toggleMenu(true);
         }
     }, 100));
-
-    // Handle orientation change on mobile
-    window.addEventListener('orientationchange', () => {
-        if (navMenu.classList.contains('active')) {
-            setTimeout(() => toggleMenu(true), 100);
-        }
-    });
-
-    // Add touch feedback for mobile menu items
-    navLinks.forEach(link => {
-        link.addEventListener('touchstart', () => {
-            link.style.transform = 'scale(0.95)';
-        });
-        
-        link.addEventListener('touchend', () => {
-            setTimeout(() => {
-                link.style.transform = '';
-            }, 150);
-        });
-    });
 };
 
 // Optimized smooth scrolling
@@ -385,8 +332,15 @@ const initButtonEffects = () => {
     });
 };
 
-// Optimized image lazy loading
+// Optimized image lazy loading with performance boost
 const initLazyLoading = () => {
+    // Add loading="lazy" to all images for native lazy loading
+    document.querySelectorAll('img').forEach(img => {
+        if (!img.hasAttribute('loading')) {
+            img.setAttribute('loading', 'lazy');
+        }
+    });
+
     if ('loading' in HTMLImageElement.prototype) {
         const images = document.querySelectorAll('img[data-src]');
         images.forEach(img => {
@@ -394,7 +348,7 @@ const initLazyLoading = () => {
             img.removeAttribute('data-src');
         });
     } else {
-        // Fallback for browsers that don't support native lazy loading
+        // Fallback with improved performance
         const imageObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -404,7 +358,7 @@ const initLazyLoading = () => {
                     imageObserver.unobserve(img);
                 }
             });
-        });
+        }, { rootMargin: '50px' });
 
         document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
     }
