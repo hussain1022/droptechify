@@ -187,7 +187,7 @@ const server = http.createServer(async (req, res) => {
             // Compress text-based files
             if (contentType.includes('text') || contentType.includes('javascript') || contentType.includes('json')) {
                 const acceptEncoding = req.headers['accept-encoding'] || '';
-                
+
                 if (acceptEncoding.includes('gzip')) {
                     headers['Content-Encoding'] = 'gzip';
                     res.writeHead(200, headers);
