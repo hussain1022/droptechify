@@ -39,86 +39,136 @@ if (typeof AOS !== 'undefined') {
     });
 }
 
-// Simple Mobile Navigation - Fixed Implementation
+// Enhanced Mobile Navigation - Fully Fixed Implementation
 const initMobileNav = () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    if (!navToggle || !navMenu) return;
+    if (!navToggle || !navMenu) {
+        console.log('Navigation elements not found');
+        return;
+    }
+
+    console.log('Initializing mobile navigation...');
 
     // Reset initial state
     navMenu.classList.remove('active');
     navToggle.classList.remove('active');
     document.body.classList.remove('menu-open');
 
-    // Simple toggle function
-    const toggleMenu = () => {
-        const isOpen = navMenu.classList.contains('active');
+    let isMenuOpen = false;
+
+    // Enhanced toggle function
+    const toggleMenu = (forceClose = false) => {
+        console.log('Toggle menu called, current state:', isMenuOpen);
         
-        if (isOpen) {
+        if (forceClose || isMenuOpen) {
+            // Close menu
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
             document.body.classList.remove('menu-open');
+            document.body.style.overflow = '';
+            isMenuOpen = false;
+            console.log('Menu closed');
         } else {
+            // Open menu
             navMenu.classList.add('active');
             navToggle.classList.add('active');
             document.body.classList.add('menu-open');
+            document.body.style.overflow = 'hidden';
+            isMenuOpen = true;
+            console.log('Menu opened');
         }
     };
 
-    // Toggle button click
-    navToggle.addEventListener('click', (e) => {
+    // Enhanced click handler for toggle button
+    const handleToggleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log('Nav toggle clicked!');
         toggleMenu();
-    });
+    };
+
+    // Multiple event listeners for better mobile support
+    navToggle.addEventListener('click', handleToggleClick, { passive: false });
+    navToggle.addEventListener('touchstart', handleToggleClick, { passive: false });
+    
+    // Prevent double-tap issues on mobile
+    navToggle.addEventListener('touchend', (e) => {
+        e.preventDefault();
+    }, { passive: false });
 
     // Close menu when clicking nav links
     navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
+        link.addEventListener('click', (e) => {
+            console.log('Nav link clicked, closing menu');
+            toggleMenu(true);
+        });
+        
+        // Add touch support for nav links
+        link.addEventListener('touchstart', (e) => {
+            setTimeout(() => toggleMenu(true), 100);
         });
     });
 
     // Close menu when clicking dropdown items
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
+    const updateDropdownListeners = () => {
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                console.log('Dropdown item clicked, closing menu');
+                toggleMenu(true);
+            });
         });
-    });
+    };
+    updateDropdownListeners();
 
-    // Close menu when clicking close button (✖)
+    // Close menu when clicking the close button (✖)
     navMenu.addEventListener('click', (e) => {
-        if (e.target.classList.contains('nav-menu') || 
-            e.target === navMenu.querySelector('::after')) {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
+        // Check if clicked on the close button area
+        const rect = navMenu.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        
+        // Close button is positioned at top-right
+        if (clickX > rect.width - 80 && clickY < 80) {
+            console.log('Close button clicked');
+            toggleMenu(true);
+        }
+        
+        // Also close if clicking on the background overlay
+        if (e.target === navMenu) {
+            console.log('Background clicked, closing menu');
+            toggleMenu(true);
         }
     });
 
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
+        if (isMenuOpen && !navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+            console.log('Clicked outside, closing menu');
+            toggleMenu(true);
         }
     });
 
     // Close menu on window resize
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
+        if (window.innerWidth > 768 && isMenuOpen) {
+            console.log('Window resized, closing menu');
+            toggleMenu(true);
         }
     });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMenuOpen) {
+            console.log('Escape pressed, closing menu');
+            toggleMenu(true);
+        }
+    });
+
+    console.log('Mobile navigation initialized successfully');
 };
 
 // Optimized smooth scrolling
