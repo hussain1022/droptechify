@@ -54,14 +54,29 @@ const initMobileNav = () => {
 
     let isMenuOpen = false;
 
-    // Single toggle function
-    const toggleMenu = () => {
-        isMenuOpen = !isMenuOpen;
+    // Single toggle function with smooth animation
+    const toggleMenu = (forceClose = false) => {
+        if (forceClose) {
+            isMenuOpen = false;
+        } else {
+            isMenuOpen = !isMenuOpen;
+        }
         
         if (isMenuOpen) {
             navMenu.classList.add('active');
             navToggle.classList.add('active');
             document.body.classList.add('menu-open');
+            
+            // Add staggered animation to menu items
+            const menuItems = navMenu.querySelectorAll('li');
+            menuItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100 + (index * 50));
+            });
         } else {
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
@@ -69,18 +84,32 @@ const initMobileNav = () => {
         }
     };
 
-    // Single click handler for toggle button
+    // Single click handler for toggle button - prevent multiple triggers
+    let clickTimeout;
     navToggle.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
+        
+        if (clickTimeout) return;
+        
+        clickTimeout = setTimeout(() => {
+            clickTimeout = null;
+        }, 300);
+        
         toggleMenu();
+    });
+
+    // Prevent double-tap issues on mobile
+    navToggle.addEventListener('touchstart', (e) => {
+        e.preventDefault();
     });
 
     // Close menu when clicking nav links
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             if (isMenuOpen) {
-                toggleMenu();
+                toggleMenu(true);
             }
         });
     });
@@ -89,9 +118,27 @@ const initMobileNav = () => {
     document.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', () => {
             if (isMenuOpen) {
-                toggleMenu();
+                toggleMenu(true);
             }
         });
+    });
+
+    // Handle close button click (✖ icon)
+    navMenu.addEventListener('click', (e) => {
+        const rect = navMenu.getBoundingClientRect();
+        const closeButtonArea = {
+            left: rect.right - 80,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.top + 80
+        };
+        
+        if (e.clientX >= closeButtonArea.left && 
+            e.clientX <= closeButtonArea.right &&
+            e.clientY >= closeButtonArea.top && 
+            e.clientY <= closeButtonArea.bottom) {
+            toggleMenu(true);
+        }
     });
 
     // Close menu when clicking outside
@@ -99,23 +146,23 @@ const initMobileNav = () => {
         if (isMenuOpen && 
             !navToggle.contains(e.target) && 
             !navMenu.contains(e.target)) {
-            toggleMenu();
+            toggleMenu(true);
         }
     });
 
     // Close menu on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && isMenuOpen) {
-            toggleMenu();
+            toggleMenu(true);
         }
     });
 
     // Close menu on window resize
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', debounce(() => {
         if (window.innerWidth > 768 && isMenuOpen) {
-            toggleMenu();
+            toggleMenu(true);
         }
-    });
+    }, 100));
 };
 
 // Optimized smooth scrolling
