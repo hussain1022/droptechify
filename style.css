@@ -22,7 +22,7 @@ body {
 
 /* Remove all unwanted scrollbars */
 ::-webkit-scrollbar {
-    width: 0px;
+    width: 3px;
 }
 
 ::-webkit-scrollbar-track {
