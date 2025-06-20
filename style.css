@@ -1057,7 +1057,7 @@ section {
 }
 
 .contact-info-cta {
-    display: flex;
+    display: flex,
     justify-content: center;
     gap: 2rem;
     margin-bottom: 2rem;
@@ -1257,7 +1257,7 @@ body.modal-open {
     }
 
     /* Fix text overflow */
-    p, h1, h2, h3, h4, h5, h6 {
+    p, h1, h2, h3, h4, h5, h5, h6 {
         word-wrap: break-word;
         overflow-wrap: break-word;
         hyphens: auto;
@@ -1838,4 +1838,119 @@ body.modal-open {
 .btn-book-nav:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.social-profiles {
+    margin-top: 2.5rem;
+}
+
+.social-profiles h4 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.profile-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.profile-link:hover::before {
+    transform: translateX(0);
+}
+
+.profile-link:hover {
+    border-color: #667eea;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.profile-link i {
+    font-size: 1.3rem;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.profile-link:hover i {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.profile-link span {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #495057;
+    transition: color 0.3s ease;
+}
+
+.profile-link:hover span {
+    color: #667eea;
+}
+
+/* Individual platform styling */
+.profile-link.upwork:hover {
+    border-color: #14a800;
+}
+.profile-link.upwork:hover i {
+    background: linear-gradient(135deg, #14a800 0%, #0f7b00 100%);
+}
+
+.profile-link.linkedin:hover {
+    border-color: #0077b5;
+}
+.profile-link.linkedin:hover i {
+    background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+}
+
+.profile-link.clutch:hover {
+    border-color: #ff6b35;
+}
+.profile-link.clutch:hover i {
+    background: linear-gradient(135deg, #ff6b35 0%, #e55527 100%);
+}
+
+.profile-link.facebook:hover {
+    border-color: #1877f2;
+}
+.profile-link.facebook:hover i {
+    background: linear-gradient(135deg, #1877f2 0%, #1565c0 100%);
 }
