@@ -34,12 +34,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     console.log('✅ User authenticated, initializing dashboard...');
-    // Initialize dashboard
+    
+    // Initialize dashboard immediately
     initializeDashboard();
     
     // Initialize Firebase connection
     initializeFirebaseSync();
+    
+    // Ensure dashboard section is shown by default
+    setTimeout(() => {
+        showDashboardSection();
+        updateStats();
+    }, 500);
 });
+
+// Function to show dashboard section by default
+function showDashboardSection() {
+    const dashboardMenuItem = document.querySelector('[data-section="dashboard"]');
+    const dashboardSection = document.getElementById('dashboard-section');
+    
+    if (dashboardMenuItem && dashboardSection) {
+        // Remove active from all menu items
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+        
+        // Set dashboard as active
+        dashboardMenuItem.classList.add('active');
+        dashboardSection.classList.add('active');
+        
+        // Update page title
+        const pageTitle = document.getElementById('page-title');
+        if (pageTitle) {
+            pageTitle.textContent = 'Dashboard Overview';
+        }
+    }
+}
 
 // Initialize dashboard functionality
 function initializeDashboard() {
@@ -573,12 +602,54 @@ async function testFirebaseConnection() {
     }
 }
 
+// Section switching function
+function switchSection(event, sectionName) {
+    event.preventDefault();
+    console.log('🔄 Switching to section:', sectionName);
+    
+    // Remove active class from all menu items and sections
+    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+    
+    // Add active class to clicked item
+    event.target.closest('.menu-item').classList.add('active');
+    
+    // Show target section
+    const targetSection = document.getElementById(sectionName + '-section');
+    if (targetSection) {
+        targetSection.classList.add('active');
+        console.log('✅ Section activated:', sectionName);
+        
+        // Load data when switching to sections
+        if (sectionName === 'projects') {
+            loadProjectsData();
+        } else if (sectionName === 'reviews') {
+            loadReviewsData();
+        } else if (sectionName === 'dashboard') {
+            updateStats();
+        }
+    }
+    
+    // Update page title
+    const titles = {
+        'dashboard': 'Dashboard Overview',
+        'projects': 'Manage Projects',
+        'reviews': 'Manage Reviews',
+        'settings': 'Site Settings'
+    };
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) {
+        pageTitle.textContent = titles[sectionName];
+    }
+}
+
 // Make functions globally available
 window.editProject = editProject;
 window.editReview = editReview;
 window.deleteProject = deleteProject;
 window.deleteReview = deleteReview;
 window.logout = logout;
+window.switchSection = switchSection;
 
 // Add toast animation styles
 const toastStyle = document.createElement('style');
