@@ -526,4 +526,91 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Initialize AOS
+AOS.init({
+    duration: 800,
+    offset: 100,
+    once: true
+});
+
+// Mobile navigation
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+
+if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+}
+
+// Firebase integration for homepage reviews
+document.addEventListener('DOMContentLoaded', function() {
+    loadHomepageReviews();
+});
+
+// Load reviews for homepage
+async function loadHomepageReviews() {
+    try {
+        // Firebase configuration
+        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { getFirestore, collection, onSnapshot, orderBy, query, limit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyChFO-OThN7rPIZuAOVNP8aG7R9qEAO-z4",
+            authDomain: "droptechify-80034.firebaseapp.com",
+            projectId: "droptechify-80034",
+            storageBucket: "droptechify-80034.firebasestorage.app",
+            messagingSenderId: "41692901589",
+            appId: "1:41692901589:web:1e2000fd5bf89f0d7c725c",
+            measurementId: "G-1PJMJF5W4L"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Listen for reviews
+        const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'), limit(6));
+        onSnapshot(reviewsQuery, (snapshot) => {
+            const reviewsContainer = document.getElementById('homepage-reviews');
+            if (reviewsContainer && snapshot.docs.length > 0) {
+                reviewsContainer.innerHTML = '';
+
+                snapshot.docs.forEach(doc => {
+                    const review = doc.data();
+                    const reviewCard = createReviewCard(review);
+                    reviewsContainer.appendChild(reviewCard);
+                });
+            } else if (reviewsContainer) {
+                reviewsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                        <p style="color: #666;">Reviews will appear here once added from admin panel.</p>
+                    </div>
+                `;
+            }
+        });
+    } catch (error) {
+        console.log('Homepage reviews not loaded:', error);
+    }
+}
+
+// Create review card
+function createReviewCard(review) {
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    card.setAttribute('data-aos', 'fade-up');
+
+    const ratingStars = '⭐'.repeat(review.rating || 5);
+
+    card.innerHTML = `
+        <div class="stars">${ratingStars}</div>
+        <p>"${review.text || ''}"</p>
+        <div class="reviewer">
+            <strong>${review.name || 'Anonymous'}</strong>
+            ${review.position && review.company ? `<br><small>${review.position} at ${review.company}</small>` : ''}
+        </div>
+    `;
+
+    return card;
+}
+
 console.log('🎉 DropTechify website script loaded and optimized!');
