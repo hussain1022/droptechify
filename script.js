@@ -39,7 +39,7 @@ if (typeof AOS !== 'undefined') {
     });
 }
 
-// Enhanced Mobile Navigation - Fixed
+// Enhanced Mobile Navigation - Completely Fixed
 const initMobileNav = () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -50,81 +50,104 @@ const initMobileNav = () => {
     // Ensure proper initial state
     navMenu.classList.remove('active');
     navToggle.classList.remove('active');
+    document.body.style.overflow = '';
+
+    let isMenuOpen = false;
 
     const toggleMenu = (forceClose = false) => {
-        const isActive = navMenu.classList.contains('active');
-
-        if (forceClose || isActive) {
+        if (forceClose || isMenuOpen) {
             // Closing menu
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
             document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
+            isMenuOpen = false;
+            console.log('Mobile menu closed');
         } else {
             // Opening menu
             navMenu.classList.add('active');
             navToggle.classList.add('active');
             document.body.style.overflow = 'hidden';
+            isMenuOpen = true;
+            console.log('Mobile menu opened');
         }
     };
 
-    // Handle hamburger button click - Fixed
-    navToggle.addEventListener('click', (e) => {
+    // Handle hamburger button click with better touch support
+    const handleToggleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log('Toggle clicked, current state:', isMenuOpen);
         toggleMenu();
-        console.log('Mobile menu toggled');
-    });
+    };
 
-    // Handle touch events for mobile
+    // Add event listeners with improved mobile support
+    navToggle.addEventListener('click', handleToggleClick);
     navToggle.addEventListener('touchend', (e) => {
         e.preventDefault();
+        handleToggleClick(e);
+    }, { passive: false });
+
+    // Prevent default touch behavior on toggle
+    navToggle.addEventListener('touchstart', (e) => {
         e.stopPropagation();
-        toggleMenu();
-    });
+    }, { passive: true });
 
     // Close menu when clicking nav links
     navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (navMenu.classList.contains('active')) {
-                setTimeout(() => toggleMenu(true), 100);
+        link.addEventListener('click', (e) => {
+            if (isMenuOpen) {
+                setTimeout(() => toggleMenu(true), 50);
             }
         });
+        
+        link.addEventListener('touchend', (e) => {
+            if (isMenuOpen) {
+                setTimeout(() => toggleMenu(true), 50);
+            }
+        }, { passive: true });
     });
 
     // Close menu when clicking dropdown items
     document.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', () => {
-            if (navMenu.classList.contains('active')) {
-                setTimeout(() => toggleMenu(true), 100);
+            if (isMenuOpen) {
+                setTimeout(() => toggleMenu(true), 50);
             }
         });
     });
 
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (!navToggle.contains(e.target) && 
-            !navMenu.contains(e.target) && 
-            navMenu.classList.contains('active')) {
+        if (isMenuOpen && 
+            !navToggle.contains(e.target) && 
+            !navMenu.contains(e.target)) {
             toggleMenu(true);
         }
     });
 
     // Handle escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+        if (e.key === 'Escape' && isMenuOpen) {
             toggleMenu(true);
         }
     });
 
     // Handle window resize
     window.addEventListener('resize', debounce(() => {
-        if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+        if (window.innerWidth > 768 && isMenuOpen) {
             toggleMenu(true);
         }
     }, 100));
+
+    // Handle orientation change
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            if (window.innerWidth > 768 && isMenuOpen) {
+                toggleMenu(true);
+            }
+        }, 100);
+    });
 };
 
 // Optimized smooth scrolling
