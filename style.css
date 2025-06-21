@@ -119,6 +119,7 @@ img {
     padding: 1rem 0;
     box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    min-height: 70px;
 }
 
 .nav-container {
@@ -165,7 +166,20 @@ img {
     cursor: pointer;
     background: none;
     border: none;
-    padding: 5px;
+    padding: 8px;
+    border-radius: 4px;
+    position: relative;
+    z-index: 10002;
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
 }
 
 .bar {
@@ -234,26 +248,37 @@ body.menu-open {
     .nav-container {
         padding: 0 20px;
         position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .nav-logo {
+        flex: 1;
+        z-index: 10002;
+        position: relative;
     }
 
     .nav-logo h2 {
         font-size: 1.4rem;
         z-index: 10002;
         position: relative;
+        margin: 0;
     }
 
     .nav-toggle {
-        display: flex;
+        display: flex !important;
         flex-direction: column;
         background: transparent;
         border: none;
-        padding: 12px;
+        padding: 10px;
         border-radius: 8px;
         cursor: pointer;
         z-index: 10002;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        width: 52px;
-        height: 52px;
+        width: 48px;
+        height: 48px;
         justify-content: center;
         align-items: center;
         position: relative;
@@ -261,6 +286,8 @@ body.menu-open {
         touch-action: manipulation;
         outline: none;
         user-select: none;
+        flex-shrink: 0;
+        margin-left: auto;
     }
 
     .nav-toggle:active {
@@ -273,18 +300,19 @@ body.menu-open {
     }
 
     .nav-toggle .bar {
-        width: 28px;
+        width: 24px;
         height: 3px;
         background: #333;
-        margin: 3px 0;
+        margin: 2px 0;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 2px;
         transform-origin: center;
         display: block;
+        position: relative;
     }
 
     .nav-toggle.active .bar:nth-child(1) {
-        transform: rotate(45deg) translate(7px, 7px);
+        transform: rotate(45deg) translate(5px, 6px);
         background: white;
     }
 
@@ -294,7 +322,7 @@ body.menu-open {
     }
 
     .nav-toggle.active .bar:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
+        transform: rotate(-45deg) translate(5px, -6px);
         background: white;
     }
 
