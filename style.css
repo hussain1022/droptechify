@@ -309,6 +309,8 @@ body.menu-open {
         transform-origin: center;
         display: block;
         position: relative;
+        opacity: 1;
+        transform: none;
     }
 
     .nav-toggle.active .bar:nth-child(1) {
@@ -324,6 +326,12 @@ body.menu-open {
     .nav-toggle.active .bar:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -6px);
         background: white;
+    }
+
+    .nav-toggle:not(.active) .bar {
+        opacity: 1;
+        transform: none;
+        background: #333;
     }
 
     .nav-toggle.active:hover {
