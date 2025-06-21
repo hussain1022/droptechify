@@ -58,6 +58,7 @@ const initMobileNav = () => {
     document.body.classList.remove('menu-open');
 
     let isMenuOpen = false;
+    let isProcessing = false;
 
     // Add close button to menu
     const closeButton = document.createElement('button');
@@ -75,38 +76,58 @@ const initMobileNav = () => {
 
     // Enhanced toggle function
     const toggleMenu = (forceClose = false) => {
+        if (isProcessing) return;
+        isProcessing = true;
+        
         console.log('Toggle menu called, current state:', isMenuOpen);
         
-        if (forceClose || isMenuOpen) {
-            // Close menu
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            document.body.style.overflow = '';
-            isMenuOpen = false;
-            console.log('Menu closed');
-        } else {
-            // Open menu
-            navMenu.classList.add('active');
-            navToggle.classList.add('active');
-            document.body.classList.add('menu-open');
-            document.body.style.overflow = 'hidden';
-            isMenuOpen = true;
-            console.log('Menu opened');
-        }
+        setTimeout(() => {
+            if (forceClose || isMenuOpen) {
+                // Close menu
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                document.body.style.overflow = '';
+                isMenuOpen = false;
+                console.log('Menu closed');
+            } else {
+                // Open menu
+                navMenu.classList.add('active');
+                navToggle.classList.add('active');
+                document.body.classList.add('menu-open');
+                document.body.style.overflow = 'hidden';
+                isMenuOpen = true;
+                console.log('Menu opened');
+            }
+            isProcessing = false;
+        }, 50);
     };
 
     // Enhanced click handler for toggle button
     const handleToggleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
         console.log('Nav toggle clicked!');
         toggleMenu();
     };
 
-    // Add event listeners
-    navToggle.addEventListener('click', handleToggleClick);
-    navToggle.addEventListener('touchstart', handleToggleClick, { passive: true });
+    // Add event listeners with proper mobile support
+    navToggle.addEventListener('click', handleToggleClick, { passive: false });
+    navToggle.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log('Nav toggle touched!');
+        toggleMenu();
+    }, { passive: false });
+
+    // Prevent double firing on touch devices
+    let touchStarted = false;
+    navToggle.addEventListener('touchstart', (e) => {
+        touchStarted = true;
+        e.preventDefault();
+    }, { passive: false });
 
     // Close button event listener
     closeButton.addEventListener('click', (e) => {
