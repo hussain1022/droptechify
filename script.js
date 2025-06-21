@@ -81,52 +81,50 @@ const initMobileNav = () => {
         
         console.log('Toggle menu called, current state:', isMenuOpen);
         
+        if (forceClose || isMenuOpen) {
+            // Close menu
+            navMenu.classList.remove('active');
+            navToggle.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            document.body.style.overflow = '';
+            isMenuOpen = false;
+            console.log('Menu closed');
+        } else {
+            // Open menu
+            navMenu.classList.add('active');
+            navToggle.classList.add('active');
+            document.body.classList.add('menu-open');
+            document.body.style.overflow = 'hidden';
+            isMenuOpen = true;
+            console.log('Menu opened');
+        }
+        
         setTimeout(() => {
-            if (forceClose || isMenuOpen) {
-                // Close menu
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-                document.body.classList.remove('menu-open');
-                document.body.style.overflow = '';
-                isMenuOpen = false;
-                console.log('Menu closed');
-            } else {
-                // Open menu
-                navMenu.classList.add('active');
-                navToggle.classList.add('active');
-                document.body.classList.add('menu-open');
-                document.body.style.overflow = 'hidden';
-                isMenuOpen = true;
-                console.log('Menu opened');
-            }
             isProcessing = false;
-        }, 50);
+        }, 300);
     };
 
-    // Enhanced click handler for toggle button
+    // Simple click handler for toggle button
     const handleToggleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation();
         console.log('Nav toggle clicked!');
         toggleMenu();
     };
 
-    // Add event listeners with proper mobile support
-    navToggle.addEventListener('click', handleToggleClick, { passive: false });
+    // Add single event listener
+    navToggle.addEventListener('click', handleToggleClick);
+    
+    // Handle touch events for mobile
+    navToggle.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+    }, { passive: false });
+    
     navToggle.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation();
         console.log('Nav toggle touched!');
         toggleMenu();
-    }, { passive: false });
-
-    // Prevent double firing on touch devices
-    let touchStarted = false;
-    navToggle.addEventListener('touchstart', (e) => {
-        touchStarted = true;
-        e.preventDefault();
     }, { passive: false });
 
     // Close button event listener
