@@ -1,0 +1,17 @@
+
+{
+  "name": "droptechify-website",
+  "version": "1.0.0",
+  "description": "DropTechify Professional Website with Admin Panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "keywords": ["droptechify", "admin-panel", "portfolio"],
+  "author": "DropTechify",
+  "license": "MIT"
+}

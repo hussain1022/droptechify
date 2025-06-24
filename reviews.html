@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="FAL.png">
+    <title>Client Reviews - DropTechify</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        .coming-soon-section {
+            min-height: 80vh;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coming-soon-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="120" height="120"><path d="M60 10 L110 60 L60 110 L10 60 Z" fill="none" stroke="rgba(255,193,7,0.1)" stroke-width="2"/></pattern></defs><rect width="1000" height="1000" fill="url(%23pattern)"/></svg>');
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .coming-soon-container {
+            text-align: center;
+            max-width: 650px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .coming-soon-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 20px 60px rgba(255, 193, 7, 0.3);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .coming-soon-icon i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .coming-soon-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .coming-soon-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .coming-soon-description {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-preview {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            border-left: 5px solid #ffc107;
+        }
+
+        .preview-stars {
+            color: #ffc107;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .preview-text {
+            font-size: 1.1rem;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .preview-author {
+            text-align: right;
+        }
+
+        .preview-author strong {
+            display: block;
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .preview-author span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffc107;
+            border: 2px solid #ffc107;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #ffc107;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .coming-soon-title {
+                font-size: 2rem;
+            }
+
+            .coming-soon-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .coming-soon-icon i {
+                font-size: 2.5rem;
+            }
+
+            .testimonial-preview {
+                padding: 2rem;
+            }
+
+            .stats-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>DropTechify</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#services" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item portfolio-dropdown">
+                    <a href="#" class="nav-link active">Portfolio <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="portfolio.html" class="dropdown-item">
+                            <i class="fas fa-briefcase"></i> Our Projects
+                        </a>
+                        <a href="reviews.html" class="dropdown-item">
+                            <i class="fas fa-star"></i> Client Reviews
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Coming Soon Section -->
+    <section class="coming-soon-section">
+        <div class="coming-soon-container" data-aos="fade-up">
+            <div class="coming-soon-icon" data-aos="zoom-in" data-aos-delay="200">
+                <i class="fas fa-star"></i>
+            </div>
+
+            <h1 class="coming-soon-title" data-aos="fade-up" data-aos-delay="300">
+                Reviews Coming Soon
+            </h1>
+
+            <p class="coming-soon-subtitle" data-aos="fade-up" data-aos-delay="400">
+                We're gathering amazing testimonials from our satisfied clients
+            </p>
+
+            <p class="coming-soon-description" data-aos="fade-up" data-aos-delay="500">
+                Our clients have shared incredible feedback about their experience working with DropTechify. We're currently compiling these testimonials to showcase the real impact of our solutions on businesses worldwide.
+            </p>
+
+            <div class="testimonial-preview" data-aos="fade-up" data-aos-delay="600">
+                <div class="preview-stars">⭐⭐⭐⭐⭐</div>
+                <p class="preview-text">
+                    "DropTechify delivered exactly what we needed. Their automation solution saved us countless hours and improved our efficiency dramatically. Professional, reliable, and truly innovative."
+                </p>
+                <div class="preview-author">
+                    <strong>Sample Client</strong>
+                    <span>CEO, Tech Company</span>
+                </div>
+            </div>
+
+            <div class="stats-preview" data-aos="fade-up" data-aos-delay="700">
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Client Satisfaction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5.0</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+            </div>
+
+            <div class="cta-buttons" data-aos="fade-up" data-aos-delay="800">
+                <a href="index.html#contact" class="btn-primary">
+                    <i class="fas fa-comment-dots"></i> Share Your Experience
+                </a>
+                <a href="index.html" class="btn-secondary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>DropTechify</h3>
+                    <p>Empowering Digital Solutions</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/abdul-kabeer-mughal-003902246" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://clutch.co/profile/droptechify" target="_blank" title="Clutch"><i class="fas fa-star"></i></a>
+                        <a href="https://www.facebook.com/share/19uKfqsFCX/" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.upwork.com/freelancers/~017b30088039d8ddbc?mp_source=share" target="_blank" title="Upwork"><i class="fas fa-briefcase"></i></a>
+                        <a href="https://wa.me/923030273718" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:droptechify@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="reviews.html">Reviews</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li>Web Scraping & Automation</li>
+                        <li>Web Development</li>
+                        <li>AI & Chatbot Integration</li>
+                        <li>Custom Software Solutions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DropTechify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            offset: 100,
+            once: true
+        });
+
+        // Mobile navigation toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Initialize chatbot
+        document.addEventListener('DOMContentLob', function() {
+            setTimeout(() => {
+                if (!document.getElementById('chat-button')) {
+                    new DropTechifyChatbot();
+                }
+            }, 1000);
+        });
+    </script>
+
+    <!-- Dynamic Reviews Loading (when admin adds content) -->
+    <div id="dynamic-reviews" style="display: none;">
+        <!-- Reviews will be loaded here dynamically when added via admin panel -->
+    </div>
+
+    <!-- Firebase Integration for Dynamic Content -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, onSnapshot, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyChFO-OThN7rPIZuAOVNP8aG7R9qEAO-z4",
+            authDomain: "droptechify-80034.firebaseapp.com",
+            projectId: "droptechify-80034",
+            storageBucket: "droptechify-80034.firebasestorage.app",
+            messagingSenderId: "41692901589",
+            appId: "1:41692901589:web:1e2000fd5bf89f0d7c725c",
+            measurementId: "G-1PJMJF5W4L"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Listen for reviews - when reviews are added, show them instead of coming soon
+        function checkForReviews() {
+            const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
+
+            onSnapshot(reviewsQuery, (snapshot) => {
+                if (snapshot.docs.length > 0) {
+                    // Reviews exist - hide coming soon and show reviews
+                    document.querySelector('.coming-soon-section').style.display = 'none';
+                    document.getElementById('dynamic-reviews').style.display = 'block';
+                    loadReviews(snapshot.docs);
+                }
+            });
+        }
+
+        function loadReviews(reviews) {
+            const container = document.getElementById('dynamic-reviews');
+            container.innerHTML = `
+                <section class="reviews-main" style="padding: 8rem 0 5rem; background: #f8f9fa;">
+                    <div class="container">
+                        <div class="section-header">
+                            <h2>Client Reviews</h2>
+                            <p>What our clients say about working with us</p>
+                        </div>
+                        <div class="reviews-grid" id="reviews-grid">
+                        </div>
+                    </div>
+                </section>
+            `;
+
+            const grid = document.getElementById('reviews-grid');
+            reviews.forEach(doc => {
+                const review = doc.data();
+                const reviewCard = createReviewCard(review, doc.id);
+                grid.appendChild(reviewCard);
+            });
+        }
+
+        function createReviewCard(review, id) {
+            const card = document.createElement('div');
+            card.className = 'review-card-full';
+
+            const rating = '⭐'.repeat(review.rating || 5);
+            const dateAdded = review.dateAdded ? new Date(review.dateAdded.seconds * 1000).toLocaleDateString() : 'Recent';
+
+            card.innerHTML = `
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <h4>${review.name}</h4>
+                        <p>${review.position}${review.company ? ` at ${review.company}` : ''}</p>
+                    </div>
+                    <div class="review-date">${dateAdded}</div>
+                </div>
+                <div class="review-rating">
+                    <div class="stars">${rating}</div>
+                </div>
+                <div class="review-text">
+                    <p>"${review.text}"</p>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Initialize review checking
+        checkForReviews();
+    </script>
+</body>
+</html>3
