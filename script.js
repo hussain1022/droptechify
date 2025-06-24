@@ -39,7 +39,7 @@ if (typeof AOS !== 'undefined') {
     });
 }
 
-// Clean Mobile Navigation Implementation
+// Enhanced Mobile Navigation - Clean Implementation
 const initMobileNav = () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -50,7 +50,7 @@ const initMobileNav = () => {
         return;
     }
 
-    console.log('🔧 Initializing mobile navigation...');
+    console.log('Initializing mobile navigation...');
 
     // Reset initial state
     navMenu.classList.remove('active');
@@ -58,19 +58,12 @@ const initMobileNav = () => {
     document.body.classList.remove('menu-open');
 
     let isMenuOpen = false;
+    let touchStarted = false;
 
-    // Add close button to menu (only if it doesn't exist)
-    let closeButton = navMenu.querySelector('.nav-close-btn');
-    if (!closeButton) {
-        closeButton = document.createElement('button');
-        closeButton.className = 'nav-close-btn';
-        closeButton.innerHTML = '×';
-        closeButton.setAttribute('aria-label', 'Close menu');
-        navMenu.appendChild(closeButton);
-    }
-
-    // Toggle function
+    // Enhanced toggle function
     const toggleMenu = (forceClose = false) => {
+        console.log('Toggle menu called, current state:', isMenuOpen, 'forceClose:', forceClose);
+
         if (forceClose || isMenuOpen) {
             // Close menu
             navMenu.classList.remove('active');
@@ -78,7 +71,7 @@ const initMobileNav = () => {
             document.body.classList.remove('menu-open');
             document.body.style.overflow = '';
             isMenuOpen = false;
-            console.log('📱 Menu closed');
+            console.log('Menu closed');
         } else {
             // Open menu
             navMenu.classList.add('active');
@@ -86,75 +79,88 @@ const initMobileNav = () => {
             document.body.classList.add('menu-open');
             document.body.style.overflow = 'hidden';
             isMenuOpen = true;
-            console.log('📱 Menu opened');
+            console.log('Menu opened');
         }
     };
 
-    // Hamburger toggle click
-    navToggle.addEventListener('click', (e) => {
+    // Handle click/touch events
+    const handleToggleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('🍔 Hamburger clicked!');
+        console.log('Nav toggle clicked/touched!');
         toggleMenu();
-    });
+    };
 
-    // Touch support for mobile
+    // Add event listeners with proper touch handling
+    navToggle.addEventListener('click', handleToggleClick);
+    
+    // Handle touch events properly
+    navToggle.addEventListener('touchstart', (e) => {
+        touchStarted = true;
+        e.preventDefault();
+    }, { passive: false });
+
     navToggle.addEventListener('touchend', (e) => {
+        if (touchStarted) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Touch end - toggling menu');
+            toggleMenu();
+            touchStarted = false;
+        }
+    }, { passive: false });
+
+    // Prevent context menu on long press
+    navToggle.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        e.stopPropagation();
-        console.log('🍔 Hamburger touched!');
-        toggleMenu();
     });
 
-    // Close button
-    closeButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('❌ Close button clicked');
-        toggleMenu(true);
-    });
-
-    // Close when clicking nav links
+    // Close menu when clicking nav links
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            console.log('🔗 Nav link clicked, closing menu');
-            toggleMenu(true);
+            console.log('Nav link clicked, closing menu');
+            setTimeout(() => toggleMenu(true), 100);
+        });
+        
+        link.addEventListener('touchend', () => {
+            console.log('Nav link touched, closing menu');
+            setTimeout(() => toggleMenu(true), 100);
         });
     });
 
-    // Close when clicking dropdown items
+    // Close menu when clicking dropdown items
     document.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', () => {
-            console.log('📋 Dropdown item clicked, closing menu');
-            toggleMenu(true);
+            console.log('Dropdown item clicked, closing menu');
+            setTimeout(() => toggleMenu(true), 100);
         });
     });
 
-    // Close on outside click
+    // Close menu when clicking outside (only on click, not touch)
     document.addEventListener('click', (e) => {
         if (isMenuOpen && !navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-            console.log('🎯 Clicked outside, closing menu');
+            console.log('Clicked outside, closing menu');
             toggleMenu(true);
         }
     });
 
-    // Close on window resize to desktop
+    // Close menu on window resize
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768 && isMenuOpen) {
-            console.log('💻 Resized to desktop, closing menu');
+            console.log('Window resized, closing menu');
             toggleMenu(true);
         }
     });
 
-    // Close on escape key
+    // Close menu on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && isMenuOpen) {
-            console.log('⌨️ Escape pressed, closing menu');
+            console.log('Escape pressed, closing menu');
             toggleMenu(true);
         }
     });
 
-    console.log('✅ Mobile navigation initialized successfully!');
+    console.log('Mobile navigation initialized successfully');
 };
 
 // Optimized smooth scrolling
