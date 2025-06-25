@@ -62,7 +62,7 @@ const initSideNav = () => {
         });
     });
 
-    // Portfolio dropdown functionality
+    // Portfolio dropdown functionality for side nav
     const portfolioDropdown = document.querySelector('.portfolio-dropdown-side');
     if (portfolioDropdown) {
         let timeoutId;
@@ -105,6 +105,26 @@ const initSideNav = () => {
                         dropdown.style.transform = 'translateX(0)';
                     }
                 }
+            }
+        });
+    }
+
+    // Hero portfolio dropdown functionality
+    const heroPortfolioDropdown = document.querySelector('.portfolio-dropdown-hero');
+    if (heroPortfolioDropdown) {
+        // Mobile click support for hero dropdown
+        const portfolioBtn = heroPortfolioDropdown.querySelector('.portfolio-btn');
+        portfolioBtn.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                heroPortfolioDropdown.classList.toggle('active');
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!heroPortfolioDropdown.contains(e.target)) {
+                heroPortfolioDropdown.classList.remove('active');
             }
         });
     }
