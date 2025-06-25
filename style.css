@@ -6,8 +6,9 @@
 
 html {
     height: 100%;
-    scroll-behavior: smooth;
+    scroll-behavior: smooth !important;
     overflow-x: hidden;
+    scroll-padding-top: 80px;
 }
 
 body {
@@ -19,6 +20,9 @@ body {
     margin: 0;
     padding: 0;
     background: #f8fafc;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: scroll-position;
 }
 
 /* Custom Stylish Scrollbar */
@@ -1155,23 +1159,7 @@ section {
     transition: all 0.3s ease;
 }
 
-#chat-button::before {
-    content: '1';
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4757;
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid white;
-}
+/* Removed duplicate notification - will be handled by chatbot.js */
 
 #chat-button:hover {
     transform: scale(1.1);
