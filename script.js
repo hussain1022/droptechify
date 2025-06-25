@@ -1,6 +1,26 @@
 
-// Optimized DropTechify Website Script
+// Ultra-Optimized DropTechify Website Script
 console.log('🚀 Loading DropTechify website...');
+
+// Critical performance optimizations
+const optimizePerformance = () => {
+    // Preload critical resources
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap';
+    preloadLink.as = 'style';
+    document.head.appendChild(preloadLink);
+
+    // Optimize images
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.loading = 'lazy';
+        img.decoding = 'async';
+    });
+
+    // Reduce layout thrashing
+    document.documentElement.style.contain = 'layout style paint';
+};
 
 // Smooth Scroll Enhancement
 const addSmoothScrollStyle = () => {
@@ -12,7 +32,7 @@ const addSmoothScrollStyle = () => {
                 scroll-behavior: smooth;
                 scroll-padding-top: 2rem;
             }
-            
+
             /* Enhanced scroll progress bar */
             .scroll-progress {
                 position: fixed;
@@ -26,7 +46,7 @@ const addSmoothScrollStyle = () => {
                 border-radius: 0 2px 2px 0;
                 box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
             }
-            
+
             /* Smooth transitions for all interactive elements */
             a, button, .btn, .nav-btn, .service-card, .tech-item {
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -43,18 +63,18 @@ const initSmoothScrollProgress = () => {
     document.body.appendChild(progressBar);
 
     let ticking = false;
-    
+
     const updateProgress = () => {
         const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
         progressBar.style.width = Math.min(scrolled, 100) + '%';
-        
+
         // Add glow effect when scrolling
         if (scrolled > 5) {
             progressBar.style.boxShadow = '0 2px 20px rgba(102, 126, 234, 0.5)';
         } else {
             progressBar.style.boxShadow = '0 2px 10px rgba(102, 126, 234, 0.3)';
         }
-        
+
         ticking = false;
     };
 
@@ -80,7 +100,7 @@ const initEnhancedSmoothScroll = () => {
 
         if (target) {
             const offsetTop = target.offsetTop - 20;
-            
+
             // Smooth scroll with custom easing
             const startPosition = window.pageYOffset;
             const distance = offsetTop - startPosition;
@@ -107,23 +127,57 @@ const initEnhancedSmoothScroll = () => {
     });
 };
 
-// Hero portfolio dropdown functionality
+// Enhanced Hero portfolio dropdown functionality
 const initHeroPortfolioDropdown = () => {
     console.log('Initializing hero portfolio dropdown...');
 
     const heroPortfolioDropdown = document.querySelector('.portfolio-dropdown-hero');
     if (heroPortfolioDropdown) {
         const portfolioBtn = heroPortfolioDropdown.querySelector('.portfolio-btn');
+        let isDropdownOpen = false;
+
         portfolioBtn.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                heroPortfolioDropdown.classList.toggle('active');
+            e.preventDefault();
+            e.stopPropagation();
+            
+            isDropdownOpen = !isDropdownOpen;
+            heroPortfolioDropdown.classList.toggle('active', isDropdownOpen);
+            
+            // Add ripple effect
+            const ripple = document.createElement('span');
+            const rect = portfolioBtn.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.3);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+            portfolioBtn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Close dropdown when clicking outside or on dropdown items
+        document.addEventListener('click', (e) => {
+            if (!heroPortfolioDropdown.contains(e.target) || e.target.classList.contains('dropdown-item-hero')) {
+                isDropdownOpen = false;
+                heroPortfolioDropdown.classList.remove('active');
             }
         });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!heroPortfolioDropdown.contains(e.target)) {
+        // Close dropdown on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isDropdownOpen) {
+                isDropdownOpen = false;
                 heroPortfolioDropdown.classList.remove('active');
             }
         });
@@ -139,7 +193,7 @@ const initFloatingElements = () => {
     floatingElements.forEach((element, index) => {
         // Add slight delay to each element for staggered animation
         element.style.animationDelay = `${index * 0.5}s`;
-        
+
         element.addEventListener('mouseenter', () => {
             element.style.transform = 'scale(1.2) translateY(-10px)';
             element.style.boxShadow = '0 15px 40px rgba(255,255,255,0.4)';
@@ -350,6 +404,9 @@ const initMobileEnhancements = () => {
 const initializeWebsite = () => {
     console.log('🚀 Initializing DropTechify website...');
 
+    // Performance optimizations first
+    optimizePerformance();
+    
     // Add styles first
     addSmoothScrollStyle();
 
@@ -359,11 +416,13 @@ const initializeWebsite = () => {
     initSmoothScrollProgress();
     initContactForm();
 
-    // Visual enhancements
-    initFloatingElements();
-    initScrollAnimations();
-    initButtonEffects();
-    initMobileEnhancements();
+    // Visual enhancements (load these after critical functionality)
+    requestIdleCallback(() => {
+        initFloatingElements();
+        initScrollAnimations();
+        initButtonEffects();
+        initMobileEnhancements();
+    });
 
     console.log('✅ DropTechify website initialized successfully!');
 };
