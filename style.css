@@ -238,108 +238,50 @@ img {
 /* Vertical Side Navigation */
 .side-nav {
     position: fixed;
-    left: 20px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 2rem 0.8rem;
-    border-radius: 25px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 90px;
+    gap: 1rem;
+    background: rgba(102, 126, 234, 0.2);
+    padding: 1rem 0.5rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+    width: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .side-nav-item {
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    padding: 1.2rem 0.8rem;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
+    padding: 1rem 0.3rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
     text-decoration: none;
     color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .side-nav-item:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: white;
-    transform: scale(1.05) translateX(5px);
-    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .side-nav-item.portfolio {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(102, 126, 234, 0.3);
 }
 
 .side-nav-item.contact {
-    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(37, 211, 102, 0.4);
 }
 
-/* Portfolio Dropdown for Side Nav */
-.portfolio-dropdown-side {
-    position: relative;
-}
-
-.dropdown-side {
-    position: absolute;
-    left: calc(100% + 15px);
-    top: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-width: 180px;
-    border-radius: 15px;
-    padding: 1rem 0;
-    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-20px);
-    transition: all 0.3s ease;
-    z-index: 1001;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.portfolio-dropdown-side:hover .dropdown-side {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-}
-
-.dropdown-side-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
-}
-
-.dropdown-side-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-}
-
-.dropdown-side-item i {
-    font-size: 1.1rem;
-    color: white;
-}
 
 /* Main Content Area */
 .main-content {
