@@ -22,7 +22,7 @@ class DropTechifyChatbot {
             <!-- Chat Button -->
             <div id="chat-button" class="chat-button">
                 <i class="fas fa-comments"></i>
-                <div class="chat-notification" id="chat-notification">1</div>
+                <div class="chat-notification" id="chat-notification" style="display: none;">1</div>
             </div>
 
             <!-- Chat Window -->
@@ -84,6 +84,7 @@ class DropTechifyChatbot {
                     z-index: 9998;
                     transition: all 0.3s ease;
                     animation: pulse 2s infinite;
+                    will-change: transform;
                 }
 
                 .chat-button:hover {
@@ -141,6 +142,7 @@ class DropTechifyChatbot {
                     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                     border: 1px solid #e0e0e0;
                     overflow: hidden;
+                    will-change: transform, opacity;
                 }
 
                 .chat-window.open {
@@ -492,8 +494,14 @@ class DropTechifyChatbot {
 
     openChat() {
         const chatWindow = document.getElementById('chat-window');
+        const chatNotification = document.getElementById('chat-notification');
+        
         chatWindow.classList.add('open');
         this.isOpen = true;
+        
+        // Hide notification and mark as visited
+        chatNotification.style.display = 'none';
+        localStorage.setItem('chatbot-visited', 'true');
 
         // Focus input
         setTimeout(() => {
@@ -508,6 +516,12 @@ class DropTechifyChatbot {
     }
 
     showWelcomeMessage() {
+        // Show notification only if user hasn't interacted
+        const chatNotification = document.getElementById('chat-notification');
+        if (!localStorage.getItem('chatbot-visited')) {
+            chatNotification.style.display = 'flex';
+        }
+        
         this.addBotMessage(`Hi there! I'm here to help you with any questions about DropTechify.
 
 🔥 **LIMITED TIME: 30% OFF for First 10 Projects!**
@@ -972,10 +986,11 @@ What would you like to know more about?`;
     }
 }
 
-// Multiple initialization methods to ensure chatbot loads
+// Single initialization to prevent duplicates
 function initializeChatbot() {
-    if (!document.getElementById('chat-button')) {
+    if (!document.getElementById('chat-button') && !window.chatbotInitialized) {
         console.log('🤖 Initializing DropTechify Chatbot...');
+        window.chatbotInitialized = true;
         new DropTechifyChatbot();
     }
 }
@@ -986,9 +1001,5 @@ if (document.readyState === 'loading') {
 } else {
     initializeChatbot();
 }
-
-// Backup initialization
-setTimeout(initializeChatbot, 1000);
-setTimeout(initializeChatbot, 3000);
 
 console.log('🤖 DropTechify Chatbot script loaded!');
