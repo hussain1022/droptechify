@@ -318,30 +318,33 @@ img {
     transform: rotate(180deg);
 }
 
-.dropdown-menu-hero {
-    position: absolute;
-    top: calc(100% + 15px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(15px);
-    border-radius: 15px;
-    padding: 1rem 0;
-    min-width: 200px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-50%) translateY(-10px);
-    transition: all 0.3s ease;
-    z-index: 1000;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+.portfolio-dropdown-hero {
+  position: relative;
 }
 
-.portfolio-dropdown-hero:hover .dropdown-menu-hero {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
+.dropdown-menu-hero {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  margin-top: 1rem;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 200px;
 }
+
+.portfolio-dropdown-hero.active .dropdown-menu-hero {
+  opacity: 1;
+  max-height: 200px;
+  padding: 1rem 0;
+}
+
 
 .dropdown-item-hero {
     display: flex;
