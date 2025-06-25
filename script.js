@@ -39,128 +39,77 @@ if (typeof AOS !== 'undefined') {
     });
 }
 
-// Enhanced Mobile Navigation - Clean Implementation
+// Clean Horizontal Navigation - No Hamburger Menu
 const initMobileNav = () => {
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
+    console.log('Initializing clean horizontal navigation...');
 
-    if (!navToggle || !navMenu) {
-        console.log('Navigation elements not found');
-        return;
+    // Simple smooth scroll for navigation links
+    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+
+    // Enhanced Portfolio dropdown functionality
+    const portfolioDropdown = document.querySelector('.portfolio-dropdown');
+    if (portfolioDropdown) {
+        let timeoutId;
+        
+        portfolioDropdown.addEventListener('mouseenter', () => {
+            clearTimeout(timeoutId);
+            const dropdown = portfolioDropdown.querySelector('.dropdown-menu');
+            if (dropdown) {
+                dropdown.style.opacity = '1';
+                dropdown.style.visibility = 'visible';
+                dropdown.style.transform = 'translateX(-50%) translateY(0)';
+            }
+        });
+
+        portfolioDropdown.addEventListener('mouseleave', () => {
+            timeoutId = setTimeout(() => {
+                const dropdown = portfolioDropdown.querySelector('.dropdown-menu');
+                if (dropdown) {
+                    dropdown.style.opacity = '0';
+                    dropdown.style.visibility = 'hidden';
+                    dropdown.style.transform = 'translateX(-50%) translateY(-10px)';
+                }
+            }, 200);
+        });
+
+        // Mobile touch support for portfolio dropdown
+        portfolioDropdown.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = portfolioDropdown.querySelector('.dropdown-menu');
+                if (dropdown) {
+                    const isVisible = dropdown.style.opacity === '1';
+                    if (isVisible) {
+                        dropdown.style.opacity = '0';
+                        dropdown.style.visibility = 'hidden';
+                        dropdown.style.transform = 'translateX(-50%) translateY(-10px)';
+                    } else {
+                        dropdown.style.opacity = '1';
+                        dropdown.style.visibility = 'visible';
+                        dropdown.style.transform = 'translateX(-50%) translateY(0)';
+                    }
+                }
+            }
+        });
     }
 
-    console.log('Initializing mobile navigation...');
-
-    // Reset initial state
-    navMenu.classList.remove('active');
-    navToggle.classList.remove('active');
-    document.body.classList.remove('menu-open');
-
-    let isMenuOpen = false;
-    let touchStarted = false;
-
-    // Enhanced toggle function
-    const toggleMenu = (forceClose = false) => {
-        console.log('Toggle menu called, current state:', isMenuOpen, 'forceClose:', forceClose);
-
-        if (forceClose || isMenuOpen) {
-            // Close menu
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            document.body.style.overflow = '';
-            isMenuOpen = false;
-            console.log('Menu closed');
-        } else {
-            // Open menu
-            navMenu.classList.add('active');
-            navToggle.classList.add('active');
-            document.body.classList.add('menu-open');
-            document.body.style.overflow = 'hidden';
-            isMenuOpen = true;
-            console.log('Menu opened');
-        }
-    };
-
-    // Handle click/touch events
-    const handleToggleClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('Nav toggle clicked/touched!');
-        toggleMenu();
-    };
-
-    // Add event listeners with proper touch handling
-    navToggle.addEventListener('click', handleToggleClick);
-    
-    // Handle touch events properly
-    navToggle.addEventListener('touchstart', (e) => {
-        touchStarted = true;
-        e.preventDefault();
-    }, { passive: false });
-
-    navToggle.addEventListener('touchend', (e) => {
-        if (touchStarted) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Touch end - toggling menu');
-            toggleMenu();
-            touchStarted = false;
-        }
-    }, { passive: false });
-
-    // Prevent context menu on long press
-    navToggle.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-    });
-
-    // Close menu when clicking nav links
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            console.log('Nav link clicked, closing menu');
-            setTimeout(() => toggleMenu(true), 100);
-        });
-        
-        link.addEventListener('touchend', () => {
-            console.log('Nav link touched, closing menu');
-            setTimeout(() => toggleMenu(true), 100);
-        });
-    });
-
-    // Close menu when clicking dropdown items
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', () => {
-            console.log('Dropdown item clicked, closing menu');
-            setTimeout(() => toggleMenu(true), 100);
-        });
-    });
-
-    // Close menu when clicking outside (only on click, not touch)
-    document.addEventListener('click', (e) => {
-        if (isMenuOpen && !navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-            console.log('Clicked outside, closing menu');
-            toggleMenu(true);
-        }
-    });
-
-    // Close menu on window resize
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && isMenuOpen) {
-            console.log('Window resized, closing menu');
-            toggleMenu(true);
-        }
-    });
-
-    // Close menu on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isMenuOpen) {
-            console.log('Escape pressed, closing menu');
-            toggleMenu(true);
-        }
-    });
-
-    console.log('Mobile navigation initialized successfully');
+    console.log('Clean horizontal navigation initialized successfully');
 };
 
 // Optimized smooth scrolling
