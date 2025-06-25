@@ -1,4 +1,3 @@
-
 // Ultra-Optimized DropTechify Website Script
 console.log('🚀 Loading DropTechify website...');
 
@@ -139,17 +138,17 @@ const initHeroPortfolioDropdown = () => {
         portfolioBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            
+
             isDropdownOpen = !isDropdownOpen;
             heroPortfolioDropdown.classList.toggle('active', isDropdownOpen);
-            
+
             // Add ripple effect
             const ripple = document.createElement('span');
             const rect = portfolioBtn.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
             const x = e.clientX - rect.left - size / 2;
             const y = e.clientY - rect.top - size / 2;
-            
+
             ripple.style.cssText = `
                 position: absolute;
                 width: ${size}px;
@@ -406,7 +405,7 @@ const initializeWebsite = () => {
 
     // Performance optimizations first
     optimizePerformance();
-    
+
     // Add styles first
     addSmoothScrollStyle();
 
@@ -569,3 +568,23 @@ function createReviewCard(review) {
 }
 
 console.log('🎉 DropTechify website script loaded and optimized!');
+// Ultra performance optimizations
+const optimizeWebsitePerformance = () => {
+    // Reduce unnecessary repaints
+    document.documentElement.style.willChange = 'scroll-position';
+
+    // Optimize images
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.style.willChange = 'auto';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+    });
+
+    // Optimize animations for 60fps
+    const animatedElements = document.querySelectorAll('.floating-element, .service-card, .tech-item');
+    animatedElements.forEach(el => {
+        el.style.transform = 'translate3d(0,0,0)';
+        el.style.backfaceVisibility = 'hidden';
+    });
+};
