@@ -39,20 +39,20 @@ if (typeof AOS !== 'undefined') {
     });
 }
 
-// Clean Horizontal Navigation - No Hamburger Menu
-const initMobileNav = () => {
-    console.log('Initializing clean horizontal navigation...');
+// Side Navigation functionality
+const initSideNav = () => {
+    console.log('Initializing side navigation...');
 
     // Simple smooth scroll for navigation links
-    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-    navLinks.forEach(link => {
+    const sideNavLinks = document.querySelectorAll('.side-nav-item[href^="#"]');
+    sideNavLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
             if (href.startsWith('#')) {
                 e.preventDefault();
                 const target = document.querySelector(href);
                 if (target) {
-                    const offsetTop = target.offsetTop - 80;
+                    const offsetTop = target.offsetTop - 120;
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
@@ -62,54 +62,54 @@ const initMobileNav = () => {
         });
     });
 
-    // Enhanced Portfolio dropdown functionality
-    const portfolioDropdown = document.querySelector('.portfolio-dropdown');
+    // Portfolio dropdown functionality
+    const portfolioDropdown = document.querySelector('.portfolio-dropdown-side');
     if (portfolioDropdown) {
         let timeoutId;
         
         portfolioDropdown.addEventListener('mouseenter', () => {
             clearTimeout(timeoutId);
-            const dropdown = portfolioDropdown.querySelector('.dropdown-menu');
+            const dropdown = portfolioDropdown.querySelector('.dropdown-side');
             if (dropdown) {
                 dropdown.style.opacity = '1';
                 dropdown.style.visibility = 'visible';
-                dropdown.style.transform = 'translateX(-50%) translateY(0)';
+                dropdown.style.transform = 'translateX(0)';
             }
         });
 
         portfolioDropdown.addEventListener('mouseleave', () => {
             timeoutId = setTimeout(() => {
-                const dropdown = portfolioDropdown.querySelector('.dropdown-menu');
+                const dropdown = portfolioDropdown.querySelector('.dropdown-side');
                 if (dropdown) {
                     dropdown.style.opacity = '0';
                     dropdown.style.visibility = 'hidden';
-                    dropdown.style.transform = 'translateX(-50%) translateY(-10px)';
+                    dropdown.style.transform = 'translateX(-20px)';
                 }
             }, 200);
         });
 
-        // Mobile touch support for portfolio dropdown
+        // Mobile touch support
         portfolioDropdown.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                const dropdown = portfolioDropdown.querySelector('.dropdown-menu');
+                const dropdown = portfolioDropdown.querySelector('.dropdown-side');
                 if (dropdown) {
                     const isVisible = dropdown.style.opacity === '1';
                     if (isVisible) {
                         dropdown.style.opacity = '0';
                         dropdown.style.visibility = 'hidden';
-                        dropdown.style.transform = 'translateX(-50%) translateY(-10px)';
+                        dropdown.style.transform = 'translateX(-20px)';
                     } else {
                         dropdown.style.opacity = '1';
                         dropdown.style.visibility = 'visible';
-                        dropdown.style.transform = 'translateX(-50%) translateY(0)';
+                        dropdown.style.transform = 'translateX(0)';
                     }
                 }
             }
         });
     }
 
-    console.log('Clean horizontal navigation initialized successfully');
+    console.log('Side navigation initialized successfully');
 };
 
 // Optimized smooth scrolling
@@ -132,23 +132,23 @@ const initSmoothScroll = () => {
     });
 };
 
-// Enhanced navbar - Always sticky and visible
-const initNavbarScroll = () => {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
+// Enhanced header scroll effect
+const initHeaderScroll = () => {
+    const header = document.querySelector('.top-header');
+    if (!header) return;
 
-    // Simple scroll effect for navbar
-    const updateNavbar = throttle(() => {
+    // Simple scroll effect for header
+    const updateHeader = throttle(() => {
         if (window.scrollY > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+            header.style.background = 'rgba(255, 255, 255, 0.98)';
+            header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
         } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
         }
     }, 16);
 
-    window.addEventListener('scroll', updateNavbar, { passive: true });
+    window.addEventListener('scroll', updateHeader, { passive: true });
 };
 
 // Optimized floating elements animation
@@ -417,9 +417,9 @@ const initializeWebsite = () => {
     console.log('🚀 Initializing DropTechify website...');
 
     // Core functionality
-    initMobileNav();
+    initSideNav();
     initSmoothScroll();
-    initNavbarScroll();
+    initHeaderScroll();
     initScrollProgress();
     initContactForm();
 
