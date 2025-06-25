@@ -53,7 +53,7 @@ html {
     scrollbar-color: #667eea #e2e8f0;
 }
 
-/* Performance optimizations */
+/* Enhanced Performance optimizations */
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -64,13 +64,29 @@ img {
     contain-intrinsic-size: 300px;
     loading: lazy;
     will-change: transform;
+    image-rendering: optimizeSpeed;
 }
 
 /* GPU acceleration for animations */
-.floating-element, .service-card, .tech-item {
+.floating-element, .service-card, .tech-item, .nav-btn, .dropdown-menu-hero {
     transform: translateZ(0);
     backface-visibility: hidden;
     perspective: 1000px;
+    contain: layout style paint;
+}
+
+/* Critical performance improvements */
+.hero, section {
+    contain: layout style paint;
+}
+
+/* Optimize animations for 60fps */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 /* Container */
@@ -134,28 +150,31 @@ img {
 
 .dropdown-menu-hero {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
     background: white;
-    margin-top: 0.5rem;
     opacity: 0;
     max-height: 0;
     overflow: hidden;
-    transition: all 0.3s ease;
-    z-index: 999;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     width: max-content;
     min-width: 220px;
-    pointer-events: none; /* Hide from mouse events until shown */
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
 }
 
-.portfolio-dropdown-hero:hover .dropdown-menu-hero {
+.portfolio-dropdown-hero:hover .dropdown-menu-hero,
+.portfolio-dropdown-hero.active .dropdown-menu-hero {
     opacity: 1;
     max-height: 200px;
     padding: 1rem 0;
-    pointer-events: auto; /* Allow mouse interaction when shown */
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
 }
 
 
