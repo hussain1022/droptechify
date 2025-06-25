@@ -107,65 +107,10 @@ const initEnhancedSmoothScroll = () => {
     });
 };
 
-// Side Navigation functionality with improved mobile support
-const initSideNav = () => {
-    console.log('Initializing side navigation...');
+// Hero portfolio dropdown functionality
+const initHeroPortfolioDropdown = () => {
+    console.log('Initializing hero portfolio dropdown...');
 
-    // Portfolio dropdown functionality for side nav
-    const portfolioDropdown = document.querySelector('.portfolio-dropdown-side');
-    if (portfolioDropdown) {
-        let timeoutId;
-        
-        portfolioDropdown.addEventListener('mouseenter', () => {
-            clearTimeout(timeoutId);
-            const dropdown = portfolioDropdown.querySelector('.dropdown-side');
-            if (dropdown) {
-                dropdown.style.opacity = '1';
-                dropdown.style.visibility = 'visible';
-                dropdown.style.transform = 'translateX(0)';
-            }
-        });
-
-        portfolioDropdown.addEventListener('mouseleave', () => {
-            timeoutId = setTimeout(() => {
-                const dropdown = portfolioDropdown.querySelector('.dropdown-side');
-                if (dropdown) {
-                    dropdown.style.opacity = '0';
-                    dropdown.style.visibility = 'hidden';
-                    dropdown.style.transform = 'translateX(-20px)';
-                }
-            }, 200);
-        });
-
-        // Enhanced mobile touch support
-        portfolioDropdown.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const dropdown = portfolioDropdown.querySelector('.dropdown-side');
-                if (dropdown) {
-                    const isVisible = dropdown.style.opacity === '1';
-                    if (isVisible) {
-                        dropdown.style.opacity = '0';
-                        dropdown.style.visibility = 'hidden';
-                        dropdown.style.transform = 'translateX(-20px)';
-                    } else {
-                        dropdown.style.opacity = '1';
-                        dropdown.style.visibility = 'visible';
-                        dropdown.style.transform = 'translateX(0)';
-                        
-                        // Close after 3 seconds on mobile
-                        setTimeout(() => {
-                            dropdown.style.opacity = '0';
-                            dropdown.style.visibility = 'hidden';
-                            dropdown.style.transform = 'translateX(-20px)';
-                        }, 3000);
-                    }
-                }
-            }
-        });
-    }
-
-    // Hero portfolio dropdown functionality
     const heroPortfolioDropdown = document.querySelector('.portfolio-dropdown-hero');
     if (heroPortfolioDropdown) {
         const portfolioBtn = heroPortfolioDropdown.querySelector('.portfolio-btn');
@@ -184,7 +129,7 @@ const initSideNav = () => {
         });
     }
 
-    console.log('Side navigation initialized successfully');
+    console.log('Hero portfolio dropdown initialized successfully');
 };
 
 // Enhanced floating elements animation
@@ -409,7 +354,7 @@ const initializeWebsite = () => {
     addSmoothScrollStyle();
 
     // Core functionality
-    initSideNav();
+    initHeroPortfolioDropdown();
     initEnhancedSmoothScroll();
     initSmoothScrollProgress();
     initContactForm();
