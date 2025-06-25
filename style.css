@@ -9,6 +9,7 @@ html {
     scroll-behavior: smooth;
     overflow-x: hidden;
     scroll-padding-top: 80px;
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -24,6 +25,7 @@ body {
     display: flex;
     flex-direction: column;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 }
 
 /* Custom Stylish Scrollbar */
