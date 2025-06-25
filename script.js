@@ -1,66 +1,115 @@
+
 // Optimized DropTechify Website Script
 console.log('🚀 Loading DropTechify website...');
 
-// Debounce function for performance
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Throttle function for scroll events
-function throttle(func, limit) {
-    let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
+// Smooth Scroll Enhancement
+const addSmoothScrollStyle = () => {
+    if (!document.getElementById('smooth-scroll-style')) {
+        const style = document.createElement('style');
+        style.id = 'smooth-scroll-style';
+        style.textContent = `
+            html {
+                scroll-behavior: smooth;
+                scroll-padding-top: 2rem;
+            }
+            
+            /* Enhanced scroll progress bar */
+            .scroll-progress {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 4px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                z-index: 10000;
+                transition: width 0.2s ease;
+                border-radius: 0 2px 2px 0;
+                box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+            }
+            
+            /* Smooth transitions for all interactive elements */
+            a, button, .btn, .nav-btn, .service-card, .tech-item {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        `;
+        document.head.appendChild(style);
     }
-}
+};
 
-// Initialize AOS with performance optimization
-if (typeof AOS !== 'undefined') {
-    AOS.init({
-        duration: 400,
-        once: true,
-        offset: 30,
-        disable: window.innerWidth < 768, // Disable on mobile for better performance
-        startEvent: 'DOMContentLoaded'
+// Enhanced scroll progress with smooth animation
+const initSmoothScrollProgress = () => {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    document.body.appendChild(progressBar);
+
+    let ticking = false;
+    
+    const updateProgress = () => {
+        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        progressBar.style.width = Math.min(scrolled, 100) + '%';
+        
+        // Add glow effect when scrolling
+        if (scrolled > 5) {
+            progressBar.style.boxShadow = '0 2px 20px rgba(102, 126, 234, 0.5)';
+        } else {
+            progressBar.style.boxShadow = '0 2px 10px rgba(102, 126, 234, 0.3)';
+        }
+        
+        ticking = false;
+    };
+
+    const requestTick = () => {
+        if (!ticking) {
+            requestAnimationFrame(updateProgress);
+            ticking = true;
+        }
+    };
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+};
+
+// Enhanced smooth scroll for navigation
+const initEnhancedSmoothScroll = () => {
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+
+        e.preventDefault();
+        const targetId = link.getAttribute('href');
+        const target = document.querySelector(targetId);
+
+        if (target) {
+            const offsetTop = target.offsetTop - 20;
+            
+            // Smooth scroll with custom easing
+            const startPosition = window.pageYOffset;
+            const distance = offsetTop - startPosition;
+            const duration = Math.min(Math.abs(distance) / 2, 1000); // Max 1 second
+            let start = null;
+
+            const animation = (currentTime) => {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            };
+
+            const easeInOutCubic = (t, b, c, d) => {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            };
+
+            requestAnimationFrame(animation);
+        }
     });
-}
+};
 
-// Side Navigation functionality
+// Side Navigation functionality with improved mobile support
 const initSideNav = () => {
     console.log('Initializing side navigation...');
-
-    // Simple smooth scroll for navigation links
-    const sideNavLinks = document.querySelectorAll('.side-nav-item[href^="#"]');
-    sideNavLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-            if (href.startsWith('#')) {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    const offsetTop = target.offsetTop - 120;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
-    });
 
     // Portfolio dropdown functionality for side nav
     const portfolioDropdown = document.querySelector('.portfolio-dropdown-side');
@@ -88,7 +137,7 @@ const initSideNav = () => {
             }, 200);
         });
 
-        // Mobile touch support
+        // Enhanced mobile touch support
         portfolioDropdown.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
@@ -103,6 +152,13 @@ const initSideNav = () => {
                         dropdown.style.opacity = '1';
                         dropdown.style.visibility = 'visible';
                         dropdown.style.transform = 'translateX(0)';
+                        
+                        // Close after 3 seconds on mobile
+                        setTimeout(() => {
+                            dropdown.style.opacity = '0';
+                            dropdown.style.visibility = 'hidden';
+                            dropdown.style.transform = 'translateX(-20px)';
+                        }, 3000);
                     }
                 }
             }
@@ -112,7 +168,6 @@ const initSideNav = () => {
     // Hero portfolio dropdown functionality
     const heroPortfolioDropdown = document.querySelector('.portfolio-dropdown-hero');
     if (heroPortfolioDropdown) {
-        // Mobile click support for hero dropdown
         const portfolioBtn = heroPortfolioDropdown.querySelector('.portfolio-btn');
         portfolioBtn.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
@@ -132,63 +187,29 @@ const initSideNav = () => {
     console.log('Side navigation initialized successfully');
 };
 
-// Optimized smooth scrolling
-const initSmoothScroll = () => {
-    document.addEventListener('click', (e) => {
-        const link = e.target.closest('a[href^="#"]');
-        if (!link) return;
-
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const target = document.querySelector(targetId);
-
-        if (target) {
-            const offsetTop = target.offsetTop - 70;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-};
-
-// Enhanced header scroll effect
-const initHeaderScroll = () => {
-    const header = document.querySelector('.top-header');
-    if (!header) return;
-
-    // Simple scroll effect for header
-    const updateHeader = throttle(() => {
-        if (window.scrollY > 100) {
-            header.style.background = 'rgba(255, 255, 255, 0.98)';
-            header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-        } else {
-            header.style.background = 'rgba(255, 255, 255, 0.95)';
-            header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-        }
-    }, 16);
-
-    window.addEventListener('scroll', updateHeader, { passive: true });
-};
-
-// Optimized floating elements animation
+// Enhanced floating elements animation
 const initFloatingElements = () => {
     const floatingElements = document.querySelectorAll('.floating-element');
 
-    floatingElements.forEach((element) => {
+    floatingElements.forEach((element, index) => {
+        // Add slight delay to each element for staggered animation
+        element.style.animationDelay = `${index * 0.5}s`;
+        
         element.addEventListener('mouseenter', () => {
             element.style.transform = 'scale(1.2) translateY(-10px)';
-            element.style.boxShadow = '0 10px 30px rgba(255,255,255,0.3)';
+            element.style.boxShadow = '0 15px 40px rgba(255,255,255,0.4)';
+            element.style.filter = 'brightness(1.2)';
         });
 
         element.addEventListener('mouseleave', () => {
             element.style.transform = 'scale(1)';
             element.style.boxShadow = 'none';
+            element.style.filter = 'brightness(1)';
         });
     });
 };
 
-// Optimized intersection observer
+// Enhanced scroll animations with better performance
 const initScrollAnimations = () => {
     if (!window.IntersectionObserver) return;
 
@@ -201,41 +222,17 @@ const initScrollAnimations = () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('fade-in');
-                observer.unobserve(entry.target); // Stop observing after animation
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
     // Observe elements for animation
-    const animatedElements = document.querySelectorAll('.service-card, .review-card, .stat-item');
+    const animatedElements = document.querySelectorAll('.service-card, .review-card, .stat-item, .tech-category, .process-step');
     animatedElements.forEach(el => observer.observe(el));
 };
 
-// Optimized scroll progress indicator
-const initScrollProgress = () => {
-    const progressBar = document.createElement('div');
-    progressBar.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0%;
-        height: 3px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        z-index: 9999;
-        transition: width 0.1s ease;
-        will-change: width;
-    `;
-    document.body.appendChild(progressBar);
-
-    const updateProgress = throttle(() => {
-        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        progressBar.style.width = Math.min(scrolled, 100) + '%';
-    }, 16);
-
-    window.addEventListener('scroll', updateProgress, { passive: true });
-};
-
-// Optimized form submission
+// Enhanced form submission with better UX
 const initContactForm = () => {
     const contactForm = document.getElementById('contactForm');
     if (!contactForm) return;
@@ -248,9 +245,10 @@ const initContactForm = () => {
         const successMsg = document.getElementById('form-success');
         const errorMsg = document.getElementById('form-error');
 
-        // Show loading state
+        // Show loading state with animation
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
+        submitBtn.style.background = 'linear-gradient(135deg, #a0aec0 0%, #718096 100%)';
 
         try {
             const formData = new FormData(contactForm);
@@ -263,6 +261,7 @@ const initContactForm = () => {
             if (response.ok) {
                 contactForm.style.display = 'none';
                 successMsg.style.display = 'block';
+                successMsg.style.animation = 'fadeInUp 0.5s ease';
 
                 // Auto-open WhatsApp after 3 seconds
                 setTimeout(() => {
@@ -279,20 +278,22 @@ const initContactForm = () => {
         } catch (error) {
             console.error('Form submission error:', error);
             errorMsg.style.display = 'block';
+            errorMsg.style.animation = 'fadeInUp 0.5s ease';
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
+            submitBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
         }
     });
 };
 
-// Button ripple effect with performance optimization
+// Enhanced button effects with ripple animation
 const initButtonEffects = () => {
     let rippleStyle = document.getElementById('ripple-styles');
     if (!rippleStyle) {
         rippleStyle = document.createElement('style');
         rippleStyle.id = 'ripple-styles';
         rippleStyle.textContent = `
-            .btn {
+            .btn, .nav-btn {
                 position: relative;
                 overflow: hidden;
             }
@@ -310,12 +311,22 @@ const initButtonEffects = () => {
                     opacity: 0;
                 }
             }
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
         `;
         document.head.appendChild(rippleStyle);
     }
 
     document.addEventListener('click', (e) => {
-        const button = e.target.closest('.btn');
+        const button = e.target.closest('.btn, .nav-btn');
         if (!button) return;
 
         const ripple = document.createElement('span');
@@ -334,126 +345,80 @@ const initButtonEffects = () => {
         button.appendChild(ripple);
 
         setTimeout(() => ripple.remove(), 600);
+
+        // Add slight scale effect
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1)';
+        }, 100);
     });
 };
 
-// Optimized image lazy loading with performance boost
-const initLazyLoading = () => {
-    // Add loading="lazy" to all images for native lazy loading
-    document.querySelectorAll('img').forEach(img => {
-        if (!img.hasAttribute('loading')) {
-            img.setAttribute('loading', 'lazy');
+// Enhanced mobile navigation behavior
+const initMobileEnhancements = () => {
+    // Prevent zoom on double tap for iOS
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
         }
+        lastTouchEnd = now;
+    }, false);
+
+    // Add touch feedback for buttons
+    const touchElements = document.querySelectorAll('.btn, .nav-btn, .service-card, .tech-item');
+    touchElements.forEach(element => {
+        element.addEventListener('touchstart', () => {
+            element.style.transform = 'scale(0.98)';
+        }, { passive: true });
+
+        element.addEventListener('touchend', () => {
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 100);
+        }, { passive: true });
     });
 
-    if ('loading' in HTMLImageElement.prototype) {
-        const images = document.querySelectorAll('img[data-src]');
-        images.forEach(img => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-        });
-    } else {
-        // Fallback with improved performance
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.removeAttribute('data-src');
-                    imageObserver.unobserve(img);
+    // Optimize mobile side nav
+    if (window.innerWidth <= 768) {
+        const sideNav = document.querySelector('.side-nav');
+        if (sideNav) {
+            // Hide side nav when scrolling down, show when scrolling up
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    sideNav.style.transform = 'translateX(-50%) translateY(20px)';
+                    sideNav.style.opacity = '0.8';
+                } else {
+                    sideNav.style.transform = 'translateX(-50%) translateY(0)';
+                    sideNav.style.opacity = '1';
                 }
-            });
-        }, { rootMargin: '50px' });
-
-        document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
-    }
-};
-
-// Resource preloading for better performance
-const preloadResources = () => {
-    // Preload critical CSS
-    const criticalCSS = ['https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'];
-
-    criticalCSS.forEach(href => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'style';
-        link.href = href;
-        document.head.appendChild(link);
-    });
-};
-
-// Service worker registration for caching
-const registerServiceWorker = () => {
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => console.log('SW registered'))
-                .catch(error => console.log('SW registration failed'));
-        });
-    }
-};
-
-// Countdown Timer Function
-const initCountdownTimer = () => {
-    // Set end date (15 days from now)
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 15);
-
-    const countdownTimer = document.getElementById('countdown-timer');
-    if (!countdownTimer) return;
-
-    const updateTimer = () => {
-        const now = new Date().getTime();
-        const distance = endDate.getTime() - now;
-
-        if (distance < 0) {
-            // Timer expired
-            document.getElementById('days').textContent = '00';
-            document.getElementById('hours').textContent = '00';
-            document.getElementById('minutes').textContent = '00';
-            document.getElementById('seconds').textContent = '00';
-            return;
+                lastScrollTop = scrollTop;
+            }, { passive: true });
         }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-    };
-
-    // Update immediately and then every second
-    updateTimer();
-    setInterval(updateTimer, 1000);
+    }
 };
 
 // Initialize all functions when DOM is ready
 const initializeWebsite = () => {
     console.log('🚀 Initializing DropTechify website...');
 
+    // Add styles first
+    addSmoothScrollStyle();
+
     // Core functionality
     initSideNav();
-    initSmoothScroll();
-    initHeaderScroll();
-    initScrollProgress();
+    initEnhancedSmoothScroll();
+    initSmoothScrollProgress();
     initContactForm();
 
     // Visual enhancements
     initFloatingElements();
     initScrollAnimations();
     initButtonEffects();
-
-    // Performance optimizations
-    initLazyLoading();
-    preloadResources();
-
-    // Additional functionality
-    initCountdownTimer();
+    initMobileEnhancements();
 
     console.log('✅ DropTechify website initialized successfully!');
 };
@@ -474,7 +439,7 @@ fadeInStyle.textContent = `
         transition: all 0.6s ease !important;
     }
 
-    .service-card, .review-card, .stat-item {
+    .service-card, .review-card, .stat-item, .tech-category, .process-step {
         opacity: 0;
         transform: translateY(30px);
     }
@@ -522,13 +487,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Initialize AOS
-AOS.init({
-    duration: 800,
-    offset: 100,
-    once: true
-});
-
-// Enhanced mobile navigation (handled by initMobileNav function)
+if (typeof AOS !== 'undefined') {
+    AOS.init({
+        duration: 600,
+        offset: 50,
+        once: true,
+        disable: window.innerWidth < 768
+    });
+}
 
 // Firebase integration for homepage reviews
 document.addEventListener('DOMContentLoaded', function() {
@@ -538,7 +504,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load reviews for homepage
 async function loadHomepageReviews() {
     try {
-        // Firebase configuration
         const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
         const { getFirestore, collection, onSnapshot, orderBy, query, limit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
@@ -555,7 +520,6 @@ async function loadHomepageReviews() {
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Listen for reviews
         const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'), limit(6));
         onSnapshot(reviewsQuery, (snapshot) => {
             const reviewsContainer = document.getElementById('homepage-reviews');
@@ -570,7 +534,7 @@ async function loadHomepageReviews() {
             } else if (reviewsContainer) {
                 reviewsContainer.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
-                        <p style="color: #666;">Reviews will appear here once added from admin panel.</p>
+                        <p style="color: #718096;">Reviews will appear here once added from admin panel.</p>
                     </div>
                 `;
             }
