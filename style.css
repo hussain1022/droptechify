@@ -172,7 +172,7 @@ img {
 
 .portfolio-dropdown-hero:hover .dropdown-menu-hero,
 .portfolio-dropdown-hero.active .dropdown-menu-hero {
-    opacity: 1;
+    opacity: 10;
     max-height: 200px;
     padding: 1rem 0;
     pointer-events: auto;
