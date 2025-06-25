@@ -106,6 +106,24 @@ const initEnhancedSmoothScroll = () => {
         }
     });
 };
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('portfolioToggle');
+    const dropdown = document.querySelector('.portfolio-dropdown-hero');
+
+    toggleBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      dropdown.classList.toggle('active');
+    });
+
+    // Close dropdown if clicked outside
+    document.addEventListener('click', function (e) {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+  });
+</script>
 
 // Hero portfolio dropdown functionality
 const initHeroPortfolioDropdown = () => {
