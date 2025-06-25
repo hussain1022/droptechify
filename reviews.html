@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   
+
     <style>
         .coming-soon-section {
             min-height: 80vh;
@@ -388,23 +388,23 @@
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
-        
+
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-        
+
         .coming-soon-section {
             flex: 1;
         }
-        
+
         .footer {
             margin-top: auto;
             flex-shrink: 0;
@@ -535,9 +535,10 @@
         });
 
         // Initialize chatbot
-        document.addEventListener('DOMContentLob', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                if (!document.getElementById('chat-button')) {
+                if (!document.getElementById('chat-button') && !window.chatbotInitialized) {
+                    window.chatbotInitialized = true;
                     new DropTechifyChatbot();
                 }
             }, 1000);
@@ -636,4 +637,4 @@
         checkForReviews();
     </script>
 </body>
-</html>3
+</html>
