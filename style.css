@@ -160,9 +160,9 @@ img {
     max-height: 0;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+    z-index: 9999;
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     width: max-content;
     min-width: 220px;
     pointer-events: none;
@@ -170,9 +170,10 @@ img {
     backdrop-filter: blur(20px);
 }
 
+
 .portfolio-dropdown-hero:hover .dropdown-menu-hero,
 .portfolio-dropdown-hero.active .dropdown-menu-hero {
-    opacity: 100;
+    opacity: 0;
     max-height: 200px;
     padding: 1rem 0;
     pointer-events: auto;
@@ -181,7 +182,7 @@ img {
 
 
 .portfolio-dropdown-side:hover .dropdown-side {
-    opacity: 1;
+    opacity: 10;
     visibility: visible;
     transform: translateX(0);
 }
