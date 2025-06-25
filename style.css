@@ -6,7 +6,7 @@
 
 html {
     height: 100%;
-    scroll-behavior: smooth !important;
+    scroll-behavior: smooth;
     overflow-x: hidden;
     scroll-padding-top: 80px;
 }
@@ -20,12 +20,10 @@ body {
     margin: 0;
     padding: 0;
     background: #f8fafc;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: scroll-position;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Custom Stylish Scrollbar */
@@ -1147,36 +1145,7 @@ section {
     text-align: center;
 }
 
-/* Chatbot */
-#chat-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-/* Removed duplicate notification - will be handled by chatbot.js */
-
-#chat-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
-}
-
-#chat-button i {
-    color: white;
-    font-size: 24px;
-}
+/* Chatbot styles removed - handled by chatbot.js */
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
