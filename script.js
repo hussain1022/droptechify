@@ -133,14 +133,22 @@ const initHeroPortfolioDropdown = () => {
     const heroPortfolioDropdown = document.querySelector('.portfolio-dropdown-hero');
     if (heroPortfolioDropdown) {
         const portfolioBtn = heroPortfolioDropdown.querySelector('.portfolio-btn');
+        const dropdownMenu = heroPortfolioDropdown.querySelector('.dropdown-menu-hero');
         let isDropdownOpen = false;
 
+        // Toggle dropdown on button click
         portfolioBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
 
             isDropdownOpen = !isDropdownOpen;
             heroPortfolioDropdown.classList.toggle('active', isDropdownOpen);
+
+            // Rotate chevron icon
+            const chevron = portfolioBtn.querySelector('.fa-chevron-down');
+            if (chevron) {
+                chevron.style.transform = isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
 
             // Add ripple effect
             const ripple = document.createElement('span');
@@ -160,22 +168,39 @@ const initHeroPortfolioDropdown = () => {
                 transform: scale(0);
                 animation: ripple 0.6s linear;
                 pointer-events: none;
+                z-index: 1;
             `;
             portfolioBtn.appendChild(ripple);
             setTimeout(() => ripple.remove(), 600);
+
+            console.log('Dropdown toggled:', isDropdownOpen);
         });
 
-        // Close dropdown when clicking outside or on dropdown items
+        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!heroPortfolioDropdown.contains(e.target)) {
-                isDropdownOpen = false;
-                heroPortfolioDropdown.classList.remove('active');
-            } else if (e.target.classList.contains('dropdown-item-hero') || e.target.closest('.dropdown-item-hero')) {
-                // Close dropdown when clicking on dropdown items
+                if (isDropdownOpen) {
+                    isDropdownOpen = false;
+                    heroPortfolioDropdown.classList.remove('active');
+                    const chevron = portfolioBtn.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+        });
+
+        // Close dropdown when clicking on dropdown items
+        dropdownMenu.addEventListener('click', (e) => {
+            if (e.target.closest('.dropdown-item-hero')) {
                 setTimeout(() => {
                     isDropdownOpen = false;
                     heroPortfolioDropdown.classList.remove('active');
-                }, 150);
+                    const chevron = portfolioBtn.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                }, 100);
             }
         });
 
@@ -184,8 +209,17 @@ const initHeroPortfolioDropdown = () => {
             if (e.key === 'Escape' && isDropdownOpen) {
                 isDropdownOpen = false;
                 heroPortfolioDropdown.classList.remove('active');
+                const chevron = portfolioBtn.querySelector('.fa-chevron-down');
+                if (chevron) {
+                    chevron.style.transform = 'rotate(0deg)';
+                }
             }
         });
+
+        // Handle mobile touch events
+        portfolioBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+        }, { passive: false });
     }
 
     console.log('Hero portfolio dropdown initialized successfully');
