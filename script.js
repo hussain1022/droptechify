@@ -135,9 +135,10 @@ const initHeroPortfolioDropdown = () => {
         const portfolioBtn = heroPortfolioDropdown.querySelector('.portfolio-btn');
         const dropdownMenu = heroPortfolioDropdown.querySelector('.dropdown-menu-hero');
         let isDropdownOpen = false;
+        let touchStarted = false;
 
-        // Toggle dropdown on button click
-        portfolioBtn.addEventListener('click', (e) => {
+        // Function to toggle dropdown
+        const toggleDropdown = (e) => {
             e.preventDefault();
             e.stopPropagation();
 
@@ -150,12 +151,12 @@ const initHeroPortfolioDropdown = () => {
                 chevron.style.transform = isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)';
             }
 
-            // Add ripple effect
+            // Add ripple effect for visual feedback
             const ripple = document.createElement('span');
             const rect = portfolioBtn.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
+            const x = (e.clientX || e.touches?.[0]?.clientX || rect.left + rect.width/2) - rect.left - size / 2;
+            const y = (e.clientY || e.touches?.[0]?.clientY || rect.top + rect.height/2) - rect.top - size / 2;
 
             ripple.style.cssText = `
                 position: absolute;
@@ -174,39 +175,11 @@ const initHeroPortfolioDropdown = () => {
             setTimeout(() => ripple.remove(), 600);
 
             console.log('Dropdown toggled:', isDropdownOpen);
-        });
+        };
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!heroPortfolioDropdown.contains(e.target)) {
-                if (isDropdownOpen) {
-                    isDropdownOpen = false;
-                    heroPortfolioDropdown.classList.remove('active');
-                    const chevron = portfolioBtn.querySelector('.fa-chevron-down');
-                    if (chevron) {
-                        chevron.style.transform = 'rotate(0deg)';
-                    }
-                }
-            }
-        });
-
-        // Close dropdown when clicking on dropdown items
-        dropdownMenu.addEventListener('click', (e) => {
-            if (e.target.closest('.dropdown-item-hero')) {
-                setTimeout(() => {
-                    isDropdownOpen = false;
-                    heroPortfolioDropdown.classList.remove('active');
-                    const chevron = portfolioBtn.querySelector('.fa-chevron-down');
-                    if (chevron) {
-                        chevron.style.transform = 'rotate(0deg)';
-                    }
-                }, 100);
-            }
-        });
-
-        // Close dropdown on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isDropdownOpen) {
+        // Function to close dropdown
+        const closeDropdown = () => {
+            if (isDropdownOpen) {
                 isDropdownOpen = false;
                 heroPortfolioDropdown.classList.remove('active');
                 const chevron = portfolioBtn.querySelector('.fa-chevron-down');
@@ -214,10 +187,65 @@ const initHeroPortfolioDropdown = () => {
                     chevron.style.transform = 'rotate(0deg)';
                 }
             }
+        };
+
+        // Mobile touch events
+        portfolioBtn.addEventListener('touchstart', (e) => {
+            touchStarted = true;
+            e.preventDefault();
+        }, { passive: false });
+
+        portfolioBtn.addEventListener('touchend', (e) => {
+            if (touchStarted) {
+                touchStarted = false;
+                toggleDropdown(e);
+            }
+        }, { passive: false });
+
+        // Desktop click event
+        portfolioBtn.addEventListener('click', (e) => {
+            if (!touchStarted) {
+                toggleDropdown(e);
+            }
         });
 
-        // Handle mobile touch events
-        portfolioBtn.addEventListener('touchstart', (e) => {
+        // Close dropdown when clicking/touching outside
+        document.addEventListener('click', (e) => {
+            if (!heroPortfolioDropdown.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (!heroPortfolioDropdown.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        // Close dropdown when clicking/touching on dropdown items
+        if (dropdownMenu) {
+            dropdownMenu.addEventListener('click', (e) => {
+                if (e.target.closest('.dropdown-item-hero')) {
+                    setTimeout(closeDropdown, 100);
+                }
+            });
+
+            dropdownMenu.addEventListener('touchend', (e) => {
+                if (e.target.closest('.dropdown-item-hero')) {
+                    setTimeout(closeDropdown, 100);
+                }
+            });
+        }
+
+        // Close dropdown on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDropdown();
+            }
+        });
+
+        // Prevent default touch behaviors that might interfere
+        heroPortfolioDropdown.addEventListener('touchmove', (e) => {
             e.preventDefault();
         }, { passive: false });
     }
