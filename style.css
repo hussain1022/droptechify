@@ -152,9 +152,9 @@ img {
 
 .dropdown-menu-hero {
     position: absolute;
-    top: calc(100% + 15px);
+    bottom: calc(100% + 15px);
     left: 50%;
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateX(-50%) translateY(10px);
     background: white;
     opacity: 0;
     visibility: hidden;
@@ -169,6 +169,7 @@ img {
     backdrop-filter: blur(10px);
     padding: 0;
     overflow: hidden;
+    max-width: 280px;
 }
 
 .portfolio-dropdown-hero:hover .dropdown-menu-hero,
@@ -178,6 +179,23 @@ img {
     transform: translateX(-50%) translateY(0);
     pointer-events: auto;
     padding: 1rem 0;
+}
+
+/* Mobile dropdown positioning */
+@media (max-width: 768px) {
+    .dropdown-menu-hero {
+        bottom: calc(100% + 12px);
+        left: 50%;
+        transform: translateX(-50%) translateY(5px);
+        min-width: 200px;
+        max-width: 250px;
+    }
+    
+    .portfolio-dropdown-hero:hover .dropdown-menu-hero,
+    .portfolio-dropdown-hero.active .dropdown-menu-hero {
+        transform: translateX(-50%) translateY(0);
+        padding: 0.8rem 0;
+    }
 }
 
 
@@ -1109,6 +1127,167 @@ section {
     background: #fed7d7;
     border: 1px solid #feb2b2;
     color: #742a2a;
+}
+
+/* Portfolio Grid Styles */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.project-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.project-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.05);
+}
+
+.project-content {
+    padding: 2rem;
+}
+
+.project-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.project-category {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.project-description {
+    color: #718096;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.project-rating {
+    color: #ffd700;
+}
+
+.project-duration {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+/* Project Modal */
+.project-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 2rem;
+    animation: modalSlideIn 0.3s ease;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+    transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(0,0,0,0.2);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Utilities */
