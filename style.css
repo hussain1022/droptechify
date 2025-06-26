@@ -549,8 +549,8 @@ img {
 .element-6 {
     width: 68px;
     height: 68px;
-    bottom: 6%;
-    left: 25%;
+    bottom: 6px;
+    left: 25px;
     animation-delay: 5s;
 }
 
