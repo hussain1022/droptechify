@@ -76,15 +76,17 @@ class DropTechifyChatbot {
                     height: 65px;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 50%;
-                    display: flex;
+                    display: flex !important;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
                     box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
-                    z-index: 9998;
+                    z-index: 99999;
                     transition: all 0.3s ease;
                     animation: pulse 2s infinite;
                     will-change: transform;
+                    visibility: visible !important;
+                    opacity: 1 !important;
                 }
 
                 .chat-button:hover {
@@ -986,12 +988,24 @@ What would you like to know more about?`;
     }
 }
 
-// Single initialization to prevent duplicates
+// Enhanced initialization to prevent duplicates and ensure visibility
 function initializeChatbot() {
     if (!document.getElementById('chat-button') && !window.chatbotInitialized) {
         console.log('🤖 Initializing DropTechify Chatbot...');
         window.chatbotInitialized = true;
         new DropTechifyChatbot();
+        
+        // Force visibility after creation
+        setTimeout(() => {
+            const chatButton = document.getElementById('chat-button');
+            if (chatButton) {
+                chatButton.style.display = 'flex';
+                chatButton.style.visibility = 'visible';
+                chatButton.style.opacity = '1';
+                chatButton.style.zIndex = '99999';
+                console.log('✅ Chatbot visibility ensured');
+            }
+        }, 100);
     }
 }
 
@@ -1001,5 +1015,10 @@ if (document.readyState === 'loading') {
 } else {
     initializeChatbot();
 }
+
+// Re-initialize on page changes (for SPAs)
+window.addEventListener('load', () => {
+    setTimeout(initializeChatbot, 500);
+});
 
 console.log('🤖 DropTechify Chatbot script loaded!');
