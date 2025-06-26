@@ -26,49 +26,27 @@ let editingReviewId = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔐 Admin dashboard loading...');
 
-    // For development - auto-login (remove in production)
+    // Check if user is logged in
     if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
-        console.log('🔧 Development mode - auto-authenticating...');
-        sessionStorage.setItem('adminLoggedIn', 'true');
-        sessionStorage.setItem('adminEmail', 'admin@droptechify.com');
+        console.log('❌ User not authenticated, redirecting to login...');
+        window.location.href = 'admin-login.html';
+        return;
     }
 
     console.log('✅ User authenticated, initializing dashboard...');
 
-    // Initialize dashboard immediately
+    // Initialize dashboard
     initializeDashboard();
 
     // Initialize Firebase connection
     initializeFirebaseSync();
 
-    // Ensure dashboard section is shown by default
+    // Show dashboard section by default
     setTimeout(() => {
         showDashboardSection();
         updateStats();
     }, 500);
 });
-
-// Function to show dashboard section by default
-function showDashboardSection() {
-    const dashboardMenuItem = document.querySelector('[data-section="dashboard"]');
-    const dashboardSection = document.getElementById('dashboard-section');
-
-    if (dashboardMenuItem && dashboardSection) {
-        // Remove active from all menu items
-        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-
-        // Set dashboard as active
-        dashboardMenuItem.classList.add('active');
-        dashboardSection.classList.add('active');
-
-        // Update page title
-        const pageTitle = document.getElementById('page-title');
-        if (pageTitle) {
-            pageTitle.textContent = 'Dashboard Overview';
-        }
-    }
-}
 
 // Initialize dashboard functionality
 function initializeDashboard() {
@@ -85,7 +63,8 @@ function initializeDashboard() {
     menuItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            console.log('🖱️ Menu item clicked:', item.getAttribute('data-section'));
+            const targetSection = item.getAttribute('data-section');
+            console.log('🖱️ Menu item clicked:', targetSection);
 
             // Remove active class from all menu items
             menuItems.forEach(mi => mi.classList.remove('active'));
@@ -96,7 +75,6 @@ function initializeDashboard() {
             contentSections.forEach(section => section.classList.remove('active'));
 
             // Show target section
-            const targetSection = item.getAttribute('data-section');
             const sectionElement = document.getElementById(targetSection + '-section');
             if (sectionElement) {
                 sectionElement.classList.add('active');
@@ -125,13 +103,32 @@ function initializeDashboard() {
         });
     });
 
-    // Form submissions
+    // Setup form handlers
     setupFormHandlers();
 
-    // Load data from Firebase with real-time updates
-    loadDataWithRealTime();
-
     console.log('✅ Dashboard initialized successfully!');
+}
+
+// Show dashboard section by default
+function showDashboardSection() {
+    const dashboardMenuItem = document.querySelector('[data-section="dashboard"]');
+    const dashboardSection = document.getElementById('dashboard-section');
+
+    if (dashboardMenuItem && dashboardSection) {
+        // Remove active from all menu items
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+
+        // Set dashboard as active
+        dashboardMenuItem.classList.add('active');
+        dashboardSection.classList.add('active');
+
+        // Update page title
+        const pageTitle = document.getElementById('page-title');
+        if (pageTitle) {
+            pageTitle.textContent = 'Dashboard Overview';
+        }
+    }
 }
 
 // Setup form handlers
@@ -181,7 +178,7 @@ async function handleProjectSubmit(e) {
         // Show loading state
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        submitBtn.innerHTML = '<div class="spinner"></div> Saving...';
         submitBtn.disabled = true;
 
         if (editingProjectId) {
@@ -243,7 +240,7 @@ async function handleReviewSubmit(e) {
         // Show loading state
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        submitBtn.innerHTML = '<div class="spinner"></div> Saving...';
         submitBtn.disabled = true;
 
         if (editingReviewId) {
@@ -283,9 +280,12 @@ async function handleReviewSubmit(e) {
     }
 }
 
-// Load data with real-time updates
-function loadDataWithRealTime() {
-    console.log('🔄 Setting up real-time data listeners...');
+// Initialize Firebase sync
+function initializeFirebaseSync() {
+    console.log('🔄 Initializing Firebase sync...');
+
+    // Test Firebase connection
+    testFirebaseConnection();
 
     // Real-time projects listener
     const projectsQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
@@ -304,6 +304,7 @@ function loadDataWithRealTime() {
         updateStats();
     }, (error) => {
         console.error('❌ Error loading projects:', error);
+        showToast('❌ Error loading projects from Firebase', 'error');
     });
 
     // Real-time reviews listener
@@ -323,7 +324,31 @@ function loadDataWithRealTime() {
         updateStats();
     }, (error) => {
         console.error('❌ Error loading reviews:', error);
+        showToast('❌ Error loading reviews from Firebase', 'error');
     });
+
+    console.log('✅ Firebase sync initialized successfully!');
+}
+
+// Test Firebase connection
+async function testFirebaseConnection() {
+    try {
+        console.log('🧪 Testing Firebase connection...');
+        const testQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
+        const snapshot = await getDocs(testQuery);
+        console.log('✅ Firebase connection successful. Projects count:', snapshot.size);
+
+        const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
+        const reviewsSnapshot = await getDocs(reviewsQuery);
+        console.log('✅ Firebase connection successful. Reviews count:', reviewsSnapshot.size);
+
+        showToast('✅ Firebase connected successfully!', 'success');
+        return true;
+    } catch (error) {
+        console.error('❌ Firebase connection failed:', error);
+        showToast('❌ Firebase connection failed. Please check your connection.', 'error');
+        return false;
+    }
 }
 
 // Load projects data
@@ -548,7 +573,7 @@ function showToast(message, type = 'success') {
 
     document.body.appendChild(toast);
 
-    // Auto remove after 3 seconds
+    // Auto remove after 4 seconds
     setTimeout(() => {
         toast.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => {
@@ -556,7 +581,7 @@ function showToast(message, type = 'success') {
                 toast.parentNode.removeChild(toast);
             }
         }, 300);
-    }, 3000);
+    }, 4000);
 }
 
 // Logout function
@@ -569,87 +594,12 @@ function logout() {
     }
 }
 
-// Initialize Firebase sync
-function initializeFirebaseSync() {
-    console.log('🔄 Initializing Firebase sync...');
-
-    // Test Firebase connection
-    testFirebaseConnection();
-
-    // Load initial data
-    loadDataWithRealTime();
-
-    console.log('✅ Firebase sync initialized successfully!');
-}
-
-// Test Firebase connection
-async function testFirebaseConnection() {
-    try {
-        console.log('🧪 Testing Firebase connection...');
-        const testQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
-        const snapshot = await getDocs(testQuery);
-        console.log('✅ Firebase connection successful. Projects count:', snapshot.size);
-
-        const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
-        const reviewsSnapshot = await getDocs(reviewsQuery);
-        console.log('✅ Firebase connection successful. Reviews count:', reviewsSnapshot.size);
-
-        return true;
-    } catch (error) {
-        console.error('❌ Firebase connection failed:', error);
-        showToast('Firebase connection failed. Please check your connection.', 'error');
-        return false;
-    }
-}
-
-// Section switching function
-function switchSection(event, sectionName) {
-    event.preventDefault();
-    console.log('🔄 Switching to section:', sectionName);
-
-    // Remove active class from all menu items and sections
-    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-    document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-
-    // Add active class to clicked item
-    event.target.closest('.menu-item').classList.add('active');
-
-    // Show target section
-    const targetSection = document.getElementById(sectionName + '-section');
-    if (targetSection) {
-        targetSection.classList.add('active');
-        console.log('✅ Section activated:', sectionName);
-
-        // Load data when switching to sections
-        if (sectionName === 'projects') {
-            loadProjectsData();
-        } else if (sectionName === 'reviews') {
-            loadReviewsData();
-        } else if (sectionName === 'dashboard') {
-            updateStats();
-        }
-    }
-
-    // Update page title
-    const titles = {
-        'dashboard': 'Dashboard Overview',
-        'projects': 'Manage Projects',
-        'reviews': 'Manage Reviews',
-        'settings': 'Site Settings'
-    };
-    const pageTitle = document.getElementById('page-title');
-    if (pageTitle) {
-        pageTitle.textContent = titles[sectionName];
-    }
-}
-
 // Make functions globally available
 window.editProject = editProject;
 window.editReview = editReview;
 window.deleteProject = deleteProject;
 window.deleteReview = deleteReview;
 window.logout = logout;
-window.switchSection = switchSection;
 
 // Add toast animation styles
 const toastStyle = document.createElement('style');
