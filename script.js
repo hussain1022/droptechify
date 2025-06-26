@@ -167,9 +167,15 @@ const initHeroPortfolioDropdown = () => {
 
         // Close dropdown when clicking outside or on dropdown items
         document.addEventListener('click', (e) => {
-            if (!heroPortfolioDropdown.contains(e.target) || e.target.classList.contains('dropdown-item-hero')) {
+            if (!heroPortfolioDropdown.contains(e.target)) {
                 isDropdownOpen = false;
                 heroPortfolioDropdown.classList.remove('active');
+            } else if (e.target.classList.contains('dropdown-item-hero') || e.target.closest('.dropdown-item-hero')) {
+                // Close dropdown when clicking on dropdown items
+                setTimeout(() => {
+                    isDropdownOpen = false;
+                    heroPortfolioDropdown.classList.remove('active');
+                }, 150);
             }
         });
 
