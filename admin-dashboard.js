@@ -24,28 +24,56 @@ let editingReviewId = null;
 
 // Check authentication on page load
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔐 Admin dashboard loading...');
+    try {
+        console.log('🔐 Admin dashboard loading...');
 
-    // Check if user is logged in
-    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
-        console.log('❌ User not authenticated, redirecting to login...');
-        window.location.href = 'admin-login.html';
-        return;
+        // Create error display system first
+        createErrorDisplay();
+
+        // Check if user is logged in
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            console.log('❌ User not authenticated, redirecting to login...');
+            showError('Not authenticated. Redirecting to login...');
+            setTimeout(() => {
+                window.location.href = 'admin-login.html';
+            }, 2000);
+            return;
+        }
+
+        console.log('✅ User authenticated, initializing dashboard...');
+
+        // Initialize dashboard with error handling
+        try {
+            initializeDashboard();
+            console.log('✅ Dashboard initialized');
+        } catch (error) {
+            showError('Failed to initialize dashboard', error);
+            return;
+        }
+
+        // Initialize Firebase connection with error handling
+        try {
+            initializeFirebaseSync();
+            console.log('✅ Firebase sync initialized');
+        } catch (error) {
+            showError('Failed to connect to Firebase database', error);
+        }
+
+        // Show dashboard section by default
+        setTimeout(() => {
+            try {
+                showDashboardSection();
+                updateStats();
+                showToast('✅ Admin panel loaded successfully!', 'success');
+            } catch (error) {
+                showError('Failed to load dashboard sections', error);
+            }
+        }, 500);
+
+    } catch (error) {
+        console.error('❌ Critical error during initialization:', error);
+        showError('Critical error during admin panel initialization', error);
     }
-
-    console.log('✅ User authenticated, initializing dashboard...');
-
-    // Initialize dashboard
-    initializeDashboard();
-
-    // Initialize Firebase connection
-    initializeFirebaseSync();
-
-    // Show dashboard section by default
-    setTimeout(() => {
-        showDashboardSection();
-        updateStats();
-    }, 500);
 });
 
 // Initialize dashboard functionality
@@ -62,43 +90,58 @@ function initializeDashboard() {
 
     menuItems.forEach(item => {
         item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSection = item.getAttribute('data-section');
-            console.log('🖱️ Menu item clicked:', targetSection);
+            try {
+                e.preventDefault();
+                const targetSection = item.getAttribute('data-section');
+                console.log('🖱️ Menu item clicked:', targetSection);
 
-            // Remove active class from all menu items
-            menuItems.forEach(mi => mi.classList.remove('active'));
-            // Add active class to clicked item
-            item.classList.add('active');
-
-            // Hide all content sections
-            contentSections.forEach(section => section.classList.remove('active'));
-
-            // Show target section
-            const sectionElement = document.getElementById(targetSection + '-section');
-            if (sectionElement) {
-                sectionElement.classList.add('active');
-                console.log('✅ Section activated:', targetSection);
-
-                // Load data when switching to sections
-                if (targetSection === 'projects') {
-                    loadProjectsData();
-                } else if (targetSection === 'reviews') {
-                    loadReviewsData();
+                if (!targetSection) {
+                    showError('Menu item missing data-section attribute');
+                    return;
                 }
-            } else {
-                console.error('❌ Section not found:', targetSection + '-section');
-            }
 
-            // Update page title
-            const titles = {
-                'dashboard': 'Dashboard Overview',
-                'projects': 'Manage Projects',
-                'reviews': 'Manage Reviews',
-                'settings': 'Site Settings'
-            };
-            if (pageTitle) {
-                pageTitle.textContent = titles[targetSection];
+                // Remove active class from all menu items
+                menuItems.forEach(mi => mi.classList.remove('active'));
+                // Add active class to clicked item
+                item.classList.add('active');
+
+                // Hide all content sections
+                contentSections.forEach(section => section.classList.remove('active'));
+
+                // Show target section
+                const sectionElement = document.getElementById(targetSection + '-section');
+                if (sectionElement) {
+                    sectionElement.classList.add('active');
+                    console.log('✅ Section activated:', targetSection);
+
+                    // Load data when switching to sections
+                    try {
+                        if (targetSection === 'projects') {
+                            loadProjectsData();
+                        } else if (targetSection === 'reviews') {
+                            loadReviewsData();
+                        }
+                    } catch (error) {
+                        showError(`Failed to load ${targetSection} data`, error);
+                    }
+                } else {
+                    showError(`Section not found: ${targetSection}-section`);
+                    console.error('❌ Section not found:', targetSection + '-section');
+                }
+
+                // Update page title
+                const titles = {
+                    'dashboard': 'Dashboard Overview',
+                    'projects': 'Manage Projects',
+                    'reviews': 'Manage Reviews',
+                    'settings': 'Site Settings'
+                };
+                if (pageTitle) {
+                    pageTitle.textContent = titles[targetSection] || 'Admin Panel';
+                }
+
+            } catch (error) {
+                showError('Menu navigation failed', error);
             }
         });
     });
@@ -334,6 +377,16 @@ function initializeFirebaseSync() {
 async function testFirebaseConnection() {
     try {
         console.log('🧪 Testing Firebase connection...');
+        
+        // Test basic Firebase app initialization
+        if (!app) {
+            throw new Error('Firebase app not initialized');
+        }
+        
+        if (!db) {
+            throw new Error('Firestore database not initialized');
+        }
+
         const testQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
         const snapshot = await getDocs(testQuery);
         console.log('✅ Firebase connection successful. Projects count:', snapshot.size);
@@ -346,6 +399,7 @@ async function testFirebaseConnection() {
         return true;
     } catch (error) {
         console.error('❌ Firebase connection failed:', error);
+        showError('Firebase connection failed. Check your internet connection and Firebase config.', error);
         showToast('❌ Firebase connection failed. Please check your connection.', 'error');
         return false;
     }
@@ -586,12 +640,68 @@ function showToast(message, type = 'success') {
 
 // Logout function
 function logout() {
-    console.log('🚪 Logging out...');
-    if (confirm('Are you sure you want to logout?')) {
-        sessionStorage.removeItem('adminLoggedIn');
-        sessionStorage.removeItem('adminEmail');
+    try {
+        console.log('🚪 Logging out...');
+        if (confirm('Are you sure you want to logout?')) {
+            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminEmail');
+            showToast('Logging out...', 'success');
+            setTimeout(() => {
+                window.location.href = 'admin-login.html';
+            }, 1000);
+        }
+    } catch (error) {
+        showError('Logout failed', error);
+        // Force logout anyway
+        sessionStorage.clear();
         window.location.href = 'admin-login.html';
     }
+}
+
+// Force refresh function
+function forceRefresh() {
+    try {
+        console.log('🔄 Force refreshing dashboard...');
+        showToast('Refreshing dashboard...', 'success');
+        
+        // Clear any existing data
+        const projectsTable = document.getElementById('projects-table-body');
+        const reviewsTable = document.getElementById('reviews-table-body');
+        
+        if (projectsTable) projectsTable.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+        if (reviewsTable) reviewsTable.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+        
+        // Reinitialize Firebase sync
+        setTimeout(() => {
+            initializeFirebaseSync();
+            updateStats();
+            showToast('Dashboard refreshed!', 'success');
+        }, 1000);
+        
+    } catch (error) {
+        showError('Force refresh failed', error);
+    }
+}
+
+// Debug function to check system status
+function debugCheck() {
+    console.log('🔍 Running debug check...');
+    
+    const debugInfo = {
+        timestamp: new Date().toISOString(),
+        authentication: sessionStorage.getItem('adminLoggedIn'),
+        firebaseApp: !!app,
+        firebaseDb: !!db,
+        currentSection: document.querySelector('.menu-item.active')?.getAttribute('data-section'),
+        projectsTable: !!document.getElementById('projects-table-body'),
+        reviewsTable: !!document.getElementById('reviews-table-body'),
+        errorDisplay: !!document.getElementById('error-display')
+    };
+    
+    console.log('Debug Info:', debugInfo);
+    showToast('Debug info logged to console', 'success');
+    
+    return debugInfo;
 }
 
 // Make functions globally available
@@ -600,6 +710,9 @@ window.editReview = editReview;
 window.deleteProject = deleteProject;
 window.deleteReview = deleteReview;
 window.logout = logout;
+window.showError = showError;
+window.forceRefresh = forceRefresh;
+window.debugCheck = debugCheck;
 
 // Add toast animation styles
 const toastStyle = document.createElement('style');
@@ -627,5 +740,79 @@ toastStyle.textContent = `
     }
 `;
 document.head.appendChild(toastStyle);
+
+// Error Display System
+function createErrorDisplay() {
+    // Remove existing error display
+    const existingError = document.getElementById('error-display');
+    if (existingError) {
+        existingError.remove();
+    }
+
+    // Create error display container
+    const errorDisplay = document.createElement('div');
+    errorDisplay.id = 'error-display';
+    errorDisplay.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #dc3545;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 99999;
+        max-width: 400px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        display: none;
+    `;
+    document.body.appendChild(errorDisplay);
+    return errorDisplay;
+}
+
+// Show error function
+function showError(message, error = null) {
+    console.error('❌ Error:', message, error);
+    
+    const errorDisplay = document.getElementById('error-display') || createErrorDisplay();
+    const timestamp = new Date().toLocaleTimeString();
+    
+    let errorDetails = message;
+    if (error) {
+        errorDetails += `\n\nTechnical Details: ${error.message || error}`;
+    }
+    
+    errorDisplay.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Admin Panel Error</strong>
+            <button onclick="document.getElementById('error-display').style.display='none'" 
+                    style="margin-left: auto; background: none; border: none; color: white; cursor: pointer; font-size: 16px;">
+                ×
+            </button>
+        </div>
+        <div style="margin-bottom: 10px;">${errorDetails}</div>
+        <div style="font-size: 12px; opacity: 0.8;">Time: ${timestamp}</div>
+    `;
+    
+    errorDisplay.style.display = 'block';
+    
+    // Auto hide after 10 seconds
+    setTimeout(() => {
+        if (errorDisplay.style.display !== 'none') {
+            errorDisplay.style.display = 'none';
+        }
+    }, 10000);
+}
+
+// Global error handler
+window.addEventListener('error', function(event) {
+    showError('JavaScript Error Detected', event.error);
+});
+
+window.addEventListener('unhandledrejection', function(event) {
+    showError('Promise Rejection Error', event.reason);
+});
 
 console.log('🔐 Admin dashboard script loaded successfully!');
