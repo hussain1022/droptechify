@@ -189,16 +189,30 @@ const initHeroPortfolioDropdown = () => {
             }
         };
 
-        // Mobile touch events
+        // Enhanced mobile touch events
+        let touchTimeout;
+        
         portfolioBtn.addEventListener('touchstart', (e) => {
             touchStarted = true;
+            clearTimeout(touchTimeout);
             e.preventDefault();
+            
+            // Add visual feedback
+            portfolioBtn.style.transform = 'scale(0.95)';
         }, { passive: false });
 
         portfolioBtn.addEventListener('touchend', (e) => {
             if (touchStarted) {
                 touchStarted = false;
-                toggleDropdown(e);
+                e.preventDefault();
+                
+                // Reset visual feedback
+                portfolioBtn.style.transform = 'scale(1)';
+                
+                // Small delay to prevent double-tap issues
+                touchTimeout = setTimeout(() => {
+                    toggleDropdown(e);
+                }, 50);
             }
         }, { passive: false });
 
