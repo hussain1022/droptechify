@@ -26,11 +26,11 @@ let editingReviewId = null;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔐 Admin dashboard loading...');
 
-    // Check if user is logged in
+    // For development - auto-login (remove in production)
     if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
-        console.log('❌ Not logged in, redirecting...');
-        window.location.href = 'admin-login.html';
-        return;
+        console.log('🔧 Development mode - auto-authenticating...');
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        sessionStorage.setItem('adminEmail', 'admin@droptechify.com');
     }
 
     console.log('✅ User authenticated, initializing dashboard...');
