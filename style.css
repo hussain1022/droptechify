@@ -197,13 +197,14 @@ img {
     }
     
     .dropdown-menu-hero {
-        bottom: calc(100% + 12px);
+        top: calc(100% + 12px);
+        bottom: auto;
         left: 50%;
-        transform: translateX(-50%) translateY(5px);
+        transform: translateX(-50%) translateY(-5px);
         min-width: 200px;
         max-width: 250px;
         touch-action: manipulation;
-        z-index: 999;
+        z-index: 9999;
     }
     
     .portfolio-dropdown-hero:hover .dropdown-menu-hero,
@@ -1395,22 +1396,23 @@ section {
 
     .dropdown-menu-hero {
         position: absolute;
-        top: calc(100% + 12px);
+        top: calc(100% + 8px);
         left: 50%;
-        transform: translateX(-50%) translateY(-5px);
+        transform: translateX(-50%) translateY(-10px);
         background: white;
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 10000;
-        border-radius: 10px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         width: max-content;
-        min-width: 200px;
+        min-width: 220px;
         pointer-events: none;
         padding: 0;
         overflow: hidden;
         border: 1px solid rgba(102, 126, 234, 0.1);
+        backdrop-filter: blur(10px);
     }
 
     .portfolio-dropdown-hero:hover .dropdown-menu-hero,
