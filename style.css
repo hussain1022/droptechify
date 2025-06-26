@@ -152,31 +152,32 @@ img {
 
 .dropdown-menu-hero {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 15px);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-10px);
     background: white;
     opacity: 0;
-    max-height: 0;
-    overflow: hidden;
+    visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+    z-index: 9999;
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     width: max-content;
     min-width: 220px;
     pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 0;
+    overflow: hidden;
 }
 
 .portfolio-dropdown-hero:hover .dropdown-menu-hero,
 .portfolio-dropdown-hero.active .dropdown-menu-hero {
     opacity: 1;
-    max-height: 200px;
-    padding: 1rem 0;
-    pointer-events: auto;
+    visibility: visible;
     transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+    padding: 1rem 0;
 }
 
 
@@ -353,34 +354,7 @@ img {
     transform: rotate(180deg);
 }
 
-.portfolio-dropdown-hero {
-  position: relative;
-}
-
-.dropdown-menu-hero {
-    position: absolute; /* change from static to absolute */
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    margin-top: 1rem;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    z-index: 999;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: max-content; /* or fixed width if needed */
-    min-width: 200px;   /* optional */
-}
-
-.portfolio-dropdown-hero:hover .dropdown-menu-hero,
-.portfolio-dropdown-hero.active .dropdown-menu-hero {
-    opacity: 1;
-    max-height: 200px;
-    padding: 1rem 0;
-}
+/* Duplicate dropdown styles removed - handled above */
 
 
 
@@ -388,21 +362,34 @@ img {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 1.5rem;
     color: #2d3748;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item-hero:last-child {
+    border-bottom: none;
 }
 
 .dropdown-item-hero:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
     color: #667eea;
+    transform: translateX(5px);
 }
 
 .dropdown-item-hero i {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #667eea;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item-hero:hover i {
+    transform: scale(1.1);
 }
 
 .contact-btn {
@@ -1199,29 +1186,33 @@ section {
     }
 
     .dropdown-menu-hero {
-    position: absolute; /* change from static to absolute */
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    margin-top: 1rem;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    z-index: 999;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: max-content; /* or fixed width if needed */
-    min-width: 200px;   /* optional */
-}
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-5px);
+        background: white;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 10000;
+        border-radius: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        width: max-content;
+        min-width: 200px;
+        pointer-events: none;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+    }
 
-.portfolio-dropdown-hero:hover .dropdown-menu-hero,
-.portfolio-dropdown-hero.active .dropdown-menu-hero {
-    opacity: 1;
-    max-height: 200px;
-    padding: 1rem 0;
-}
+    .portfolio-dropdown-hero:hover .dropdown-menu-hero,
+    .portfolio-dropdown-hero.active .dropdown-menu-hero {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+        pointer-events: auto;
+        padding: 1rem 0;
+    }
 
 
     .hero-description {
