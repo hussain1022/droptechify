@@ -8,668 +8,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet"></head>
-<body>
-    
-
-    <style>
-        .coming-soon-section {
-            min-height: 80vh;
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5rem 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .coming-soon-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="120" height="120"><path d="M60 10 L110 60 L60 110 L10 60 Z" fill="none" stroke="rgba(255,193,7,0.1)" stroke-width="2"/></pattern></defs><rect width="1000" height="1000" fill="url(%23pattern)"/></svg>');
-            animation: rotate 30s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .coming-soon-container {
-            text-align: center;
-            max-width: 650px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .coming-soon-icon {
-            width: 140px;
-            height: 140px;
-            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-            border-radius: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2.5rem;
-            box-shadow: 0 25px 70px rgba(255, 193, 7, 0.4);
-            animation: bounce 2s ease-in-out infinite;
-            position: relative;
-        }
-
-        .coming-soon-icon::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 152, 0, 0.3));
-            border-radius: 40px;
-            z-index: -1;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-12px) scale(1.05); }
-        }
-
-        .coming-soon-icon i {
-            font-size: 3.5rem;
-            color: white;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .coming-soon-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 1px;
-        }
-
-        .coming-soon-subtitle {
-            font-size: 1.4rem;
-            color: #444;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .coming-soon-description {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 3rem;
-            line-height: 1.8;
-        }
-
-        .testimonial-preview {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-            margin-bottom: 3rem;
-            border-left: 5px solid #ffc107;
-        }
-
-        .preview-stars {
-            color: #ffc107;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .preview-text {
-            font-size: 1.1rem;
-            color: #555;
-            font-style: italic;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .preview-author {
-            text-align: right;
-        }
-
-        .preview-author strong {
-            display: block;
-            color: #333;
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .preview-author span {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .stats-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-item {
-            background: white;
-            padding: 2rem 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #ffc107;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-            color: white;
-            padding: 1.2rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-size: 1.1rem;
-            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 193, 7, 0.5);
-            background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
-        }
-
-        .btn-primary i {
-            font-size: 1.2rem;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #ffc107;
-            border: 2px solid #ffc107;
-            padding: 1.2rem 2.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-size: 1.1rem;
-        }
-
-        .btn-secondary:hover {
-            background: #ffc107;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
-        }
-
-        .btn-secondary i {
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 768px) {
-            .coming-soon-title {
-                font-size: 2.5rem;
-                line-height: 1.2;
-                margin-bottom: 1rem;
-            }
-
-            .coming-soon-subtitle {
-                font-size: 1.3rem;
-                padding: 0 1rem;
-            }
-
-            .coming-soon-description {
-                font-size: 1.1rem;
-                padding: 0 1rem;
-            }
-
-            .coming-soon-icon {
-                width: 120px;
-                height: 120px;
-                margin-bottom: 2rem;
-            }
-
-            .coming-soon-icon i {
-                font-size: 3rem;
-            }
-
-            .testimonial-preview {
-                padding: 2rem 1.5rem;
-                margin: 0 1rem 3rem;
-            }
-
-            .preview-text {
-                font-size: 1rem;
-            }
-
-            .stats-preview {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-                margin: 0 1rem 3rem;
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-                padding: 0 1rem;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                max-width: 280px;
-                padding: 1.2rem 2rem;
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .coming-soon-title {
-                font-size: 2rem;
-            }
-            
-            .coming-soon-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .coming-soon-description {
-                font-size: 1rem;
-            }
-            
-            .coming-soon-icon {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .coming-soon-icon i {
-                font-size: 2.5rem;
-            }
-            
-            .stats-preview {
-                grid-template-columns: 1fr;
-            }
-        }
-       /* Footer */
-.footer {
-    background: #1a202c;
-    color: #e2e8f0;
-    padding: 3rem 0 1rem;
-    margin-top: 0;
-    width: 100%;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-section h3,
-.footer-section h4 {
-    margin-bottom: 1rem;
-    color: white;
-    font-size: 1.3rem;
-}
-
-.footer-section p {
-    color: #cbd5e0;
-    margin-bottom: 1.5rem;
-}
-
-.footer-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-.footer-section ul li {
-    margin-bottom: 0.8rem;
-}
-
-.footer-section ul li a {
-    color: #cbd5e0;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.footer-section ul li a:hover {
-    color: white;
-    transform: translateX(5px);
-}
-
-.footer-section ul li a i {
-    width: 16px;
-    color: #667eea;
-}
-
-.footer-section a {
-    color: #cbd5e0;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-section a:hover {
-    color: white;
-}
-
-.social-links {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.social-links a {
-    width: 45px;
-    height: 45px;
-    background: #667eea;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    font-size: 1.2rem;
-    color: white;
-    text-decoration: none;
-}
-
-.social-links a:hover {
-    background: #764ba2;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-@media (max-width: 768px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 2.5rem;
-    }
-    
-    .social-links {
-        justify-content: center;
-    }
-    
-    .footer-section ul li a {
-        justify-content: center;
-    }
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid #2d3748;
-    color: #cbd5e0;
-}
-
-/* Form Messages */
-.form-message {
-    display: none;
-    text-align: center;
-    padding: 2rem;
-    border-radius: 15px;
-    margin-top: 1rem;
-}
-
-.form-message.success {
-    background: #c6f6d5;
-    border: 1px solid #9ae6b4;
-    color: #22543d;
-}
-
-.form-message.error {
-    background: #fed7d7;
-    border: 1px solid #feb2b2;
-    color: #742a2a;
-}
-
-/* Utilities */
-.fade-in {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    transition: all 0.6s ease !important;
-}
-
-.service-card, .review-card, .stat-item {
-    opacity: 0;
-    transform: translateY(30px);
-}
-
-.text-center {
-    text-align: center;
-}
-
-/* Chatbot */
-#chat-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-
-
-#chat-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
-}
-
-#chat-button i {
-    color: white;
-    font-size: 24px;
-}
-
-        
-
-        /* Chatbot Button */
-        .chatbot-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .chatbot-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
-        }
-
-        .chatbot-button i {
-            color: white;
-            font-size: 24px;
-        }
-
-        /* Mobile Chatbot Positioning */
-        @media (max-width: 768px) {
-            .chatbot-button {
-                bottom: 15px;
-                right: 15px;
-                width: 55px;
-                height: 55px;
-                z-index: 9999;
-            }
-            
-            .chatbot-button i {
-                font-size: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .chatbot-button {
-                bottom: 12px;
-                right: 12px;
-                width: 50px;
-                height: 50px;
-            }
-            
-            .chatbot-button i {
-                font-size: 18px;
-            }
-        }
-
-        /* Ripple animation */
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* Sticky Footer Layout */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            min-height: 100vh;
-        }
-
-        .main-content {
-            flex: 1;
-        }
-
-        .coming-soon-section {
-            min-height: auto;
-            padding: 3rem 2rem;
-            padding-top: 2rem;
-        }
-
-        .footer {
-            margin-top: auto;
-            flex-shrink: 0;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
     <div class="main-content">
-    <!-- Coming Soon Section -->
-    <section class="coming-soon-section">
-        <div class="coming-soon-container" data-aos="fade-up">
-            <div class="coming-soon-icon" data-aos="zoom-in" data-aos-delay="200">
-                <i class="fas fa-star"></i>
-            </div>
-
-            <h1 class="coming-soon-title" data-aos="fade-up" data-aos-delay="300">
-                Reviews Coming Soon
-            </h1>
-
-            <p class="coming-soon-subtitle" data-aos="fade-up" data-aos-delay="400">
-                We're gathering amazing testimonials from our satisfied clients
-            </p>
-
-            <p class="coming-soon-description" data-aos="fade-up" data-aos-delay="500">
-                Our clients have shared incredible feedback about their experience working with DropTechify. We're currently compiling these testimonials to showcase the real impact of our solutions on businesses worldwide.
-            </p>
-
-            <div class="testimonial-preview" data-aos="fade-up" data-aos-delay="600">
-                <div class="preview-stars">⭐⭐⭐⭐⭐</div>
-                <p class="preview-text">
-                    "DropTechify delivered exactly what we needed. Their automation solution saved us countless hours and improved our efficiency dramatically. Professional, reliable, and truly innovative."
-                </p>
-                <div class="preview-author">
-                    <strong>Sample Client</strong>
-                    <span>CEO, Tech Company</span>
+        <!-- Reviews Section -->
+        <section class="reviews-main" style="padding: 4rem 0; background: #f8fafc; min-height: 80vh;">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Client Reviews</h2>
+                    <p>What our clients say about working with us</p>
+                </div>
+                <div id="reviewsGrid" class="reviews-grid" data-aos="fade-up" data-aos-delay="400">
+                    <!-- Reviews will be loaded here dynamically -->
+                    <div class="loading-placeholder">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading reviews...</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="stats-preview" data-aos="fade-up" data-aos-delay="700">
-                <div class="stat-item">
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">Client Satisfaction</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Happy Clients</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">5.0</div>
-                    <div class="stat-label">Average Rating</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">Support</div>
-                </div>
-            </div>
-
-            <div class="cta-buttons" data-aos="fade-up" data-aos-delay="800">
-                <a href="index.html#contact" class="btn-primary">
-                    <i class="fas fa-comment-dots"></i> Share Your Experience
-                </a>
-                <a href="index.html" class="btn-secondary">
-                    <i class="fas fa-home"></i> Back to Home
-                </a>
-            </div>
-        </div>
-    </section>
+        </section>
     </div>
 
-     <!-- Footer -->
+    <!-- Chatbot Button -->
+    <button class="chatbot-button" id="chatbot-btn">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -714,65 +80,6 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="chatbot.js"></script>
-    <script>
-        AOS.init({
-            duration: 800,
-            offset: 100,
-            once: true
-        });
-
-        
-
-        // Chatbot functionality
-        const chatbotBtn = document.getElementById('chatbot-btn');
-        if (chatbotBtn) {
-            chatbotBtn.addEventListener('click', () => {
-                // Add ripple effect
-                const ripple = document.createElement('span');
-                const rect = chatbotBtn.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = rect.width / 2 - size / 2;
-                const y = rect.height / 2 - size / 2;
-
-                ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${x}px;
-                    top: ${y}px;
-                    border-radius: 50%;
-                    background: rgba(255,255,255,0.3);
-                    transform: scale(0);
-                    animation: ripple 0.6s linear;
-                    pointer-events: none;
-                `;
-                chatbotBtn.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-
-                // Open WhatsApp
-                const message = "Hi! I'm interested in your services. Can we discuss?";
-                const whatsappUrl = `https://wa.me/923030273718?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-            });
-        }
-
-        // Initialize chatbot
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                if (!document.getElementById('chat-button') && !window.chatbotInitialized) {
-                    window.chatbotInitialized = true;
-                    new DropTechifyChatbot();
-                }
-            }, 1000);
-        });
-    </script>
-
-    <!-- Dynamic Reviews Loading (when admin adds content) -->
-    <div id="dynamic-reviews" style="display: none;">
-        <!-- Reviews will be loaded here dynamically when added via admin panel -->
-    </div>
-
-    <!-- Firebase Integration for Dynamic Content -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, onSnapshot, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -792,60 +99,59 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Listen for reviews - when reviews are added, show them instead of coming soon
-        function checkForReviews() {
+        // Load reviews from Firebase
+        function loadReviews() {
             const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
 
             onSnapshot(reviewsQuery, (snapshot) => {
-                if (snapshot.docs.length > 0) {
-                    // Reviews exist - hide coming soon and show reviews
-                    document.querySelector('.coming-soon-section').style.display = 'none';
-                    document.getElementById('dynamic-reviews').style.display = 'block';
-                    loadReviews(snapshot.docs);
+                const container = document.getElementById('reviewsGrid');
+                if (!container) return;
+
+                container.innerHTML = '';
+
+                if (snapshot.docs.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-content">
+                            <i class="fas fa-star" style="font-size: 3rem; color: #ffd700; margin-bottom: 1rem;"></i>
+                            <h3 style="color: #666; margin-bottom: 1rem;">No Reviews Yet</h3>
+                            <p style="color: #999;">Client reviews will appear here once added.</p>
+                        </div>
+                    `;
+                    return;
                 }
+
+                snapshot.docs.forEach(doc => {
+                    const review = doc.data();
+                    const reviewCard = createReviewCard(review);
+                    container.appendChild(reviewCard);
+                });
             });
         }
 
-        function loadReviews(reviews) {
-            const container = document.getElementById('dynamic-reviews');
-            container.innerHTML = `
-                <section class="reviews-main" style="padding: 8rem 0 5rem; background: #f8f9fa;">
-                    <div class="container">
-                        <div class="section-header">
-                            <h2>Client Reviews</h2>
-                            <p>What our clients say about working with us</p>
-                        </div>
-                        <div class="reviews-grid" id="reviews-grid">
-                        </div>
-                    </div>
-                </section>
-            `;
-
-            const grid = document.getElementById('reviews-grid');
-            reviews.forEach(doc => {
-                const review = doc.data();
-                const reviewCard = createReviewCard(review, doc.id);
-                grid.appendChild(reviewCard);
-            });
-        }
-
-        function createReviewCard(review, id) {
+        function createReviewCard(review) {
             const card = document.createElement('div');
-            card.className = 'review-card-full';
+            card.className = 'review-card-modern';
+            card.setAttribute('data-aos', 'fade-up');
 
-            const rating = '⭐'.repeat(review.rating || 5);
+            const ratingStars = '⭐'.repeat(review.rating || 5);
             const dateAdded = review.dateAdded ? new Date(review.dateAdded.seconds * 1000).toLocaleDateString() : 'Recent';
 
             card.innerHTML = `
                 <div class="review-header">
                     <div class="reviewer-info">
-                        <h4>${review.name}</h4>
-                        <p>${review.position}${review.company ? ` at ${review.company}` : ''}</p>
+                        <div class="reviewer-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="reviewer-details">
+                            <h4>${review.name}</h4>
+                            <p>${review.position || 'Client'}${review.company ? ` at ${review.company}` : ''}</p>
+                        </div>
                     </div>
                     <div class="review-date">${dateAdded}</div>
                 </div>
                 <div class="review-rating">
-                    <div class="stars">${rating}</div>
+                    <div class="stars">${ratingStars}</div>
+                    <span class="rating-number">(${review.rating || 5}.0)</span>
                 </div>
                 <div class="review-text">
                     <p>"${review.text}"</p>
@@ -855,8 +161,34 @@
             return card;
         }
 
-        // Initialize review checking
-        checkForReviews();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                offset: 100,
+                once: true
+            });
+
+            loadReviews();
+
+            // Chatbot functionality
+            const chatbotBtn = document.getElementById('chatbot-btn');
+            if (chatbotBtn) {
+                chatbotBtn.addEventListener('click', () => {
+                    const message = "Hi! I'm interested in your services. Can we discuss?";
+                    const whatsappUrl = `https://wa.me/923030273718?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                });
+            }
+
+            // Initialize chatbot
+            setTimeout(() => {
+                if (!document.getElementById('chat-button') && !window.chatbotInitialized) {
+                    window.chatbotInitialized = true;
+                    new DropTechifyChatbot();
+                }
+            }, 1000);
+        });
     </script>
 </body>
 </html>
