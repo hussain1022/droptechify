@@ -109,6 +109,10 @@ async function handleProjectSubmit(e) {
     console.log('📤 Submitting project...');
 
     const formData = new FormData(e.target);
+    // Process multiple images
+    const imagesText = document.getElementById('project-images').value;
+    const imageUrls = imagesText ? imagesText.split('\n').filter(url => url.trim()) : [];
+    
     const projectData = {
         title: formData.get('title') || document.getElementById('project-title').value,
         category: formData.get('category') || document.getElementById('project-category').value,
@@ -116,7 +120,8 @@ async function handleProjectSubmit(e) {
         rating: parseInt(formData.get('rating') || document.getElementById('project-rating').value),
         description: formData.get('description') || document.getElementById('project-description').value,
         technologies: (formData.get('technologies') || document.getElementById('project-tech').value).split(',').map(tech => tech.trim()),
-        image: document.getElementById('project-image').value || getDefaultProjectImage(document.getElementById('project-category').value),
+        images: imageUrls.length > 0 ? imageUrls : [getDefaultProjectImage(document.getElementById('project-category').value)],
+        image: imageUrls.length > 0 ? imageUrls[0] : getDefaultProjectImage(document.getElementById('project-category').value), // Keep for backward compatibility
         dateAdded: new Date(),
         status: 'published'
     };
@@ -336,7 +341,15 @@ async function editProject(projectId) {
             document.getElementById('project-rating').value = project.rating || 5;
             document.getElementById('project-description').value = project.description || '';
             document.getElementById('project-tech').value = Array.isArray(project.technologies) ? project.technologies.join(', ') : '';
-            document.getElementById('project-image').value = project.image || '';
+            
+            // Handle multiple images
+            const projectImages = project.images || (project.image ? [project.image] : []);
+            document.getElementById('project-images').value = projectImages.join('\n');
+            
+            // Show image previews
+            if (projectImages.length > 0) {
+                displayImagePreviews(projectImages);
+            }
 
             // Set edit mode
             editingProjectId = projectId;
@@ -524,23 +537,80 @@ function getDefaultProjectImage(category) {
     return defaultImages[category] || defaultImages['python'];
 }
 
-// Image upload handling for projects
-function handleImageUpload(input) {
-    const file = input.files[0];
-    if (file) {
+// Multiple image upload handling for projects
+function handleMultipleImageUpload(input) {
+    const files = Array.from(input.files);
+    const imageUrls = [];
+    let processedCount = 0;
+    
+    if (files.length === 0) return;
+    
+    files.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const preview = document.getElementById('image-preview');
-            const previewImg = document.getElementById('preview-img');
+            imageUrls[index] = e.target.result;
+            processedCount++;
             
-            previewImg.src = e.target.result;
-            preview.style.display = 'block';
-            
-            // Set the data URL as the image value
-            document.getElementById('project-image').value = e.target.result;
+            // When all files are processed
+            if (processedCount === files.length) {
+                // Add to existing images
+                const existingImages = document.getElementById('project-images').value;
+                const allImages = existingImages ? existingImages.split('\n').filter(url => url.trim()) : [];
+                allImages.push(...imageUrls);
+                
+                document.getElementById('project-images').value = allImages.join('\n');
+                displayImagePreviews(allImages);
+            }
         };
         reader.readAsDataURL(file);
-    }
+    });
+}
+
+// Display image previews
+function displayImagePreviews(imageUrls) {
+    const preview = document.getElementById('images-preview');
+    const container = document.getElementById('preview-container');
+    
+    container.innerHTML = '';
+    
+    imageUrls.forEach((url, index) => {
+        if (url.trim()) {
+            const imageWrapper = document.createElement('div');
+            imageWrapper.style.cssText = 'position: relative; display: inline-block;';
+            
+            const img = document.createElement('img');
+            img.src = url.trim();
+            img.style.cssText = 'width: 100px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;';
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.innerHTML = '×';
+            removeBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; line-height: 1;';
+            removeBtn.onclick = () => removeImage(index);
+            
+            imageWrapper.appendChild(img);
+            imageWrapper.appendChild(removeBtn);
+            container.appendChild(imageWrapper);
+        }
+    });
+    
+    preview.style.display = imageUrls.length > 0 ? 'block' : 'none';
+}
+
+// Remove specific image
+function removeImage(index) {
+    const imagesText = document.getElementById('project-images').value;
+    const imageUrls = imagesText.split('\n').filter(url => url.trim());
+    imageUrls.splice(index, 1);
+    
+    document.getElementById('project-images').value = imageUrls.join('\n');
+    displayImagePreviews(imageUrls);
+}
+
+// Clear all images
+function clearAllImages() {
+    document.getElementById('project-images').value = '';
+    document.getElementById('images-preview').style.display = 'none';
+    document.getElementById('project-images-file').value = '';
 }
 
 
@@ -553,7 +623,9 @@ window.deleteProject = deleteProject;
 window.deleteReview = deleteReview;
 window.logout = logout;
 window.saveSettings = saveSettings;
-window.handleImageUpload = handleImageUpload;
+window.handleMultipleImageUpload = handleMultipleImageUpload;
+window.clearAllImages = clearAllImages;
+window.removeImage = removeImage;
 
 
 console.log('✅ Admin Dashboard loaded successfully!');
