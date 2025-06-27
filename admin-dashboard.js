@@ -173,7 +173,7 @@ async function handleReviewSubmit(e) {
         company: formData.get('company') || document.getElementById('reviewer-company').value,
         rating: parseInt(formData.get('rating') || document.getElementById('reviewer-rating').value),
         text: formData.get('text') || document.getElementById('review-text').value,
-        image: document.getElementById('reviewer-image').value || '',
+        image: '',
         dateAdded: new Date(),
         status: 'published'
     };
@@ -543,24 +543,7 @@ function handleImageUpload(input) {
     }
 }
 
-// Image upload handling for reviewers
-function handleReviewerImageUpload(input) {
-    const file = input.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById('reviewer-image-preview');
-            const previewImg = document.getElementById('reviewer-preview-img');
-            
-            previewImg.src = e.target.result;
-            preview.style.display = 'block';
-            
-            // Set the data URL as the image value
-            document.getElementById('reviewer-image').value = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-}
+
 
 // Make functions globally available
 window.showSection = showSection;
@@ -571,6 +554,6 @@ window.deleteReview = deleteReview;
 window.logout = logout;
 window.saveSettings = saveSettings;
 window.handleImageUpload = handleImageUpload;
-window.handleReviewerImageUpload = handleReviewerImageUpload;
+
 
 console.log('✅ Admin Dashboard loaded successfully!');
