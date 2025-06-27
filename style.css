@@ -192,12 +192,12 @@ img {
         -webkit-user-select: none;
         user-select: none;
     }
-    
+
     .portfolio-btn {
         position: relative;
         z-index: 1000;
     }
-    
+
     .dropdown-menu-hero {
         top: calc(100% + 12px);
         bottom: auto;
@@ -208,13 +208,13 @@ img {
         touch-action: manipulation;
         z-index: 9999;
     }
-    
+
     .portfolio-dropdown-hero:hover .dropdown-menu-hero,
     .portfolio-dropdown-hero.active .dropdown-menu-hero {
         transform: translateX(-50%) translateY(0);
         padding: 0.8rem 0;
     }
-    
+
     .dropdown-item-hero {
         min-height: 44px;
         display: flex;
@@ -224,7 +224,7 @@ img {
         -webkit-user-select: none;
         user-select: none;
     }
-    
+
     .dropdown-item-hero:active {
         background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
     }
@@ -1022,8 +1022,7 @@ section:last-of-type {
 }
 
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: grid;Adding styles for image count indicator and carousel hover effects in the portfolio section.    grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
 
@@ -2348,7 +2347,7 @@ body {
         width: 55px;
         height: 55px;
     }
-    
+
     #chat-button i {
         font-size: 20px;
     }
@@ -2361,8 +2360,40 @@ body {
         width: 50px;
         height: 50px;
     }
-    
+
     #chat-button i {
         font-size: 18px;
     }
+}
+
+/* Portfolio Section Styles */
+.portfolio-section {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Image count indicator */
+.image-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Carousel hover effects */
+.carousel-btn:hover {
+    background: rgba(0,0,0,0.9) !important;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-indicators button:hover {
+    transform: scale(1.2);
 }
