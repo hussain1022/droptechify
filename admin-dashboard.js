@@ -1,7 +1,18 @@
-
 // Firebase Configuration and Initialization
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot, orderBy, query, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    getDocs, 
+    updateDoc, 
+    deleteDoc, 
+    doc, 
+    onSnapshot, 
+    orderBy, 
+    query,
+    getDoc 
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,159 +29,58 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Global variables for edit mode
+// Global variables
 let editingProjectId = null;
 let editingReviewId = null;
 
-// Check authentication on page load
+console.log('🔥 Admin Dashboard Starting...');
+
+// Check authentication when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    try {
-        console.log('🔐 Admin dashboard loading...');
+    console.log('📱 DOM Content Loaded');
 
-        // Create error display system first
-        createErrorDisplay();
-
-        // Check if user is logged in
-        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
-            console.log('❌ User not authenticated, redirecting to login...');
-            showError('Not authenticated. Redirecting to login...');
-            setTimeout(() => {
-                window.location.href = 'admin-login.html';
-            }, 2000);
-            return;
-        }
-
-        console.log('✅ User authenticated, initializing dashboard...');
-
-        // Initialize dashboard with error handling
-        try {
-            initializeDashboard();
-            console.log('✅ Dashboard initialized');
-        } catch (error) {
-            showError('Failed to initialize dashboard', error);
-            return;
-        }
-
-        // Initialize Firebase connection with error handling
-        try {
-            initializeFirebaseSync();
-            console.log('✅ Firebase sync initialized');
-        } catch (error) {
-            showError('Failed to connect to Firebase database', error);
-        }
-
-        // Show dashboard section by default
-        setTimeout(() => {
-            try {
-                showDashboardSection();
-                updateStats();
-                showToast('✅ Admin panel loaded successfully!', 'success');
-            } catch (error) {
-                showError('Failed to load dashboard sections', error);
-            }
-        }, 500);
-
-    } catch (error) {
-        console.error('❌ Critical error during initialization:', error);
-        showError('Critical error during admin panel initialization', error);
+    // Check if user is logged in
+    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+        console.log('❌ User not authenticated');
+        window.location.href = 'admin-login.html';
+        return;
     }
+
+    console.log('✅ User authenticated');
+
+    // Initialize dashboard
+    initializeDashboard();
 });
 
-// Initialize dashboard functionality
+// Initialize dashboard
 function initializeDashboard() {
-    console.log('🚀 Initializing dashboard functionality...');
+    console.log('🚀 Initializing dashboard...');
 
-    // Menu navigation
-    const menuItems = document.querySelectorAll('.menu-item');
-    const contentSections = document.querySelectorAll('.content-section');
-    const pageTitle = document.getElementById('page-title');
-
-    console.log('📋 Found menu items:', menuItems.length);
-    console.log('📄 Found content sections:', contentSections.length);
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            try {
-                e.preventDefault();
-                const targetSection = item.getAttribute('data-section');
-                console.log('🖱️ Menu item clicked:', targetSection);
-
-                if (!targetSection) {
-                    showError('Menu item missing data-section attribute');
-                    return;
-                }
-
-                // Remove active class from all menu items
-                menuItems.forEach(mi => mi.classList.remove('active'));
-                // Add active class to clicked item
-                item.classList.add('active');
-
-                // Hide all content sections
-                contentSections.forEach(section => section.classList.remove('active'));
-
-                // Show target section
-                const sectionElement = document.getElementById(targetSection + '-section');
-                if (sectionElement) {
-                    sectionElement.classList.add('active');
-                    console.log('✅ Section activated:', targetSection);
-
-                    // Load data when switching to sections
-                    try {
-                        if (targetSection === 'projects') {
-                            loadProjectsData();
-                        } else if (targetSection === 'reviews') {
-                            loadReviewsData();
-                        }
-                    } catch (error) {
-                        showError(`Failed to load ${targetSection} data`, error);
-                    }
-                } else {
-                    showError(`Section not found: ${targetSection}-section`);
-                    console.error('❌ Section not found:', targetSection + '-section');
-                }
-
-                // Update page title
-                const titles = {
-                    'dashboard': 'Dashboard Overview',
-                    'projects': 'Manage Projects',
-                    'reviews': 'Manage Reviews',
-                    'settings': 'Site Settings'
-                };
-                if (pageTitle) {
-                    pageTitle.textContent = titles[targetSection] || 'Admin Panel';
-                }
-
-            } catch (error) {
-                showError('Menu navigation failed', error);
-            }
-        });
-    });
+    // Test Firebase connection
+    testFirebaseConnection();
 
     // Setup form handlers
     setupFormHandlers();
 
-    console.log('✅ Dashboard initialized successfully!');
+    // Load initial data
+    loadProjectsData();
+    loadReviewsData();
+    updateStats();
+
+    console.log('✅ Dashboard initialized successfully');
 }
 
-// Show dashboard section by default
-function showDashboardSection() {
-    const dashboardMenuItem = document.querySelector('[data-section="dashboard"]');
-    const dashboardSection = document.getElementById('dashboard-section');
-
-    if (dashboardMenuItem && dashboardSection) {
-        // Remove active from all menu items
-        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-
-        // Set dashboard as active
-        dashboardMenuItem.classList.add('active');
-        dashboardSection.classList.add('active');
-
-        // Update page title
-        const pageTitle = document.getElementById('page-title');
-        if (pageTitle) {
-            pageTitle.textContent = 'Dashboard Overview';
-        }
+// Test Firebase connection
+async function testFirebaseConnection() {
+    try {
+        console.log('🧪 Testing Firebase connection...');
+        const testQuery = query(collection(db, 'projects'));
+        const snapshot = await getDocs(testQuery);
+        console.log('✅ Firebase connected! Projects found:', snapshot.size);
+        showMessage('Firebase connected successfully!', 'success');
+    } catch (error) {
+        console.error('❌ Firebase connection failed:', error);
+        showMessage('Firebase connection failed: ' + error.message, 'error');
     }
 }
 
@@ -182,35 +92,31 @@ function setupFormHandlers() {
     const projectForm = document.getElementById('project-form');
     if (projectForm) {
         projectForm.addEventListener('submit', handleProjectSubmit);
-        console.log('✅ Project form handler added');
-    } else {
-        console.warn('⚠️ Project form not found');
+        console.log('✅ Project form handler set');
     }
 
     // Review form
     const reviewForm = document.getElementById('review-form');
     if (reviewForm) {
         reviewForm.addEventListener('submit', handleReviewSubmit);
-        console.log('✅ Review form handler added');
-    } else {
-        console.warn('⚠️ Review form not found');
+        console.log('✅ Review form handler set');
     }
 }
 
 // Handle project form submission
 async function handleProjectSubmit(e) {
     e.preventDefault();
-    console.log('📤 Submitting project form...');
+    console.log('📤 Submitting project...');
 
     const formData = new FormData(e.target);
     const projectData = {
-        title: formData.get('title'),
-        category: formData.get('category'),
-        duration: formData.get('duration'),
-        rating: parseInt(formData.get('rating')),
-        description: formData.get('description'),
-        technologies: formData.get('technologies').split(',').map(tech => tech.trim()),
-        image: formData.get('image') || getDefaultProjectImage(formData.get('category')),
+        title: formData.get('title') || document.getElementById('project-title').value,
+        category: formData.get('category') || document.getElementById('project-category').value,
+        duration: formData.get('duration') || document.getElementById('project-duration').value,
+        rating: parseInt(formData.get('rating') || document.getElementById('project-rating').value),
+        description: formData.get('description') || document.getElementById('project-description').value,
+        technologies: (formData.get('technologies') || document.getElementById('project-tech').value).split(',').map(tech => tech.trim()),
+        image: formData.get('image') || document.getElementById('project-image').value || getDefaultProjectImage(document.getElementById('project-category').value),
         dateAdded: new Date(),
         status: 'published'
     };
@@ -218,43 +124,37 @@ async function handleProjectSubmit(e) {
     console.log('📋 Project data:', projectData);
 
     try {
-        // Show loading state
         const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<div class="spinner"></div> Saving...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         submitBtn.disabled = true;
 
         if (editingProjectId) {
             // Update existing project
             const projectRef = doc(db, 'projects', editingProjectId);
             await updateDoc(projectRef, projectData);
-            showToast('✅ Project updated successfully! Check live website.', 'success');
+            showMessage('Project updated successfully!', 'success');
             editingProjectId = null;
             submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Project';
-            console.log('✅ Project updated in Firebase');
         } else {
             // Add new project
             const docRef = await addDoc(collection(db, 'projects'), projectData);
-            showToast('✅ Project added successfully! Live on website now.', 'success');
-            console.log('✅ Project added to Firebase with ID:', docRef.id);
+            showMessage('Project added successfully!', 'success');
+            console.log('✅ Project added with ID:', docRef.id);
         }
 
-        // Clear form and restore button
+        // Reset form
         e.target.reset();
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Project';
+        submitBtn.disabled = true;
 
-        // Force refresh data
-        setTimeout(() => {
-            loadProjectsData();
-            updateStats();
-        }, 1000);
+        // Reload data
+        loadProjectsData();
+        updateStats();
 
     } catch (error) {
         console.error('❌ Error saving project:', error);
-        showToast('❌ Error saving project. Please check connection and try again.', 'error');
+        showMessage('Error saving project: ' + error.message, 'error');
 
-        // Restore button
         const submitBtn = e.target.querySelector('button[type="submit"]');
         submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Project';
         submitBtn.disabled = false;
@@ -264,15 +164,15 @@ async function handleProjectSubmit(e) {
 // Handle review form submission
 async function handleReviewSubmit(e) {
     e.preventDefault();
-    console.log('📤 Submitting review form...');
+    console.log('📤 Submitting review...');
 
     const formData = new FormData(e.target);
     const reviewData = {
-        name: formData.get('name'),
-        position: formData.get('position'),
-        company: formData.get('company'),
-        rating: parseInt(formData.get('rating')),
-        text: formData.get('text'),
+        name: formData.get('name') || document.getElementById('reviewer-name').value,
+        position: formData.get('position') || document.getElementById('reviewer-position').value,
+        company: formData.get('company') || document.getElementById('reviewer-company').value,
+        rating: parseInt(formData.get('rating') || document.getElementById('reviewer-rating').value),
+        text: formData.get('text') || document.getElementById('review-text').value,
         dateAdded: new Date(),
         status: 'published'
     };
@@ -280,150 +180,105 @@ async function handleReviewSubmit(e) {
     console.log('📋 Review data:', reviewData);
 
     try {
-        // Show loading state
         const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<div class="spinner"></div> Saving...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         submitBtn.disabled = true;
 
         if (editingReviewId) {
             // Update existing review
             const reviewRef = doc(db, 'reviews', editingReviewId);
             await updateDoc(reviewRef, reviewData);
-            showToast('✅ Review updated successfully! Check live website.', 'success');
+            showMessage('Review updated successfully!', 'success');
             editingReviewId = null;
             submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Review';
-            console.log('✅ Review updated in Firebase');
         } else {
             // Add new review
             const docRef = await addDoc(collection(db, 'reviews'), reviewData);
-            showToast('✅ Review added successfully! Live on website now.', 'success');
-            console.log('✅ Review added to Firebase with ID:', docRef.id);
+            showMessage('Review added successfully!', 'success');
+            console.log('✅ Review added with ID:', docRef.id);
         }
 
-        // Clear form and restore button
+        // Reset form
         e.target.reset();
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Review';
+        submitBtn.disabled = true;
 
-        // Force refresh data
-        setTimeout(() => {
-            loadReviewsData();
-            updateStats();
-        }, 1000);
+        // Reload data
+        loadReviewsData();
+        updateStats();
 
     } catch (error) {
         console.error('❌ Error saving review:', error);
-        showToast('❌ Error saving review. Please check connection and try again.', 'error');
+        showMessage('Error saving review: ' + error.message, 'error');
 
-        // Restore button
         const submitBtn = e.target.querySelector('button[type="submit"]');
         submitBtn.innerHTML = '<i class="fas fa-save"></i> Add Review';
         submitBtn.disabled = false;
     }
 }
 
-// Initialize Firebase sync
-function initializeFirebaseSync() {
-    console.log('🔄 Initializing Firebase sync...');
-
-    // Test Firebase connection
-    testFirebaseConnection();
-
-    // Real-time projects listener
-    const projectsQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
-    onSnapshot(projectsQuery, (snapshot) => {
-        console.log('📊 Projects updated, count:', snapshot.docs.length);
-        const tableBody = document.getElementById('projects-table-body');
-        if (tableBody) {
-            tableBody.innerHTML = '';
-
-            snapshot.docs.forEach(doc => {
-                const project = { id: doc.id, ...doc.data() };
-                addProjectToTable(project);
-            });
-        }
-
-        updateStats();
-    }, (error) => {
-        console.error('❌ Error loading projects:', error);
-        showToast('❌ Error loading projects from Firebase', 'error');
-    });
-
-    // Real-time reviews listener
-    const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
-    onSnapshot(reviewsQuery, (snapshot) => {
-        console.log('📊 Reviews updated, count:', snapshot.docs.length);
-        const tableBody = document.getElementById('reviews-table-body');
-        if (tableBody) {
-            tableBody.innerHTML = '';
-
-            snapshot.docs.forEach(doc => {
-                const review = { id: doc.id, ...doc.data() };
-                addReviewToTable(review);
-            });
-        }
-
-        updateStats();
-    }, (error) => {
-        console.error('❌ Error loading reviews:', error);
-        showToast('❌ Error loading reviews from Firebase', 'error');
-    });
-
-    console.log('✅ Firebase sync initialized successfully!');
-}
-
-// Test Firebase connection
-async function testFirebaseConnection() {
+// Load projects data
+async function loadProjectsData() {
+    console.log('📊 Loading projects...');
     try {
-        console.log('🧪 Testing Firebase connection...');
-        
-        // Test basic Firebase app initialization
-        if (!app) {
-            throw new Error('Firebase app not initialized');
+        const projectsQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
+        const snapshot = await getDocs(projectsQuery);
+
+        const tableBody = document.getElementById('projects-table');
+        if (tableBody) {
+            tableBody.innerHTML = '';
+
+            if (snapshot.empty) {
+                tableBody.innerHTML = '<tr><td colspan="5">No projects found</td></tr>';
+            } else {
+                snapshot.forEach((doc) => {
+                    const project = { id: doc.id, ...doc.data() };
+                    addProjectToTable(project);
+                });
+            }
         }
-        
-        if (!db) {
-            throw new Error('Firestore database not initialized');
-        }
 
-        const testQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
-        const snapshot = await getDocs(testQuery);
-        console.log('✅ Firebase connection successful. Projects count:', snapshot.size);
-
-        const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
-        const reviewsSnapshot = await getDocs(reviewsQuery);
-        console.log('✅ Firebase connection successful. Reviews count:', reviewsSnapshot.size);
-
-        showToast('✅ Firebase connected successfully!', 'success');
-        return true;
+        console.log('✅ Projects loaded:', snapshot.size);
     } catch (error) {
-        console.error('❌ Firebase connection failed:', error);
-        showError('Firebase connection failed. Check your internet connection and Firebase config.', error);
-        showToast('❌ Firebase connection failed. Please check your connection.', 'error');
-        return false;
+        console.error('❌ Error loading projects:', error);
+        showMessage('Error loading projects: ' + error.message, 'error');
     }
 }
 
-// Load projects data
-function loadProjectsData() {
-    console.log('📊 Loading projects data...');
-    // Data is already loaded via real-time listener
-}
-
 // Load reviews data
-function loadReviewsData() {
-    console.log('📊 Loading reviews data...');
-    // Data is already loaded via real-time listener
+async function loadReviewsData() {
+    console.log('📊 Loading reviews...');
+    try {
+        const reviewsQuery = query(collection(db, 'reviews'), orderBy('dateAdded', 'desc'));
+        const snapshot = await getDocs(reviewsQuery);
+
+        const tableBody = document.getElementById('reviews-table');
+        if (tableBody) {
+            tableBody.innerHTML = '';
+
+            if (snapshot.empty) {
+                tableBody.innerHTML = '<tr><td colspan="5">No reviews found</td></tr>';
+            } else {
+                snapshot.forEach((doc) => {
+                    const review = { id: doc.id, ...doc.data() };
+                    addReviewToTable(review);
+                });
+            }
+        }
+
+        console.log('✅ Reviews loaded:', snapshot.size);
+    } catch (error) {
+        console.error('❌ Error loading reviews:', error);
+        showMessage('Error loading reviews: ' + error.message, 'error');
+    }
 }
 
 // Add project to table
 function addProjectToTable(project) {
-    const tableBody = document.getElementById('projects-table-body');
+    const tableBody = document.getElementById('projects-table');
     if (!tableBody) return;
 
     const row = document.createElement('tr');
-
     const ratingStars = '⭐'.repeat(parseInt(project.rating || 5));
 
     row.innerHTML = `
@@ -442,11 +297,10 @@ function addProjectToTable(project) {
 
 // Add review to table
 function addReviewToTable(review) {
-    const tableBody = document.getElementById('reviews-table-body');
+    const tableBody = document.getElementById('reviews-table');
     if (!tableBody) return;
 
     const row = document.createElement('tr');
-
     const ratingStars = '⭐'.repeat(parseInt(review.rating || 5));
     const dateAdded = review.dateAdded ? new Date(review.dateAdded.seconds * 1000).toLocaleDateString() : 'N/A';
 
@@ -487,17 +341,15 @@ async function editProject(projectId) {
             editingProjectId = projectId;
             document.querySelector('#project-form button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update Project';
 
-            // Switch to projects section and scroll to form
-            document.querySelector('[data-section="projects"]').click();
-            setTimeout(() => {
-                document.getElementById('project-form').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
+            // Switch to projects section
+            showSection('projects');
+            document.getElementById('project-form').scrollIntoView({ behavior: 'smooth' });
 
-            console.log('✅ Project loaded for editing');
+            showMessage('Project loaded for editing', 'success');
         }
     } catch (error) {
         console.error('❌ Error loading project for edit:', error);
-        showToast('Error loading project data', 'error');
+        showMessage('Error loading project: ' + error.message, 'error');
     }
 }
 
@@ -522,17 +374,15 @@ async function editReview(reviewId) {
             editingReviewId = reviewId;
             document.querySelector('#review-form button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update Review';
 
-            // Switch to reviews section and scroll to form
-            document.querySelector('[data-section="reviews"]').click();
-            setTimeout(() => {
-                document.getElementById('review-form').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
+            // Switch to reviews section
+            showSection('reviews');
+            document.getElementById('review-form').scrollIntoView({ behavior: 'smooth' });
 
-            console.log('✅ Review loaded for editing');
+            showMessage('Review loaded for editing', 'success');
         }
     } catch (error) {
         console.error('❌ Error loading review for edit:', error);
-        showToast('Error loading review data', 'error');
+        showMessage('Error loading review: ' + error.message, 'error');
     }
 }
 
@@ -542,11 +392,12 @@ async function deleteProject(projectId) {
     if (confirm('Are you sure you want to delete this project?')) {
         try {
             await deleteDoc(doc(db, 'projects', projectId));
-            showToast('Project deleted successfully!', 'success');
-            console.log('✅ Project deleted');
+            showMessage('Project deleted successfully!', 'success');
+            loadProjectsData();
+            updateStats();
         } catch (error) {
             console.error('❌ Error deleting project:', error);
-            showToast('Error deleting project', 'error');
+            showMessage('Error deleting project: ' + error.message, 'error');
         }
     }
 }
@@ -557,11 +408,12 @@ async function deleteReview(reviewId) {
     if (confirm('Are you sure you want to delete this review?')) {
         try {
             await deleteDoc(doc(db, 'reviews', reviewId));
-            showToast('Review deleted successfully!', 'success');
-            console.log('✅ Review deleted');
+            showMessage('Review deleted successfully!', 'success');
+            loadReviewsData();
+            updateStats();
         } catch (error) {
             console.error('❌ Error deleting review:', error);
-            showToast('Error deleting review', 'error');
+            showMessage('Error deleting review: ' + error.message, 'error');
         }
     }
 }
@@ -584,7 +436,81 @@ async function updateStats() {
     }
 }
 
-// Get default project image based on category
+// Show section
+function showSection(sectionName) {
+    console.log('📄 Showing section:', sectionName);
+
+    // Remove active class from all menu items and sections
+    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+
+    // Add active class to clicked menu item
+    const menuItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+    if (menuItem) menuItem.classList.add('active');
+
+    // Show target section
+    const section = document.getElementById(sectionName);
+    if (section) section.classList.add('active');
+
+    // Update page title
+    const titles = {
+        'dashboard': 'Dashboard Overview',
+        'projects': 'Manage Projects', 
+        'reviews': 'Manage Reviews',
+        'settings': 'Site Settings'
+    };
+
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) pageTitle.textContent = titles[sectionName] || 'Admin Panel';
+
+    // Load data for specific sections
+    if (sectionName === 'projects') {
+        loadProjectsData();
+    } else if (sectionName === 'reviews') {
+        loadReviewsData();
+    }
+}
+
+// Save settings
+function saveSettings() {
+    showMessage('Settings saved successfully!', 'success');
+}
+
+// Logout
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        sessionStorage.removeItem('adminLoggedIn');
+        sessionStorage.removeItem('adminEmail');
+        showMessage('Logging out...', 'success');
+        setTimeout(() => {
+            window.location.href = 'admin-login.html';
+        }, 1000);
+    }
+}
+
+// Show message
+function showMessage(message, type = 'success') {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('.status-message');
+    existingMessages.forEach(msg => msg.remove());
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `status-message ${type}`;
+    messageDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check' : 'fa-exclamation-triangle'}"></i> ${message}`;
+
+    document.body.appendChild(messageDiv);
+
+    // Show message
+    setTimeout(() => messageDiv.classList.add('show'), 100);
+
+    // Hide message after 4 seconds
+    setTimeout(() => {
+        messageDiv.classList.remove('show');
+        setTimeout(() => messageDiv.remove(), 300);
+    }, 4000);
+}
+
+// Get default project image
 function getDefaultProjectImage(category) {
     const defaultImages = {
         'python': "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400'%3E%3Crect fill='%233776ab' width='600' height='400'/%3E%3Ctext fill='white' x='50%25' y='50%25' text-anchor='middle' font-family='Arial' font-size='32' font-weight='bold'%3EPython Project%3C/text%3E%3C/svg%3E",
@@ -597,222 +523,13 @@ function getDefaultProjectImage(category) {
     return defaultImages[category] || defaultImages['python'];
 }
 
-// Show toast message
-function showToast(message, type = 'success') {
-    // Remove existing toasts
-    const existingToasts = document.querySelectorAll('.toast');
-    existingToasts.forEach(toast => toast.remove());
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#28a745' : '#dc3545'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        font-weight: 500;
-        z-index: 10000;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: slideInRight 0.3s ease;
-    `;
-    toast.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
-            <span>${message}</span>
-        </div>
-    `;
-
-    document.body.appendChild(toast);
-
-    // Auto remove after 4 seconds
-    setTimeout(() => {
-        toast.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 300);
-    }, 4000);
-}
-
-// Logout function
-function logout() {
-    try {
-        console.log('🚪 Logging out...');
-        if (confirm('Are you sure you want to logout?')) {
-            sessionStorage.removeItem('adminLoggedIn');
-            sessionStorage.removeItem('adminEmail');
-            showToast('Logging out...', 'success');
-            setTimeout(() => {
-                window.location.href = 'admin-login.html';
-            }, 1000);
-        }
-    } catch (error) {
-        showError('Logout failed', error);
-        // Force logout anyway
-        sessionStorage.clear();
-        window.location.href = 'admin-login.html';
-    }
-}
-
-// Force refresh function
-function forceRefresh() {
-    try {
-        console.log('🔄 Force refreshing dashboard...');
-        showToast('Refreshing dashboard...', 'success');
-        
-        // Clear any existing data
-        const projectsTable = document.getElementById('projects-table-body');
-        const reviewsTable = document.getElementById('reviews-table-body');
-        
-        if (projectsTable) projectsTable.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
-        if (reviewsTable) reviewsTable.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
-        
-        // Reinitialize Firebase sync
-        setTimeout(() => {
-            initializeFirebaseSync();
-            updateStats();
-            showToast('Dashboard refreshed!', 'success');
-        }, 1000);
-        
-    } catch (error) {
-        showError('Force refresh failed', error);
-    }
-}
-
-// Debug function to check system status
-function debugCheck() {
-    console.log('🔍 Running debug check...');
-    
-    const debugInfo = {
-        timestamp: new Date().toISOString(),
-        authentication: sessionStorage.getItem('adminLoggedIn'),
-        firebaseApp: !!app,
-        firebaseDb: !!db,
-        currentSection: document.querySelector('.menu-item.active')?.getAttribute('data-section'),
-        projectsTable: !!document.getElementById('projects-table-body'),
-        reviewsTable: !!document.getElementById('reviews-table-body'),
-        errorDisplay: !!document.getElementById('error-display')
-    };
-    
-    console.log('Debug Info:', debugInfo);
-    showToast('Debug info logged to console', 'success');
-    
-    return debugInfo;
-}
-
 // Make functions globally available
+window.showSection = showSection;
 window.editProject = editProject;
 window.editReview = editReview;
 window.deleteProject = deleteProject;
 window.deleteReview = deleteReview;
 window.logout = logout;
-window.showError = showError;
-window.forceRefresh = forceRefresh;
-window.debugCheck = debugCheck;
+window.saveSettings = saveSettings;
 
-// Add toast animation styles
-const toastStyle = document.createElement('style');
-toastStyle.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(toastStyle);
-
-// Error Display System
-function createErrorDisplay() {
-    // Remove existing error display
-    const existingError = document.getElementById('error-display');
-    if (existingError) {
-        existingError.remove();
-    }
-
-    // Create error display container
-    const errorDisplay = document.createElement('div');
-    errorDisplay.id = 'error-display';
-    errorDisplay.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #dc3545;
-        color: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 99999;
-        max-width: 400px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 14px;
-        display: none;
-    `;
-    document.body.appendChild(errorDisplay);
-    return errorDisplay;
-}
-
-// Show error function
-function showError(message, error = null) {
-    console.error('❌ Error:', message, error);
-    
-    const errorDisplay = document.getElementById('error-display') || createErrorDisplay();
-    const timestamp = new Date().toLocaleTimeString();
-    
-    let errorDetails = message;
-    if (error) {
-        errorDetails += `\n\nTechnical Details: ${error.message || error}`;
-    }
-    
-    errorDisplay.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>Admin Panel Error</strong>
-            <button onclick="document.getElementById('error-display').style.display='none'" 
-                    style="margin-left: auto; background: none; border: none; color: white; cursor: pointer; font-size: 16px;">
-                ×
-            </button>
-        </div>
-        <div style="margin-bottom: 10px;">${errorDetails}</div>
-        <div style="font-size: 12px; opacity: 0.8;">Time: ${timestamp}</div>
-    `;
-    
-    errorDisplay.style.display = 'block';
-    
-    // Auto hide after 10 seconds
-    setTimeout(() => {
-        if (errorDisplay.style.display !== 'none') {
-            errorDisplay.style.display = 'none';
-        }
-    }, 10000);
-}
-
-// Global error handler
-window.addEventListener('error', function(event) {
-    showError('JavaScript Error Detected', event.error);
-});
-
-window.addEventListener('unhandledrejection', function(event) {
-    showError('Promise Rejection Error', event.reason);
-});
-
-console.log('🔐 Admin dashboard script loaded successfully!');
+console.log('✅ Admin Dashboard loaded successfully!');
