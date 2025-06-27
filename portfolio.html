@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -247,7 +248,7 @@
     </style>
 </head>
 <body>
-    
+
 
     <!-- Vertical Side Navigation -->
     <nav class="side-nav">
@@ -389,6 +390,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="script.js"></script>
     <script src="chatbot.js"></script>
+    <script type="module" src="portfolio.js"></script>
     <script>
         // Initialize AOS
         AOS.init({
@@ -408,8 +410,38 @@
     </script>
 
     <!-- Dynamic Projects Loading (when admin adds content) -->
-    <div id="dynamic-projects" style="display: none;">
-        <!-- Projects will be loaded here dynamically when added via admin panel -->
+    <section id="dynamic-projects" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Projects</h2>
+                <p>Explore our successful automation and development solutions</p>
+            </div>
+            <div id="projects-grid" class="projects-grid">
+                <!-- Projects will be loaded here -->
+            </div>
+        </div>
+    </section>
+            <div class="section-header" data-aos="fade-up">
+                <h2>Our Live Projects</h2>
+                <p>Recent work completed for our clients worldwide</p>
+            </div>
+            <div id="projects-grid" class="projects-grid">
+                <!-- Projects will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="project-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeProjectModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProjectModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-body">
+                <!-- Project details will be loaded here -->
+            </div>
+        </div>
     </div>
 
     <!-- Firebase Integration for Dynamic Content -->
