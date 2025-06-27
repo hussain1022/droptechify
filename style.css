@@ -22,8 +22,8 @@ body {
     scroll-behavior: smooth;
     display: flex;
     flex-direction: column;
-    height: auto
-    overflow-y: auto
+    height: auto;
+    overflow-y: auto;
 }
 
 /* Custom Stylish Scrollbar */
@@ -1093,6 +1093,8 @@ section:last-of-type {
     flex-shrink: 0;
     position: relative;
     z-index: 1;
+    bottom:auto;
+    margin-top: 50px;
 }
 
 /* Ensure proper page layout with sticky footer */
