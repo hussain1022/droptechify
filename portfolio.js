@@ -116,11 +116,11 @@ function createImageCarousel(project) {
     
     if (validImages.length === 0) {
         const defaultImg = getDefaultProjectImage(project.category);
-        return `<img src="${defaultImg}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;" onerror="console.error('Failed to load default image')">`;
+        return `<img src="${defaultImg}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; object-position: center; border-radius: 10px;" onerror="console.error('Failed to load default image')">`;
     }
     
     if (validImages.length === 1) {
-        return `<img src="${validImages[0]}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;" onerror="this.src='${getDefaultProjectImage(project.category)}'">`;
+        return `<img src="${validImages[0]}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; object-position: center; border-radius: 10px;" onerror="this.src='${getDefaultProjectImage(project.category)}'">`;
     }
     
     return `
@@ -129,22 +129,22 @@ function createImageCarousel(project) {
                 ${validImages.map((img, index) => `
                     <img src="${img}" 
                          alt="${project.title} - Image ${index + 1}" 
-                         style="width: 100%; height: 100%; object-fit: cover; display: ${index === 0 ? 'block' : 'none'};"
+                         style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: ${index === 0 ? 'block' : 'none'};"
                          data-index="${index}"
                          onerror="this.src='${getDefaultProjectImage(project.category)}'">
                 `).join('')}
             </div>
             ${validImages.length > 1 ? `
-                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${validImages.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 10;">
+                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${validImages.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8); color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; transition: all 0.3s ease;">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${validImages.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 10;">
+                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${validImages.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8); color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; transition: all 0.3s ease;">
                     <i class="fas fa-chevron-right"></i>
                 </button>
                 <div class="carousel-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
                     ${validImages.map((_, index) => `
                         <button onclick="goToCarouselImage(${index}, ${validImages.length})" 
-                                style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: ${index === 0 ? 'white' : 'transparent'}; cursor: pointer;" 
+                                style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: ${index === 0 ? 'white' : 'transparent'}; cursor: pointer; transition: all 0.3s ease;" 
                                 data-indicator="${index}"></button>
                     `).join('')}
                 </div>
