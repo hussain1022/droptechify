@@ -73,7 +73,6 @@ img {
 /* GPU acceleration for animations */
 .floating-element, .service-card, .tech-item, .nav-btn, .dropdown-menu-hero {
     transform: translateZ(0);
-    backface-visibility: hidden;
     perspective: 1000px;
     contain: layout style paint;
 }
