@@ -1095,6 +1095,34 @@ section:last-of-type {
     z-index: 1;
 }
 
+/* Ensure proper page layout with sticky footer */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Portfolio and Reviews pages specific layout */
+.portfolio-main,
+.reviews-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 .footer-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1174,13 +1202,57 @@ section:last-of-type {
     color: #742a2a;
 }
 
+/* Filter Buttons */
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0 3rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
 /* Portfolio Grid Styles */
+.portfolio-grid,
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2.5rem;
     margin-top: 3rem;
     min-height: 200px;
+}
+
+.loading-placeholder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #667eea;
+}
+
+.loading-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
 .empty-content {
@@ -1188,8 +1260,9 @@ section:last-of-type {
     text-align: center;
     padding: 4rem 2rem;
     background: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    border: 2px dashed #e2e8f0;
 }
 
 .empty-content h3 {
@@ -1201,6 +1274,259 @@ section:last-of-type {
 .empty-content p {
     color: #999;
     font-size: 1rem;
+}
+
+/* Modern Project Cards */
+.portfolio-project-card,
+.project-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.portfolio-project-card:hover,
+.project-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.project-image {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.portfolio-project-card:hover .project-image img,
+.project-card:hover .project-image img {
+    transform: scale(1.1);
+}
+
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(102, 126, 234, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.portfolio-project-card:hover .project-overlay,
+.project-card:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-overlay .btn {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.portfolio-project-card:hover .project-overlay .btn,
+.project-card:hover .project-overlay .btn {
+    transform: translateY(0);
+}
+
+.project-content {
+    padding: 2.5rem;
+}
+
+.project-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #2d3748;
+    line-height: 1.3;
+}
+
+.project-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.project-rating .stars {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.project-rating .rating-text {
+    color: #718096;
+    font-weight: 500;
+}
+
+.project-category {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.project-description {
+    color: #718096;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 1rem;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.tech-badge {
+    background: #f8f9fa;
+    color: #667eea;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+.project-duration i {
+    margin-right: 0.5rem;
+    color: #667eea;
+}
+
+/* Reviews Grid */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2.5rem;
+    margin-top: 3rem;
+}
+
+.review-card-modern {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+}
+
+.review-card-modern:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reviewer-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.reviewer-details h4 {
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.reviewer-details p {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.review-date {
+    color: #cbd5e0;
+    font-size: 0.8rem;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.review-rating .stars {
+    color: #ffd700;
+    font-size: 1.3rem;
+}
+
+.review-rating .rating-number {
+    color: #718096;
+    font-weight: 500;
+}
+
+.review-text {
+    color: #2d3748;
+    line-height: 1.7;
+    font-style: italic;
+    font-size: 1.05rem;
+}
+
+.review-text p {
+    margin: 0;
 }
 
 .project-card {
@@ -1711,7 +2037,80 @@ section:last-of-type {
     .main-content {
         margin-left: 0;
         padding-top: 0;
-        padding-bottom: 100px;
+        padding-bottom: 0;
+    }
+
+    /* Mobile Portfolio Grid */
+    .portfolio-grid,
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    /* Mobile Filter Buttons */
+    .filter-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0 1rem;
+    }
+
+    .filter-btn {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+    }
+
+    /* Mobile Project Cards */
+    .portfolio-project-card,
+    .project-card {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    .project-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .project-title {
+        font-size: 1.4rem;
+    }
+
+    /* Mobile Modal */
+    .project-modal {
+        padding: 1rem;
+    }
+
+    .modal-content {
+        max-height: 95vh;
+        margin: 0;
+    }
+
+    .modal-header,
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    /* Mobile Reviews */
+    .review-card-modern {
+        padding: 2rem 1.5rem;
+    }
+
+    .reviewer-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+
+    .reviewer-details {
+        text-align: left;
     }
 
     .hero-site-title {
