@@ -116,7 +116,7 @@ async function handleProjectSubmit(e) {
         rating: parseInt(formData.get('rating') || document.getElementById('project-rating').value),
         description: formData.get('description') || document.getElementById('project-description').value,
         technologies: (formData.get('technologies') || document.getElementById('project-tech').value).split(',').map(tech => tech.trim()),
-        image: formData.get('image') || document.getElementById('project-image').value || getDefaultProjectImage(document.getElementById('project-category').value),
+        image: document.getElementById('project-image').value || getDefaultProjectImage(document.getElementById('project-category').value),
         dateAdded: new Date(),
         status: 'published'
     };
@@ -173,6 +173,7 @@ async function handleReviewSubmit(e) {
         company: formData.get('company') || document.getElementById('reviewer-company').value,
         rating: parseInt(formData.get('rating') || document.getElementById('reviewer-rating').value),
         text: formData.get('text') || document.getElementById('review-text').value,
+        image: document.getElementById('reviewer-image').value || '',
         dateAdded: new Date(),
         status: 'published'
     };
@@ -523,6 +524,44 @@ function getDefaultProjectImage(category) {
     return defaultImages[category] || defaultImages['python'];
 }
 
+// Image upload handling for projects
+function handleImageUpload(input) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('image-preview');
+            const previewImg = document.getElementById('preview-img');
+            
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+            
+            // Set the data URL as the image value
+            document.getElementById('project-image').value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Image upload handling for reviewers
+function handleReviewerImageUpload(input) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('reviewer-image-preview');
+            const previewImg = document.getElementById('reviewer-preview-img');
+            
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+            
+            // Set the data URL as the image value
+            document.getElementById('reviewer-image').value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
 // Make functions globally available
 window.showSection = showSection;
 window.editProject = editProject;
@@ -531,5 +570,7 @@ window.deleteProject = deleteProject;
 window.deleteReview = deleteReview;
 window.logout = logout;
 window.saveSettings = saveSettings;
+window.handleImageUpload = handleImageUpload;
+window.handleReviewerImageUpload = handleReviewerImageUpload;
 
 console.log('✅ Admin Dashboard loaded successfully!');
