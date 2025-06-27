@@ -267,6 +267,19 @@ const initHeroPortfolioDropdown = () => {
     console.log('Hero portfolio dropdown initialized successfully');
 };
 
+// Fix reviews section display
+const fixReviewsDisplay = () => {
+    const reviewsGrid = document.querySelector('.reviews-grid');
+    if (reviewsGrid && reviewsGrid.children.length === 0) {
+        reviewsGrid.innerHTML = `
+            <div class="empty-content" style="grid-column: 1 / -1;">
+                <h3>No Reviews Available</h3>
+                <p>Client reviews will appear here once added from the admin panel.</p>
+            </div>
+        `;
+    }
+};
+
 // Enhanced floating elements animation
 const initFloatingElements = () => {
     const floatingElements = document.querySelectorAll('.floating-element');
