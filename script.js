@@ -219,19 +219,21 @@ const initHeroPortfolioDropdown = () => {
         // Desktop click event
         portfolioBtn.addEventListener('click', (e) => {
             if (!touchStarted) {
+                e.preventDefault();
+                e.stopPropagation();
                 toggleDropdown(e);
             }
         });
 
         // Close dropdown when clicking/touching outside
         document.addEventListener('click', (e) => {
-            if (!heroPortfolioDropdown.contains(e.target)) {
+            if (!heroPortfolioDropdown.contains(e.target) && !e.target.closest('.portfolio-dropdown-hero')) {
                 closeDropdown();
             }
         });
 
         document.addEventListener('touchstart', (e) => {
-            if (!heroPortfolioDropdown.contains(e.target)) {
+            if (!heroPortfolioDropdown.contains(e.target) && !e.target.closest('.portfolio-dropdown-hero')) {
                 closeDropdown();
             }
         });
