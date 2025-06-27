@@ -361,6 +361,30 @@
             pointer-events: none;
         }
 
+        /* Force visibility for all buttons and elements */
+        .nav-btn, .btn, button, .contact-btn, .portfolio-btn {
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: inline-flex !important;
+        }
+
+        .form-group, .form-card, .contact-form, .form-actions {
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: block !important;
+        }
+
+        .hero-nav-buttons, .portfolio-dropdown-hero {
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: flex !important;
+        }
+
+        .dropdown-menu-hero, .dropdown-item-hero {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -373,6 +397,12 @@
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .nav-btn, .contact-btn, .portfolio-btn {
+                visibility: visible !important;
+                opacity: 1 !important;
+                display: flex !important;
             }
         }
     </style>
