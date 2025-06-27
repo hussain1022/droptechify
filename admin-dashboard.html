@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +33,6 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            transition: all 0.3s ease;
             z-index: 1000;
         }
 
@@ -65,7 +63,6 @@
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
             cursor: pointer;
-            user-select: none;
         }
 
         .menu-item:hover, .menu-item.active {
@@ -120,7 +117,7 @@
             font-size: 2rem;
         }
 
-        .content-header .user-info {
+        .user-info {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -141,19 +138,13 @@
         /* Content Sections */
         .content-section {
             display: none;
-            animation: fadeIn 0.3s ease;
         }
 
         .content-section.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Dashboard Overview */
+        /* Dashboard Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -274,6 +265,11 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
         .btn-secondary {
             background: #6c757d;
             color: white;
@@ -284,7 +280,7 @@
             color: white;
         }
 
-        /* Data Tables */
+        /* Tables */
         .data-table {
             background: white;
             border-radius: 15px;
@@ -333,67 +329,42 @@
             gap: 0.5rem;
         }
 
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        /* Toast Messages */
-        .toast {
+        /* Status Messages */
+        .status-message {
             position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            top: 20px;
+            right: 20px;
             padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
             z-index: 10000;
             transform: translateX(400px);
             transition: transform 0.3s ease;
         }
 
-        .toast.show {
+        .status-message.show {
             transform: translateX(0);
         }
 
-        .toast.success {
-            border-left: 4px solid #28a745;
+        .status-message.success {
+            background: #28a745;
+            color: white;
         }
 
-        .toast.error {
-            border-left: 4px solid #dc3545;
+        .status-message.error {
+            background: #dc3545;
+            color: white;
         }
 
-        /* Loading State */
         .loading {
             opacity: 0.7;
             pointer-events: none;
         }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-            }
-
-            .sidebar.mobile-open {
-                transform: translateX(0);
             }
 
             .main-content {
@@ -403,48 +374,33 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
-
-            .content-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
         }
     </style>
 </head>
 <body>
     <div class="admin-container">
         <!-- Sidebar -->
-        <nav class="sidebar" id="sidebar">
+        <nav class="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-shield-alt"></i> Admin Panel</h2>
                 <p>DropTechify Management</p>
             </div>
 
             <div class="sidebar-menu">
-                <a href="#" class="menu-item active" data-section="dashboard" onclick="switchSection(event, 'dashboard')">
+                <a href="#" class="menu-item active" onclick="showSection('dashboard')">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
-                <a href="#" class="menu-item" data-section="projects" onclick="switchSection(event, 'projects')">
+                <a href="#" class="menu-item" onclick="showSection('projects')">
                     <i class="fas fa-briefcase"></i> Manage Projects
                 </a>
-                <a href="#" class="menu-item" data-section="reviews" onclick="switchSection(event, 'reviews')">
+                <a href="#" class="menu-item" onclick="showSection('reviews')">
                     <i class="fas fa-star"></i> Manage Reviews
                 </a>
-                <a href="#" class="menu-item" data-section="settings" onclick="switchSection(event, 'settings')">
+                <a href="#" class="menu-item" onclick="showSection('settings')">
                     <i class="fas fa-cog"></i> Settings
                 </a>
             </div>
 
-            <div style="position: absolute; bottom: 6rem; left: 1.5rem; right: 1.5rem;">
-                <button onclick="forceRefresh()" style="width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.75rem; border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem; transition: all 0.3s ease;">
-                    <i class="fas fa-sync-alt"></i> Force Refresh
-                </button>
-                <button onclick="debugCheck()" style="width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.75rem; border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem; transition: all 0.3s ease;">
-                    <i class="fas fa-bug"></i> Debug Check
-                </button>
-            </div>
-            
             <button class="logout-btn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
@@ -458,11 +414,12 @@
                     <div class="user-avatar">
                         <i class="fas fa-user"></i>
                     </div>
+                    <span>Admin</span>
                 </div>
             </header>
 
             <!-- Dashboard Section -->
-            <section class="content-section active" id="dashboard-section">
+            <section class="content-section active" id="dashboard">
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number" id="total-projects">0</div>
@@ -479,53 +436,24 @@
                         <h3>Recent Activity</h3>
                     </div>
                     <div class="table-content">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                    <th>Details</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Dec 15, 2024</td>
-                                    <td>Project Added</td>
-                                    <td>Email Scraper Tool</td>
-                                    <td><span style="color: #28a745;">✅ Published</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dec 14, 2024</td>
-                                    <td>Review Added</td>
-                                    <td>5-star review from Sarah Johnson</td>
-                                    <td><span style="color: #28a745;">✅ Published</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dec 13, 2024</td>
-                                    <td>Project Updated</td>
-                                    <td>WhatsApp Bot images updated</td>
-                                    <td><span style="color: #28a745;">✅ Published</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div id="recent-activity">Loading recent activity...</div>
                     </div>
                 </div>
             </section>
 
             <!-- Projects Section -->
-            <section class="content-section" id="projects-section">
+            <section class="content-section" id="projects">
                 <div class="form-card">
                     <h3><i class="fas fa-plus"></i> Add New Project</h3>
                     <form id="project-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="project-title">Project Title</label>
-                                <input type="text" id="project-title" name="title" required placeholder="Enter project title">
+                                <input type="text" id="project-title" required placeholder="Enter project title">
                             </div>
                             <div class="form-group">
                                 <label for="project-category">Category</label>
-                                <select id="project-category" name="category" required>
+                                <select id="project-category" required>
                                     <option value="">Select Category</option>
                                     <option value="python">Python Development</option>
                                     <option value="web-scraping">Web Scraping</option>
@@ -539,11 +467,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="project-duration">Duration</label>
-                                <input type="text" id="project-duration" name="duration" placeholder="e.g., 2 weeks">
+                                <input type="text" id="project-duration" placeholder="e.g., 2 weeks">
                             </div>
                             <div class="form-group">
                                 <label for="project-rating">Rating</label>
-                                <select id="project-rating" name="rating">
+                                <select id="project-rating">
                                     <option value="5">⭐⭐⭐⭐⭐ (5.0)</option>
                                     <option value="4">⭐⭐⭐⭐ (4.0)</option>
                                     <option value="3">⭐⭐⭐ (3.0)</option>
@@ -553,17 +481,17 @@
 
                         <div class="form-group">
                             <label for="project-description">Project Description</label>
-                            <textarea id="project-description" name="description" required placeholder="Describe the project in detail..."></textarea>
+                            <textarea id="project-description" required placeholder="Describe the project in detail..."></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="project-tech">Technologies Used (comma separated)</label>
-                            <input type="text" id="project-tech" name="technologies" placeholder="Python, Flask, Selenium, etc.">
+                            <input type="text" id="project-tech" placeholder="Python, Flask, Selenium, etc.">
                         </div>
 
                         <div class="form-group">
                             <label for="project-image">Project Image URL</label>
-                            <input type="url" id="project-image" name="image" placeholder="https://example.com/image.jpg">
+                            <input type="url" id="project-image" placeholder="https://example.com/image.jpg">
                         </div>
 
                         <button type="submit" class="btn btn-primary">
@@ -587,26 +515,9 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="projects-table-body">
+                            <tbody id="projects-table">
                                 <tr>
-                                    <td>Email Scraper Tool</td>
-                                    <td>Web Scraping</td>
-                                    <td>⭐⭐⭐⭐⭐</td>
-                                    <td>2 weeks</td>
-                                    <td class="action-buttons">
-                                        <button class="btn btn-sm btn-secondary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>WhatsApp Bot</td>
-                                    <td>Bot Development</td>
-                                    <td>⭐⭐⭐⭐⭐</td>
-                                    <td>3 weeks</td>
-                                    <td class="action-buttons">
-                                        <button class="btn btn-sm btn-secondary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
+                                    <td colspan="5">Loading projects...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -615,18 +526,18 @@
             </section>
 
             <!-- Reviews Section -->
-            <section class="content-section" id="reviews-section">
+            <section class="content-section" id="reviews">
                 <div class="form-card">
                     <h3><i class="fas fa-plus"></i> Add New Review</h3>
                     <form id="review-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="reviewer-name">Reviewer Name</label>
-                                <input type="text" id="reviewer-name" name="name" required placeholder="Client name">
+                                <input type="text" id="reviewer-name" required placeholder="Client name">
                             </div>
                             <div class="form-group">
                                 <label for="reviewer-rating">Rating</label>
-                                <select id="reviewer-rating" name="rating" required>
+                                <select id="reviewer-rating" required>
                                     <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
                                     <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
                                     <option value="3">⭐⭐⭐ (3 Stars)</option>
@@ -637,17 +548,17 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="reviewer-position">Position</label>
-                                <input type="text" id="reviewer-position" name="position" placeholder="e.g., CEO, Marketing Director">
+                                <input type="text" id="reviewer-position" placeholder="e.g., CEO, Marketing Director">
                             </div>
                             <div class="form-group">
                                 <label for="reviewer-company">Company</label>
-                                <input type="text" id="reviewer-company" name="company" placeholder="Company name">
+                                <input type="text" id="reviewer-company" placeholder="Company name">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="review-text">Review Text</label>
-                            <textarea id="review-text" name="text" required placeholder="Enter the review text..."></textarea>
+                            <textarea id="review-text" required placeholder="Enter the review text..."></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
@@ -671,16 +582,9 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="reviews-table-body">
+                            <tbody id="reviews-table">
                                 <tr>
-                                    <td>Sarah Johnson</td>
-                                    <td>GrowthLab Marketing</td>
-                                    <td>⭐⭐⭐⭐⭐</td>
-                                    <td>Dec 15, 2024</td>
-                                    <td class="action-buttons">
-                                        <button class="btn btn-sm btn-secondary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
+                                    <td colspan="5">Loading reviews...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -689,7 +593,7 @@
             </section>
 
             <!-- Settings Section -->
-            <section class="content-section" id="settings-section">
+            <section class="content-section" id="settings">
                 <div class="form-card">
                     <h3><i class="fas fa-cog"></i> Site Settings</h3>
                     <div class="form-group">
@@ -704,7 +608,7 @@
                         <label for="contact-email">Contact Email</label>
                         <input type="email" id="contact-email" value="droptechify@gmail.com">
                     </div>
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary" onclick="saveSettings()">
                         <i class="fas fa-save"></i> Save Settings
                     </button>
                 </div>
@@ -712,6 +616,6 @@
         </main>
     </div>
 
-    <script src="admin-dashboard.js"></script>
+    <script type="module" src="admin-dashboard.js"></script>
 </body>
 </html>
