@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,246 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        .coming-soon-section {
-            min-height: 80vh;
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5rem 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .coming-soon-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="120" height="120"><path d="M60 10 L110 60 L60 110 L10 60 Z" fill="none" stroke="rgba(255,193,7,0.1)" stroke-width="2"/></pattern></defs><rect width="1000" height="1000" fill="url(%23pattern)"/></svg>');
-            animation: rotate 30s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .coming-soon-container {
-            text-align: center;
-            max-width: 650px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .coming-soon-icon {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            box-shadow: 0 20px 60px rgba(255, 193, 7, 0.3);
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .coming-soon-icon i {
-            font-size: 3rem;
-            color: white;
-        }
-
-        .coming-soon-title {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .coming-soon-subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .coming-soon-description {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 3rem;
-            line-height: 1.8;
-        }
-
-        .portfolio-preview {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-            margin-bottom: 3rem;
-            border-left: 5px solid #ffc107;
-        }
-
-        .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .preview-item {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .preview-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .preview-item i {
-            font-size: 2rem;
-            color: #ffc107;
-            margin-bottom: 1rem;
-        }
-
-        .preview-item h4 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .preview-item p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .stats-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-item {
-            background: white;
-            padding: 2rem 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #ffc107;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #ffc107;
-            border: 2px solid #ffc107;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-secondary:hover {
-            background: #ffc107;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .coming-soon-title {
-                font-size: 2rem;
-            }
-
-            .coming-soon-icon {
-                width: 100px;
-                height: 100px;
-            }
-
-            .coming-soon-icon i {
-                font-size: 2.5rem;
-            }
-
-            .portfolio-preview {
-                padding: 2rem;
-            }
-
-            .stats-preview {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
 </head>
 <body>
-
-
     <!-- Vertical Side Navigation -->
     <nav class="side-nav">
         <div class="portfolio-dropdown-side">
@@ -268,80 +29,46 @@
 
     <!-- Main Content Area -->
     <div class="main-content">
-        <!-- Coming Soon Section -->
-        <section class="coming-soon-section">
-            <div class="coming-soon-container" data-aos="fade-up">
-                <div class="coming-soon-icon" data-aos="zoom-in" data-aos-delay="200">
-                    <i class="fas fa-briefcase"></i>
+        <!-- Portfolio Section -->
+        <section class="portfolio-main" style="padding: 4rem 0; background: #f8fafc; min-height: 80vh;">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Our Projects</h2>
+                    <p>Explore our successful automation and development solutions</p>
                 </div>
 
-                <h1 class="coming-soon-title" data-aos="fade-up" data-aos-delay="300">
-                    Projects Coming Soon
-                </h1>
-
-                <p class="coming-soon-subtitle" data-aos="fade-up" data-aos-delay="400">
-                    We're preparing our best work to showcase here
-                </p>
-
-                <p class="coming-soon-description" data-aos="fade-up" data-aos-delay="500">
-                    Our portfolio section will feature detailed case studies of successful automation projects, web scraping solutions, and custom software we've built for clients worldwide. Each project will include technical details, challenges solved, and results achieved.
-                </p>
-
-                <div class="portfolio-preview" data-aos="fade-up" data-aos-delay="600">
-                    <h3 style="text-align: center; margin-bottom: 2rem; color: #333;">Preview: Types of Projects</h3>
-                    <div class="preview-grid">
-                        <div class="preview-item">
-                            <i class="fas fa-spider"></i>
-                            <h4>Web Scraping</h4>
-                            <p>Advanced data extraction tools</p>
-                        </div>
-                        <div class="preview-item">
-                            <i class="fas fa-robot"></i>
-                            <h4>Automation Bots</h4>
-                            <p>Smart workflow automation</p>
-                        </div>
-                        <div class="preview-item">
-                            <i class="fas fa-globe"></i>
-                            <h4>Web Applications</h4>
-                            <p>Custom web solutions</p>
-                        </div>
-                        <div class="preview-item">
-                            <i class="fas fa-brain"></i>
-                            <h4>AI Integration</h4>
-                            <p>Intelligent chatbots & AI tools</p>
-                        </div>
-                    </div>
+                <!-- Filter Buttons -->
+                <div class="filter-buttons" data-aos="fade-up" data-aos-delay="200">
+                    <button class="filter-btn active" data-filter="all">All Projects</button>
+                    <button class="filter-btn" data-filter="python">Python</button>
+                    <button class="filter-btn" data-filter="web-scraping">Web Scraping</button>
+                    <button class="filter-btn" data-filter="bot">Bot Development</button>
+                    <button class="filter-btn" data-filter="web-dev">Web Development</button>
+                    <button class="filter-btn" data-filter="automation">Automation</button>
                 </div>
 
-                <div class="stats-preview" data-aos="fade-up" data-aos-delay="700">
-                    <div class="stat-item">
-                        <div class="stat-number">50+</div>
-                        <div class="stat-label">Projects Completed</div>
+                <div id="portfolioGrid" class="portfolio-grid" data-aos="fade-up" data-aos-delay="400">
+                    <!-- Projects will be loaded here dynamically -->
+                    <div class="loading-placeholder">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading projects...</p>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">98%</div>
-                        <div class="stat-label">Success Rate</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">30+</div>
-                        <div class="stat-label">Happy Clients</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">24/7</div>
-                        <div class="stat-label">Support</div>
-                    </div>
-                </div>
-
-                <div class="cta-buttons" data-aos="fade-up" data-aos-delay="800">
-                    <a href="index.html#contact" class="btn-primary">
-                        <i class="fas fa-rocket"></i> Start Your Project
-                    </a>
-                    <a href="index.html" class="btn-secondary">
-                        <i class="fas fa-home"></i> Back to Home
-                    </a>
                 </div>
             </div>
         </section>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="project-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeProjectModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProjectModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-body">
+                <!-- Project details will be loaded here -->
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -410,41 +137,6 @@
     </script>
 
     <!-- Dynamic Projects Loading (when admin adds content) -->
-    <section id="dynamic-projects" style="display: none;">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our Projects</h2>
-                <p>Explore our successful automation and development solutions</p>
-            </div>
-            <div id="projects-grid" class="projects-grid">
-                <!-- Projects will be loaded here -->
-            </div>
-        </div>
-    </section>
-            <div class="section-header" data-aos="fade-up">
-                <h2>Our Live Projects</h2>
-                <p>Recent work completed for our clients worldwide</p>
-            </div>
-            <div id="projects-grid" class="projects-grid">
-                <!-- Projects will be loaded here dynamically -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Project Modal -->
-    <div id="project-modal" class="project-modal" style="display: none;">
-        <div class="modal-overlay" onclick="closeProjectModal()"></div>
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeProjectModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div id="modal-body">
-                <!-- Project details will be loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase Integration for Dynamic Content -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, onSnapshot, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
