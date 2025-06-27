@@ -312,7 +312,17 @@ function loadPortfolioProjects() {
         } else {
             // Show coming soon if no projects
             if (comingSoonSection) comingSoonSection.style.display = 'block';
-            if (dynamicProjects) dynamicProjects.style.display = 'none';
+            if (dynamicProjects) {
+                dynamicProjects.style.display = 'block';
+                if (projectsGrid) {
+                    projectsGrid.innerHTML = `
+                        <div class="empty-content">
+                            <h3>No Projects Available</h3>
+                            <p>Projects will appear here once added from the admin panel.</p>
+                        </div>
+                    `;
+                }
+            }
         }
     }, (error) => {
         console.error('❌ Error loading projects:', error);
