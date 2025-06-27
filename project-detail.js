@@ -367,8 +367,18 @@ const projectKeys = Object.keys(portfolioProjects);
 
 // Load project details on page load
 document.addEventListener('DOMContentLoaded', () => {
-    const currentProjectId = localStorage.getItem('currentProject') || 'email-scraper';
-    loadProjectDetails(currentProjectId);
+    const currentProjectData = localStorage.getItem('currentProject');
+    const allProjectsData = localStorage.getItem('allProjects');
+    
+    if (currentProjectData && allProjectsData) {
+        const currentProject = JSON.parse(currentProjectData);
+        const allProjects = JSON.parse(allProjectsData);
+        loadFirebaseProjectDetails(currentProject, allProjects);
+    } else {
+        // Fallback to static project if no Firebase data
+        const currentProjectId = localStorage.getItem('currentProject') || 'email-scraper';
+        loadProjectDetails(currentProjectId);
+    }
 });
 
 // Function to load project details
@@ -519,6 +529,177 @@ function updateProjectNavigation(currentProjectId) {
     } else {
         nextBtn.style.display = 'none';
     }
+}
+
+// Function to load Firebase project details
+function loadFirebaseProjectDetails(project, allProjects) {
+    // Update page title and meta info
+    document.title = `${project.title} - DropTechify Portfolio`;
+    document.getElementById('project-title').textContent = `${project.title} - DropTechify`;
+
+    // Update breadcrumb
+    document.getElementById('breadcrumb-title').textContent = project.title;
+
+    // Update header content
+    document.getElementById('detail-project-title').textContent = project.title;
+    document.getElementById('detail-project-rating').textContent = '⭐'.repeat(project.rating || 5);
+    document.getElementById('detail-rating-text').textContent = `(${project.rating || 5}.0)`;
+    document.getElementById('detail-project-duration').innerHTML = `<i class="fas fa-clock"></i> ${project.duration || 'N/A'}`;
+    document.getElementById('detail-project-category').textContent = project.category || 'N/A';
+
+    // Update sidebar details  
+    document.getElementById('detail-client').textContent = 'Confidential Client';
+    document.getElementById('detail-industry').textContent = project.category || 'Technology';
+    document.getElementById('detail-timeline').textContent = project.duration || 'N/A';
+    document.getElementById('detail-team').textContent = '1 Developer';
+
+    // Update main image
+    const mainImage = document.getElementById('main-project-image');
+    mainImage.src = project.image || getDefaultProjectImage(project.category);
+    mainImage.alt = project.title;
+
+    // Update gallery thumbnails
+    const thumbnailsContainer = document.getElementById('image-thumbnails');
+    thumbnailsContainer.innerHTML = '';
+    
+    const thumbnail = document.createElement('img');
+    thumbnail.src = project.image || getDefaultProjectImage(project.category);
+    thumbnail.alt = project.title;
+    thumbnail.className = 'thumbnail active';
+    thumbnailsContainer.appendChild(thumbnail);
+
+    // Update project content
+    document.getElementById('project-overview').innerHTML = `
+        <p>${project.description || 'No description available.'}</p>
+        <p>This project demonstrates advanced development skills and delivers exceptional results for our clients.</p>
+    `;
+
+    // Update features list
+    const featuresList = document.getElementById('project-features');
+    featuresList.innerHTML = '';
+    
+    if (project.technologies && project.technologies.length > 0) {
+        project.technologies.forEach(tech => {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class="fas fa-check"></i> ${tech.trim()}`;
+            featuresList.appendChild(li);
+        });
+    }
+
+    // Update tech stack
+    const techStackContainer = document.getElementById('tech-stack-detail');
+    techStackContainer.innerHTML = '';
+    
+    if (project.technologies && project.technologies.length > 0) {
+        project.technologies.forEach(tech => {
+            const badge = document.createElement('span');
+            badge.className = 'tech-badge-large';
+            badge.style.backgroundColor = getTechColor(tech);
+            badge.textContent = tech.trim();
+            techStackContainer.appendChild(badge);
+        });
+    }
+
+    // Update sidebar tech list
+    const sidebarTechList = document.getElementById('sidebar-tech-list');
+    sidebarTechList.innerHTML = '';
+    
+    if (project.technologies && project.technologies.length > 0) {
+        project.technologies.forEach(tech => {
+            const item = document.createElement('div');
+            item.className = 'tech-item';
+            item.innerHTML = `
+                <span class="tech-dot" style="background-color: ${getTechColor(tech)}"></span>
+                <span class="tech-name">${tech.trim()}</span>
+            `;
+            sidebarTechList.appendChild(item);
+        });
+    }
+
+    // Update results
+    document.getElementById('project-results').innerHTML = `
+        <p><strong>Successful Implementation:</strong> The project was delivered on time and exceeded client expectations.</p>
+        <p><strong>Technical Excellence:</strong> Utilized modern technologies and best practices for optimal performance.</p>
+        <p><strong>Client Satisfaction:</strong> Received positive feedback and ${project.rating || 5}-star rating.</p>
+    `;
+
+    // Update testimonial
+    const testimonialContainer = document.getElementById('client-testimonial');
+    testimonialContainer.innerHTML = `
+        <div class="testimonial-content">
+            <div class="testimonial-quote">
+                <i class="fas fa-quote-left"></i>
+                <p>Excellent work! The project was completed professionally and delivered exactly what we needed. Highly recommended!</p>
+                <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="testimonial-author">
+                <strong>Satisfied Client</strong>
+                <span>Project Manager</span>
+                <span class="company">Tech Company</span>
+            </div>
+        </div>
+    `;
+
+    // Update navigation
+    updateFirebaseProjectNavigation(project, allProjects);
+}
+
+// Function to get tech color
+function getTechColor(tech) {
+    const colors = {
+        'Python': '#3776ab',
+        'JavaScript': '#f7df1e',
+        'React': '#61dafb',
+        'Node.js': '#339933',
+        'HTML': '#e34f26',
+        'CSS': '#1572b6',
+        'MongoDB': '#47a248',
+        'Firebase': '#ffca28',
+        'Express': '#000000',
+        'Flask': '#000000'
+    };
+    return colors[tech] || '#667eea';
+}
+
+// Function to update Firebase project navigation
+function updateFirebaseProjectNavigation(currentProject, allProjects) {
+    const currentIndex = allProjects.findIndex(p => p.id === currentProject.id);
+    const prevProject = allProjects[currentIndex - 1];
+    const nextProject = allProjects[currentIndex + 1];
+
+    const prevBtn = document.getElementById('prev-project');
+    const nextBtn = document.getElementById('next-project');
+    const prevTitle = document.getElementById('prev-project-title');
+    const nextTitle = document.getElementById('next-project-title');
+
+    if (prevProject) {
+        prevBtn.style.display = 'flex';
+        prevTitle.textContent = prevProject.title;
+        prevBtn.onclick = () => navigateToProject(prevProject, allProjects);
+    } else {
+        prevBtn.style.display = 'none';
+    }
+
+    if (nextProject) {
+        nextBtn.style.display = 'flex';
+        nextTitle.textContent = nextProject.title;
+        nextBtn.onclick = () => navigateToProject(nextProject, allProjects);
+    } else {
+        nextBtn.style.display = 'none';
+    }
+}
+
+// Function to navigate to another project
+function navigateToProject(project, allProjects) {
+    localStorage.setItem('currentProject', JSON.stringify(project));
+    localStorage.setItem('allProjects', JSON.stringify(allProjects));
+    loadFirebaseProjectDetails(project, allProjects);
+    
+    // Smooth scroll to top
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 // Function to navigate between projects
