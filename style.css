@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -230,7 +231,6 @@ img {
     }
 }
 
-
 .portfolio-dropdown-side:hover .dropdown-side {
     opacity: 1;
     visibility: visible;
@@ -406,10 +406,6 @@ img {
 .portfolio-dropdown-hero:hover .fa-chevron-down {
     transform: rotate(180deg);
 }
-
-/* Duplicate dropdown styles removed - handled above */
-
-
 
 .dropdown-item-hero {
     display: flex;
@@ -1022,7 +1018,8 @@ section:last-of-type {
 }
 
 .form-row {
-    display: grid;Adding styles for image count indicator and carousel hover effects in the portfolio section.    grid-template-columns: 1fr 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
 
@@ -1149,7 +1146,8 @@ body {
     transition: color 0.3s ease;
 }
 
-.footer-section a:hover {    color: white;
+.footer-section a:hover {
+    color: white;
 }
 
 .social-links {
@@ -1345,6 +1343,24 @@ body {
     transition: all 0.3s ease;
 }
 
+.image-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
+.image-count i {
+    margin-right: 5px;
+}
+
 .portfolio-project-card:hover .project-overlay .btn,
 .project-card:hover .project-overlay .btn {
     transform: translateY(0);
@@ -1396,11 +1412,8 @@ body {
     color: #718096;
     line-height: 1.7;
     margin-bottom: 2rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
     font-size: 1rem;
+    text-align: justify;
 }
 
 .tech-stack {
@@ -1528,93 +1541,6 @@ body {
     margin: 0;
 }
 
-.project-card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.project-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-
-.project-image {
-    width: 100%;
-    height: 200px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 3rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.project-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.project-card:hover .project-image img {
-    transform: scale(1.05);
-}
-
-.project-content {
-    padding: 2rem;
-}
-
-.project-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #2d3748;
-}
-
-.project-category {
-    display: inline-block;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-}
-
-.project-description {
-    color: #718096;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.project-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
-}
-
-.project-rating {
-    color: #ffd700;
-}
-
-.project-duration {
-    color: #718096;
-    font-size: 0.9rem;
-}
-
 /* Project Detail Page Styles */
 .project-detail {
     padding: 2rem 0;
@@ -1651,25 +1577,6 @@ body {
     font-size: 2.5rem;
     color: #2d3748;
     margin-bottom: 1rem;
-}
-
-.project-meta {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.project-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.project-info {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
 }
 
 .project-gallery {
@@ -1831,26 +1738,6 @@ body {
     gap: 2rem;
 }
 
-.nav-btn {
-    background: white;
-    border: 1px solid #e2e8f0;
-    padding: 1rem 2rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #2d3748;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.nav-btn:hover {
-    background: #667eea;
-    color: white;
-    border-color: #667eea;
-}
-
 .nav-btn-content {
     display: flex;
     align-items: center;
@@ -1962,6 +1849,93 @@ body {
     background: rgba(0,0,0,0.2);
 }
 
+/* Carousel Styles */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.carousel-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-images img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-images img.active {
+    opacity: 1;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: rgba(0,0,0,0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators button.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+.carousel-indicators button:hover {
+    transform: scale(1.2);
+}
+
 @keyframes modalSlideIn {
     from {
         opacity: 0;
@@ -2020,19 +1994,6 @@ body {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-    .side-nav {
-        display: none;
-    }
-
-    .side-nav-item {
-        writing-mode: horizontal-tb;
-        text-orientation: mixed;
-        padding: 0.8rem 1rem;
-        font-size: 0.85rem;
-        white-space: nowrap;
-        min-width: fit-content;
-    }
-
     .main-content {
         margin-left: 0;
         padding-top: 0;
@@ -2072,6 +2033,7 @@ body {
     .project-card {
         margin: 0 auto;
         max-width: 100%;
+        width: 100%;
     }
 
     .project-content {
@@ -2080,6 +2042,55 @@ body {
 
     .project-title {
         font-size: 1.4rem;
+    }
+
+    /* Mobile Image Fixes */
+    .project-image {
+        width: 100%;
+        height: 220px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.4s ease;
+    }
+
+    /* Mobile Modal Image Fixes */
+    .carousel-container {
+        position: relative;
+        width: 100%;
+        height: 250px !important;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .carousel-images img {
+        width: 100%;
+        height: 250px !important;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    /* Mobile carousel buttons */
+    .carousel-btn {
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+    }
+
+    .carousel-indicators {
+        bottom: 10px !important;
+    }
+
+    .carousel-indicators button {
+        width: 10px !important;
+        height: 10px !important;
     }
 
     /* Mobile Modal */
@@ -2106,10 +2117,6 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.8rem;
-    }
-
-    .reviewer-details {
-        text-align: left;
     }
 
     .hero-site-title {
@@ -2177,7 +2184,6 @@ body {
         padding: 1rem 0;
     }
 
-
     .hero-description {
         font-size: 1rem;
         padding: 0 1rem;
@@ -2202,12 +2208,6 @@ body {
 
     .form-row {
         grid-template-columns: 1fr;
-    }
-
-    .dropdown-side {
-        left: auto;
-        right: 0;
-        top: calc(100% + 10px);
     }
 
     .container {
@@ -2273,11 +2273,6 @@ body {
         gap: 1rem;
     }
 
-    .nav-btn {
-        width: 100%;
-        justify-content: center;
-    }
-
     .contact-cta {
         flex-direction: column;
     }
@@ -2338,6 +2333,37 @@ body {
     .stat-item {
         flex: none;
         width: 100%;
+    }
+
+    /* Small Mobile Image Optimizations */
+    .project-image {
+        height: 200px !important;
+    }
+
+    .project-image img {
+        height: 200px !important;
+    }
+
+    .carousel-container {
+        height: 200px !important;
+    }
+
+    .carousel-images img {
+        height: 200px !important;
+    }
+
+    .project-content {
+        padding: 1.5rem 1rem;
+    }
+
+    .project-title {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    .project-description {
+        font-size: 0.9rem;
+        line-height: 1.6;
     }
 
     /* Mobile Chatbot Positioning */
