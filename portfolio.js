@@ -1,4 +1,3 @@
-
 // Firebase Configuration and Initialization
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getFirestore, collection, onSnapshot, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -93,42 +92,29 @@ function createProjectCard(project, index) {
     const techStack = Array.isArray(project.technologies) ? project.technologies : [];
 
     card.innerHTML = `
-        <div class="project-gallery">
-            <div class="project-image-main">
-                <img src="${project.image || getDefaultProjectImage(project.category)}" 
-                     alt="${project.title}" 
-                     class="main-project-img"
-                     style="width: 100%; height: 100%; object-fit: cover;">
-                <div class="image-navigation">
-                    <button class="nav-arrow prev-arrow" onclick="event.stopPropagation();">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="nav-arrow next-arrow" onclick="event.stopPropagation();">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+        <div class="project-image">
+            <img src="${project.image || getDefaultProjectImage(project.category)}" 
+                 alt="${project.title}" 
+                 style="width: 100%; height: 200px; object-fit: cover;">
             <div class="project-overlay">
-                <button class="btn btn-primary" onclick="event.stopPropagation(); showProjectDetails(this.closest('.portfolio-project-card'))">
+                <button class="btn btn-primary" onclick="event.stopPropagation(); openProjectDetail('${project.id}')">
                     <i class="fas fa-eye"></i> View Details
                 </button>
             </div>
         </div>
         <div class="project-content">
-            <h3>${project.title}</h3>
+            <h3 class="project-title">${project.title}</h3>
             <div class="project-rating">
                 <span class="stars">${ratingStars}</span>
                 <span class="rating-text">(${project.rating || 5}.0)</span>
             </div>
-            <p>${project.description || ''}</p>
-
+            <div class="project-category">${project.category}</div>
+            <p class="project-description">${project.description || ''}</p>
             <div class="tech-stack">
                 ${techStack.slice(0, 4).map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
             </div>
-
             <div class="project-meta">
                 <span class="project-duration"><i class="fas fa-clock"></i> ${project.duration || 'N/A'}</span>
-                <span class="project-category">${project.category}</span>
             </div>
         </div>
     `;
@@ -275,3 +261,209 @@ window.showProjectDetails = showProjectDetails;
 window.closeProjectModal = closeProjectModal;
 
 console.log('📁 Portfolio loaded with Firebase integration!');
+// DropTechify Portfolio Management System
+console.log('📁 Loading DropTechify Portfolio...');
+
+// Firebase configuration (same as admin panel)
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, collection, onSnapshot, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyChFO-OThN7rPIZuAOVNP8aG7R9qEAO-z4",
+    authDomain: "droptechify-80034.firebaseapp.com",
+    projectId: "droptechify-80034",
+    storageBucket: "droptechify-80034.firebasestorage.app",
+    messagingSenderId: "41692901589",
+    appId: "1:41692901589:web:1e2000fd5bf89f0d7c725c",
+    measurementId: "G-1PJMJF5W4L"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Load portfolio projects
+function loadPortfolioProjects() {
+    const projectsQuery = query(collection(db, 'projects'), orderBy('dateAdded', 'desc'));
+
+    onSnapshot(projectsQuery, (snapshot) => {
+        const comingSoonSection = document.querySelector('.coming-soon-section');
+        const dynamicProjects = document.getElementById('dynamic-projects');
+        const projectsGrid = document.getElementById('projects-grid');
+
+        if (snapshot.docs.length > 0) {
+            // Hide coming soon and show dynamic projects
+            if (comingSoonSection) comingSoonSection.style.display = 'none';
+            if (dynamicProjects) dynamicProjects.style.display = 'block';
+
+            // Clear existing projects
+            if (projectsGrid) {
+                projectsGrid.innerHTML = '';
+
+                // Add each project
+                snapshot.docs.forEach(doc => {
+                    const project = { id: doc.id, ...doc.data() };
+                    const projectCard = createProjectCard(project);
+                    projectsGrid.appendChild(projectCard);
+                });
+
+                console.log(`✅ Loaded ${snapshot.docs.length} portfolio projects`);
+            }
+        } else {
+            // Show coming soon if no projects
+            if (comingSoonSection) comingSoonSection.style.display = 'block';
+            if (dynamicProjects) dynamicProjects.style.display = 'none';
+        }
+    }, (error) => {
+        console.error('❌ Error loading projects:', error);
+    });
+}
+
+// Create project card element
+function createProjectCard(project) {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.setAttribute('data-aos', 'fade-up');
+
+    const ratingStars = '⭐'.repeat(project.rating || 5);
+    const technologies = Array.isArray(project.technologies) ? project.technologies.join(', ') : project.technologies || '';
+
+    // Handle image display
+    let imageContent = '';
+    if (project.image && project.image.startsWith('http')) {
+        imageContent = `<img src="${project.image}" alt="${project.title}" loading="lazy">`;
+    } else {
+        // Default icon based on category
+        const categoryIcons = {
+            'python': 'fab fa-python',
+            'web-scraping': 'fas fa-spider',
+            'bot': 'fas fa-robot',
+            'web-dev': 'fas fa-code',
+            'automation': 'fas fa-cogs'
+        };
+        const iconClass = categoryIcons[project.category] || 'fas fa-laptop-code';
+        imageContent = `<i class="${iconClass}"></i>`;
+    }
+
+    card.innerHTML = `
+        <div class="project-image">
+            <img src="${project.image || getDefaultProjectImage(project.category)}" 
+                 alt="${project.title}" 
+                 style="width: 100%; height: 200px; object-fit: cover;">
+            <div class="project-overlay">
+                <button class="btn btn-primary" onclick="event.stopPropagation(); openProjectDetail('${project.id}')">
+                    <i class="fas fa-eye"></i> View Details
+                </button>
+            </div>
+        </div>
+        <div class="project-content">
+            <h3 class="project-title">${project.title}</h3>
+            <div class="project-rating">
+                <span class="stars">${ratingStars}</span>
+                <span class="rating-text">(${project.rating || 5}.0)</span>
+            </div>
+            <div class="project-category">${project.category}</div>
+            <p class="project-description">${project.description || ''}</p>
+            <div class="tech-stack">
+                ${techStack.slice(0, 4).map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
+            </div>
+            <div class="project-meta">
+                <span class="project-duration"><i class="fas fa-clock"></i> ${project.duration || 'N/A'}</span>
+            </div>
+        </div>
+    `;
+
+    // Add click handler for modal
+    card.addEventListener('click', () => openProjectModal(project));
+
+    return card;
+}
+
+// Open project modal with details
+function openProjectModal(project) {
+    const modal = document.getElementById('project-modal');
+    const modalBody = document.getElementById('modal-body');
+
+    if (!modal || !modalBody) return;
+
+    const ratingStars = '⭐'.repeat(project.rating || 5);
+    const technologies = Array.isArray(project.technologies) ? project.technologies : [];
+    const techList = technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('');
+
+    // Handle image display
+    let imageContent = '';
+    if (project.image && project.image.startsWith('http')) {
+        imageContent = `<img src="${project.image}" alt="${project.title}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 2rem;">`;
+    }
+
+    modalBody.innerHTML = `
+        <div style="padding: 3rem;">
+            ${imageContent}
+            <h2 style="color: #2d3748; margin-bottom: 1rem;">${project.title}</h2>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+                <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">${project.category}</span>
+                <span style="color: #ffd700; font-size: 1.2rem;">${ratingStars}</span>
+                <span style="color: #718096;">Duration: ${project.duration || 'Custom'}</span>
+            </div>
+            <div style="color: #718096; line-height: 1.8; margin-bottom: 2rem; font-size: 1.1rem;">
+                ${project.description || 'No detailed description available.'}
+            </div>
+            ${techList ? `
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: #2d3748; margin-bottom: 1rem;">Technologies Used:</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${techList}
+                    </div>
+                </div>
+            ` : ''}
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="https://wa.me/923030273718?text=Hi! I'm interested in a project similar to ${encodeURIComponent(project.title)}" 
+                   target="_blank" 
+                   style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                    <i class="fab fa-whatsapp"></i> Get Similar Project
+                </a>
+            </div>
+        </div>
+    `;
+
+    // Add tech tag styles
+    const techTags = modalBody.querySelectorAll('.tech-tag');
+    techTags.forEach(tag => {
+        tag.style.cssText = `
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        `;
+    });
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Close project modal
+window.closeProjectModal = function() {
+    const modal = document.getElementById('project-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+};
+
+// Close modal on escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeProjectModal();
+    }
+});
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initializing portfolio...');
+    loadPortfolioProjects();
+});
+
+console.log('✅ Portfolio script loaded successfully!');
