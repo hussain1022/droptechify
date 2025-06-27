@@ -540,30 +540,93 @@ function getDefaultProjectImage(category) {
 // Multiple image upload handling for projects
 function handleMultipleImageUpload(input) {
     const files = Array.from(input.files);
-    const imageUrls = [];
-    let processedCount = 0;
     
     if (files.length === 0) return;
     
+    console.log(`📸 Processing ${files.length} images...`);
+    
+    // Show loading state
+    const preview = document.getElementById('images-preview');
+    const container = document.getElementById('preview-container');
+    container.innerHTML = '<div style="padding: 20px; text-align: center;">Processing images...</div>';
+    preview.style.display = 'block';
+    
+    const imageUrls = [];
+    let processedCount = 0;
+    
     files.forEach((file, index) => {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            console.warn(`❌ File ${file.name} is not an image`);
+            processedCount++;
+            if (processedCount === files.length) {
+                finishImageProcessing(imageUrls);
+            }
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            console.warn(`❌ File ${file.name} is too large (max 5MB)`);
+            showMessage(`Image ${file.name} is too large. Max size is 5MB.`, 'error');
+            processedCount++;
+            if (processedCount === files.length) {
+                finishImageProcessing(imageUrls);
+            }
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             imageUrls[index] = e.target.result;
             processedCount++;
             
+            console.log(`✅ Processed image ${processedCount}/${files.length}`);
+            
             // When all files are processed
             if (processedCount === files.length) {
-                // Add to existing images
-                const existingImages = document.getElementById('project-images').value;
-                const allImages = existingImages ? existingImages.split('\n').filter(url => url.trim()) : [];
-                allImages.push(...imageUrls);
-                
-                document.getElementById('project-images').value = allImages.join('\n');
-                displayImagePreviews(allImages);
+                finishImageProcessing(imageUrls);
             }
         };
+        
+        reader.onerror = function() {
+            console.error(`❌ Error reading file ${file.name}`);
+            processedCount++;
+            if (processedCount === files.length) {
+                finishImageProcessing(imageUrls);
+            }
+        };
+        
         reader.readAsDataURL(file);
     });
+}
+
+// Finish image processing
+function finishImageProcessing(imageUrls) {
+    // Filter out empty/null URLs
+    const validImages = imageUrls.filter(url => url && url.trim());
+    
+    if (validImages.length === 0) {
+        showMessage('No valid images were processed.', 'error');
+        document.getElementById('images-preview').style.display = 'none';
+        return;
+    }
+    
+    // Get existing images from textarea
+    const existingImages = document.getElementById('project-images').value;
+    const existingUrls = existingImages ? existingImages.split('\n').filter(url => url.trim()) : [];
+    
+    // Combine existing and new images
+    const allImages = [...existingUrls, ...validImages];
+    
+    // Update textarea
+    document.getElementById('project-images').value = allImages.join('\n');
+    
+    // Display previews
+    displayImagePreviews(allImages);
+    
+    showMessage(`✅ ${validImages.length} images uploaded successfully!`, 'success');
+    console.log(`📸 Total images: ${allImages.length}`);
 }
 
 // Display image previews
@@ -573,27 +636,57 @@ function displayImagePreviews(imageUrls) {
     
     container.innerHTML = '';
     
-    imageUrls.forEach((url, index) => {
-        if (url.trim()) {
-            const imageWrapper = document.createElement('div');
-            imageWrapper.style.cssText = 'position: relative; display: inline-block;';
-            
-            const img = document.createElement('img');
-            img.src = url.trim();
-            img.style.cssText = 'width: 100px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;';
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.innerHTML = '×';
-            removeBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; line-height: 1;';
-            removeBtn.onclick = () => removeImage(index);
-            
-            imageWrapper.appendChild(img);
-            imageWrapper.appendChild(removeBtn);
-            container.appendChild(imageWrapper);
-        }
+    const validUrls = imageUrls.filter(url => url && url.trim());
+    
+    if (validUrls.length === 0) {
+        preview.style.display = 'none';
+        return;
+    }
+    
+    validUrls.forEach((url, index) => {
+        const imageWrapper = document.createElement('div');
+        imageWrapper.style.cssText = 'position: relative; display: inline-block; margin: 5px;';
+        
+        const img = document.createElement('img');
+        img.src = url.trim();
+        img.style.cssText = 'width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd; transition: transform 0.2s ease;';
+        
+        // Add hover effect
+        img.onmouseover = () => img.style.transform = 'scale(1.05)';
+        img.onmouseout = () => img.style.transform = 'scale(1)';
+        
+        // Handle image load errors
+        img.onerror = () => {
+            img.style.border = '2px solid #dc3545';
+            img.alt = 'Failed to load image';
+        };
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.innerHTML = '×';
+        removeBtn.style.cssText = 'position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; cursor: pointer; line-height: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: background 0.2s ease;';
+        removeBtn.title = 'Remove image';
+        removeBtn.onclick = () => removeImage(index);
+        removeBtn.onmouseover = () => removeBtn.style.background = '#a71d2a';
+        removeBtn.onmouseout = () => removeBtn.style.background = '#dc3545';
+        
+        // Image index indicator
+        const indexIndicator = document.createElement('div');
+        indexIndicator.innerHTML = index + 1;
+        indexIndicator.style.cssText = 'position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border-radius: 12px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;';
+        
+        imageWrapper.appendChild(img);
+        imageWrapper.appendChild(removeBtn);
+        imageWrapper.appendChild(indexIndicator);
+        container.appendChild(imageWrapper);
     });
     
-    preview.style.display = imageUrls.length > 0 ? 'block' : 'none';
+    // Add image count indicator
+    const countIndicator = document.createElement('div');
+    countIndicator.innerHTML = `📸 ${validUrls.length} image(s) selected`;
+    countIndicator.style.cssText = 'margin-top: 10px; padding: 5px 10px; background: #28a745; color: white; border-radius: 15px; font-size: 12px; display: inline-block;';
+    container.appendChild(countIndicator);
+    
+    preview.style.display = 'block';
 }
 
 // Remove specific image
