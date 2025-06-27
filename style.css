@@ -14,6 +14,7 @@ body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
     color: #2d3748;
+    overflow-x: hidden;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -154,16 +155,16 @@ img {
 
 .dropdown-menu-hero {
     position: absolute;
-    bottom: calc(100% + 15px);
+    top: calc(100% + 10px);
     left: 50%;
-    transform: translateX(-50%) translateY(10px);
+    transform: translateX(-50%) translateY(-10px);
     background: white;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 9999;
+    z-index: 10000;
     border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
     width: max-content;
     min-width: 220px;
     pointer-events: none;
@@ -206,7 +207,7 @@ img {
         min-width: 200px;
         max-width: 250px;
         touch-action: manipulation;
-        z-index: 9999;
+        z-index: 10000;
     }
 
     .portfolio-dropdown-hero:hover .dropdown-menu-hero,
@@ -266,6 +267,7 @@ img {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: calc(100vh - 200px);
 }
 
 /* Hero Section */
@@ -376,7 +378,7 @@ img {
     font-size: 1.1rem;
     font-weight: 600;
     text-decoration: none;
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 0.8rem;
     transition: all 0.3s ease;
@@ -384,6 +386,9 @@ img {
     cursor: pointer;
     min-width: 150px;
     justify-content: center;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 100;
 }
 
 .nav-btn:hover {
@@ -601,6 +606,9 @@ section {
     width: 100%;
     flex-shrink: 0;
     min-height: 50vh;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 section:last-of-type {
@@ -623,6 +631,9 @@ section:last-of-type {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .section-header p {
@@ -1088,6 +1099,7 @@ section:last-of-type {
     flex-shrink: 0;
     position: relative;
     z-index: 1;
+    min-height: 200px;
 }
 
 /* Ensure proper page layout with sticky footer */
