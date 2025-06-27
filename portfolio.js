@@ -106,6 +106,78 @@ function displayEmptyState() {
     `;
 }
 
+// Create image carousel for project modal
+function createImageCarousel(project) {
+    const images = project.images || (project.image ? [project.image] : [getDefaultProjectImage(project.category)]);
+    
+    if (images.length === 1) {
+        return `<img src="${images[0]}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">`;
+    }
+    
+    return `
+        <div class="carousel-container" style="position: relative; width: 100%; height: 400px; border-radius: 10px; overflow: hidden;">
+            <div class="carousel-images" id="carousel-images">
+                ${images.map((img, index) => `
+                    <img src="${img}" 
+                         alt="${project.title} - Image ${index + 1}" 
+                         style="width: 100%; height: 100%; object-fit: cover; display: ${index === 0 ? 'block' : 'none'};"
+                         data-index="${index}">
+                `).join('')}
+            </div>
+            ${images.length > 1 ? `
+                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${images.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px;">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${images.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px;">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="carousel-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
+                    ${images.map((_, index) => `
+                        <button onclick="goToCarouselImage(${index}, ${images.length})" 
+                                style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: ${index === 0 ? 'white' : 'transparent'}; cursor: pointer;" 
+                                data-indicator="${index}"></button>
+                    `).join('')}
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+// Carousel navigation functions
+let currentCarouselIndex = 0;
+
+function changeCarouselImage(direction, totalImages) {
+    const images = document.querySelectorAll('#carousel-images img');
+    const indicators = document.querySelectorAll('.carousel-indicators button');
+    
+    // Hide current image
+    images[currentCarouselIndex].style.display = 'none';
+    indicators[currentCarouselIndex].style.background = 'transparent';
+    
+    // Calculate new index
+    currentCarouselIndex += direction;
+    if (currentCarouselIndex >= totalImages) currentCarouselIndex = 0;
+    if (currentCarouselIndex < 0) currentCarouselIndex = totalImages - 1;
+    
+    // Show new image
+    images[currentCarouselIndex].style.display = 'block';
+    indicators[currentCarouselIndex].style.background = 'white';
+}
+
+function goToCarouselImage(index, totalImages) {
+    const images = document.querySelectorAll('#carousel-images img');
+    const indicators = document.querySelectorAll('.carousel-indicators button');
+    
+    // Hide current image
+    images[currentCarouselIndex].style.display = 'none';
+    indicators[currentCarouselIndex].style.background = 'transparent';
+    
+    // Show selected image
+    currentCarouselIndex = index;
+    images[currentCarouselIndex].style.display = 'block';
+    indicators[currentCarouselIndex].style.background = 'white';
+}
+
 // Create project card HTML
 function createProjectCard(project, index) {
     const card = document.createElement('div');
@@ -120,7 +192,7 @@ function createProjectCard(project, index) {
 
     card.innerHTML = `
         <div class="project-image">
-            <img src="${project.image || getDefaultProjectImage(project.category)}" 
+            <img src="${(project.images && project.images[0]) || project.image || getDefaultProjectImage(project.category)}" 
                  alt="${project.title}" 
                  loading="lazy"
                  style="width: 100%; height: 100%; object-fit: cover;">
@@ -129,6 +201,7 @@ function createProjectCard(project, index) {
                     <i class="fas fa-eye"></i> View Details
                 </button>
             </div>
+            ${project.images && project.images.length > 1 ? `<div class="image-count"><i class="fas fa-images"></i> ${project.images.length}</div>` : ''}
         </div>
         <div class="project-content">
             <h3 class="project-title">${project.title}</h3>
@@ -187,10 +260,8 @@ function showProjectDetails(project) {
                 </button>
             </div>
             <div class="modal-body">
-                <div class="project-image-large">
-                    <img src="${project.image || getDefaultProjectImage(project.category)}" 
-                         alt="${project.title}"
-                         style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
+                <div class="project-image-carousel">
+                    ${createImageCarousel(project)}
                 </div>
                 <div class="project-details">
                     <div class="project-rating">
@@ -345,6 +416,8 @@ function getDefaultProjectImage(category) {
 // Make functions globally available
 window.showProjectDetails = showProjectDetails;
 window.closeProjectModal = closeProjectModal;
+window.changeCarouselImage = changeCarouselImage;
+window.goToCarouselImage = goToCarouselImage;
 
 // Close modal on escape key
 document.addEventListener('keydown', (e) => {
