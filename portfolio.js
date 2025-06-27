@@ -46,7 +46,8 @@ function loadProjectsFromFirebase() {
                     duration: projectData.duration,
                     description: projectData.description,
                     technologies: Array.isArray(projectData.technologies) ? projectData.technologies : [],
-                    image: projectData.image,
+                    image: projectData.image || (projectData.images && projectData.images[0]) || getDefaultProjectImage(projectData.category),
+                    images: projectData.images || (projectData.image ? [projectData.image] : [getDefaultProjectImage(projectData.category)]),
                     dateAdded: projectData.dateAdded
                 });
             });
@@ -110,30 +111,39 @@ function displayEmptyState() {
 function createImageCarousel(project) {
     const images = project.images || (project.image ? [project.image] : [getDefaultProjectImage(project.category)]);
     
-    if (images.length === 1) {
-        return `<img src="${images[0]}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">`;
+    // Filter out empty or invalid images
+    const validImages = images.filter(img => img && img.trim() !== '');
+    
+    if (validImages.length === 0) {
+        const defaultImg = getDefaultProjectImage(project.category);
+        return `<img src="${defaultImg}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;" onerror="console.error('Failed to load default image')">`;
+    }
+    
+    if (validImages.length === 1) {
+        return `<img src="${validImages[0]}" alt="${project.title}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;" onerror="this.src='${getDefaultProjectImage(project.category)}'">`;
     }
     
     return `
         <div class="carousel-container" style="position: relative; width: 100%; height: 400px; border-radius: 10px; overflow: hidden;">
             <div class="carousel-images" id="carousel-images">
-                ${images.map((img, index) => `
+                ${validImages.map((img, index) => `
                     <img src="${img}" 
                          alt="${project.title} - Image ${index + 1}" 
                          style="width: 100%; height: 100%; object-fit: cover; display: ${index === 0 ? 'block' : 'none'};"
-                         data-index="${index}">
+                         data-index="${index}"
+                         onerror="this.src='${getDefaultProjectImage(project.category)}'">
                 `).join('')}
             </div>
-            ${images.length > 1 ? `
-                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${images.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px;">
+            ${validImages.length > 1 ? `
+                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${validImages.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 10;">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${images.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px;">
+                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${validImages.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 10;">
                     <i class="fas fa-chevron-right"></i>
                 </button>
-                <div class="carousel-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
-                    ${images.map((_, index) => `
-                        <button onclick="goToCarouselImage(${index}, ${images.length})" 
+                <div class="carousel-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+                    ${validImages.map((_, index) => `
+                        <button onclick="goToCarouselImage(${index}, ${validImages.length})" 
                                 style="width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; background: ${index === 0 ? 'white' : 'transparent'}; cursor: pointer;" 
                                 data-indicator="${index}"></button>
                     `).join('')}
@@ -147,35 +157,69 @@ function createImageCarousel(project) {
 let currentCarouselIndex = 0;
 
 function changeCarouselImage(direction, totalImages) {
-    const images = document.querySelectorAll('#carousel-images img');
-    const indicators = document.querySelectorAll('.carousel-indicators button');
-    
-    // Hide current image
-    images[currentCarouselIndex].style.display = 'none';
-    indicators[currentCarouselIndex].style.background = 'transparent';
-    
-    // Calculate new index
-    currentCarouselIndex += direction;
-    if (currentCarouselIndex >= totalImages) currentCarouselIndex = 0;
-    if (currentCarouselIndex < 0) currentCarouselIndex = totalImages - 1;
-    
-    // Show new image
-    images[currentCarouselIndex].style.display = 'block';
-    indicators[currentCarouselIndex].style.background = 'white';
+    try {
+        const images = document.querySelectorAll('#carousel-images img');
+        const indicators = document.querySelectorAll('.carousel-indicators button');
+        
+        if (!images.length || !indicators.length) {
+            console.error('Carousel elements not found');
+            return;
+        }
+        
+        // Hide current image
+        if (images[currentCarouselIndex]) {
+            images[currentCarouselIndex].style.display = 'none';
+        }
+        if (indicators[currentCarouselIndex]) {
+            indicators[currentCarouselIndex].style.background = 'transparent';
+        }
+        
+        // Calculate new index
+        currentCarouselIndex += direction;
+        if (currentCarouselIndex >= totalImages) currentCarouselIndex = 0;
+        if (currentCarouselIndex < 0) currentCarouselIndex = totalImages - 1;
+        
+        // Show new image
+        if (images[currentCarouselIndex]) {
+            images[currentCarouselIndex].style.display = 'block';
+        }
+        if (indicators[currentCarouselIndex]) {
+            indicators[currentCarouselIndex].style.background = 'white';
+        }
+    } catch (error) {
+        console.error('Error in carousel navigation:', error);
+    }
 }
 
 function goToCarouselImage(index, totalImages) {
-    const images = document.querySelectorAll('#carousel-images img');
-    const indicators = document.querySelectorAll('.carousel-indicators button');
-    
-    // Hide current image
-    images[currentCarouselIndex].style.display = 'none';
-    indicators[currentCarouselIndex].style.background = 'transparent';
-    
-    // Show selected image
-    currentCarouselIndex = index;
-    images[currentCarouselIndex].style.display = 'block';
-    indicators[currentCarouselIndex].style.background = 'white';
+    try {
+        const images = document.querySelectorAll('#carousel-images img');
+        const indicators = document.querySelectorAll('.carousel-indicators button');
+        
+        if (!images.length || !indicators.length) {
+            console.error('Carousel elements not found');
+            return;
+        }
+        
+        // Hide current image
+        if (images[currentCarouselIndex]) {
+            images[currentCarouselIndex].style.display = 'none';
+        }
+        if (indicators[currentCarouselIndex]) {
+            indicators[currentCarouselIndex].style.background = 'transparent';
+        }
+        
+        // Show selected image
+        currentCarouselIndex = index;
+        if (images[currentCarouselIndex]) {
+            images[currentCarouselIndex].style.display = 'block';
+        }
+        if (indicators[currentCarouselIndex]) {
+            indicators[currentCarouselIndex].style.background = 'white';
+        }
+    } catch (error) {
+        console.error('Error in carousel navigation:', error);
+    }
 }
 
 // Create project card HTML
@@ -192,16 +236,17 @@ function createProjectCard(project, index) {
 
     card.innerHTML = `
         <div class="project-image">
-            <img src="${(project.images && project.images[0]) || project.image || getDefaultProjectImage(project.category)}" 
+            <img src="${project.images && project.images.length > 0 ? project.images[0] : project.image || getDefaultProjectImage(project.category)}" 
                  alt="${project.title}" 
                  loading="lazy"
-                 style="width: 100%; height: 100%; object-fit: cover;">
+                 style="width: 100%; height: 100%; object-fit: cover;"
+                 onerror="this.src='${getDefaultProjectImage(project.category)}'">
             <div class="project-overlay">
                 <button class="btn btn-primary" onclick="event.stopPropagation(); showProjectDetails(this.closest('.portfolio-project-card').project)">
                     <i class="fas fa-eye"></i> View Details
                 </button>
             </div>
-            ${project.images && project.images.length > 1 ? `<div class="image-count"><i class="fas fa-images"></i> ${project.images.length}</div>` : ''}
+            ${project.images && project.images.length > 1 ? `<div class="image-count" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;"><i class="fas fa-images"></i> ${project.images.length}</div>` : ''}
         </div>
         <div class="project-content">
             <h3 class="project-title">${project.title}</h3>
@@ -249,6 +294,9 @@ function initializeFilters() {
 
 // Show project details in modal
 function showProjectDetails(project) {
+    // Reset carousel index when opening new modal
+    currentCarouselIndex = 0;
+    
     const modal = document.createElement('div');
     modal.className = 'project-modal';
     modal.innerHTML = `
