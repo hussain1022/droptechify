@@ -490,8 +490,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="project-image">Project Image URL</label>
-                            <input type="url" id="project-image" placeholder="https://example.com/image.jpg">
+                            <label for="project-image">Project Image</label>
+                            <input type="file" id="project-image-file" accept="image/*" onchange="handleImageUpload(this)">
+                            <input type="url" id="project-image" placeholder="Or enter image URL">
+                            <div id="image-preview" style="margin-top: 10px; display: none;">
+                                <img id="preview-img" style="max-width: 200px; max-height: 150px; border-radius: 8px;">
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
@@ -559,6 +563,15 @@
                         <div class="form-group">
                             <label for="review-text">Review Text</label>
                             <textarea id="review-text" required placeholder="Enter the review text..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reviewer-image">Reviewer Photo (Optional)</label>
+                            <input type="file" id="reviewer-image-file" accept="image/*" onchange="handleReviewerImageUpload(this)">
+                            <input type="url" id="reviewer-image" placeholder="Or enter image URL">
+                            <div id="reviewer-image-preview" style="margin-top: 10px; display: none;">
+                                <img id="reviewer-preview-img" style="max-width: 100px; max-height: 100px; border-radius: 50%;">
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
