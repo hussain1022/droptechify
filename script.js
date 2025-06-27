@@ -191,12 +191,12 @@ const initHeroPortfolioDropdown = () => {
 
         // Enhanced mobile touch events
         let touchTimeout;
-        
+
         portfolioBtn.addEventListener('touchstart', (e) => {
             touchStarted = true;
             clearTimeout(touchTimeout);
             e.preventDefault();
-            
+
             // Add visual feedback
             portfolioBtn.style.transform = 'scale(0.95)';
         }, { passive: false });
@@ -205,10 +205,10 @@ const initHeroPortfolioDropdown = () => {
             if (touchStarted) {
                 touchStarted = false;
                 e.preventDefault();
-                
+
                 // Reset visual feedback
                 portfolioBtn.style.transform = 'scale(1)';
-                
+
                 // Small delay to prevent double-tap issues
                 touchTimeout = setTimeout(() => {
                     toggleDropdown(e);
