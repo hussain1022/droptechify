@@ -2062,7 +2062,7 @@ section:last-of-type {
   .modal-content {
     padding: 1rem;
     max-width: 95%;
-    top: 0;
+    top: -845px;
   }
 }
 @media (min-width: 769px) {
