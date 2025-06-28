@@ -362,6 +362,22 @@ function showProjectDetails(project) {
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
 
+    // Center and scroll to modal immediately
+    setTimeout(() => {
+        modal.scrollIntoView({ 
+            behavior: 'instant', 
+            block: 'center', 
+            inline: 'center' 
+        });
+        
+        // For mobile, ensure we're at top of modal content
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent && window.innerWidth <= 768) {
+            modalContent.scrollTop = 0;
+            window.scrollTo(0, 0);
+        }
+    }, 10);
+
     // Add modal styles
     if (!document.querySelector('#modal-styles')) {
         const styleElement = document.createElement('style');
