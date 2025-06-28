@@ -2042,7 +2042,7 @@ section:last-of-type {
 }
 
 .modal-content {
-    top:-421px;
+    top: -864px;
     position: relative;
     background: white;
     border-radius: 20px;
