@@ -2062,14 +2062,14 @@ section:last-of-type {
   .modal-content {
     padding: 1rem;
     max-width: 95%;
-    top: -845px;
+    top: -1323px;
   }
 }
 @media (min-width: 769px) {
   .modal-content {
     padding: 2rem 3rem;
     max-width: 850px;
-    top: -1323px;
+    
   }
 }
 
