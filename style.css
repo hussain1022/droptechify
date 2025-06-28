@@ -2042,7 +2042,7 @@ section:last-of-type {
 }
 
 .modal-content {
-    top: -600px;
+    top: 0px;
     position: relative;
     background: white;
     border-radius: 20px;
@@ -2057,6 +2057,22 @@ section:last-of-type {
     display: flex;
     flex-direction: column;
 }
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 1rem;
+    max-width: 95%;
+    top: 0;
+  }
+}
+@media (min-width: 769px) {
+  .modal-content {
+    padding: 2rem 3rem;
+    max-width: 850px;
+    top: 0; /* 👈 No fixed offset */
+  }
+}
+
 
 .modal-close {
     position: absolute;
