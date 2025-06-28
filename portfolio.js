@@ -161,8 +161,8 @@ function changeCarouselImage(direction, totalImages) {
         const images = document.querySelectorAll('#carousel-images img');
         const indicators = document.querySelectorAll('.carousel-indicators button');
         
-        if (!images.length || !indicators.length) {
-            console.error('Carousel elements not found');
+        if (!images || images.length === 0) {
+            console.error('Carousel images not found');
             return;
         }
         
@@ -170,7 +170,7 @@ function changeCarouselImage(direction, totalImages) {
         if (images[currentCarouselIndex]) {
             images[currentCarouselIndex].style.display = 'none';
         }
-        if (indicators[currentCarouselIndex]) {
+        if (indicators && indicators[currentCarouselIndex]) {
             indicators[currentCarouselIndex].style.background = 'transparent';
         }
         
@@ -183,7 +183,7 @@ function changeCarouselImage(direction, totalImages) {
         if (images[currentCarouselIndex]) {
             images[currentCarouselIndex].style.display = 'block';
         }
-        if (indicators[currentCarouselIndex]) {
+        if (indicators && indicators[currentCarouselIndex]) {
             indicators[currentCarouselIndex].style.background = 'white';
         }
     } catch (error) {
@@ -196,8 +196,8 @@ function goToCarouselImage(index, totalImages) {
         const images = document.querySelectorAll('#carousel-images img');
         const indicators = document.querySelectorAll('.carousel-indicators button');
         
-        if (!images.length || !indicators.length) {
-            console.error('Carousel elements not found');
+        if (!images || images.length === 0) {
+            console.error('Carousel images not found');
             return;
         }
         
@@ -205,7 +205,7 @@ function goToCarouselImage(index, totalImages) {
         if (images[currentCarouselIndex]) {
             images[currentCarouselIndex].style.display = 'none';
         }
-        if (indicators[currentCarouselIndex]) {
+        if (indicators && indicators[currentCarouselIndex]) {
             indicators[currentCarouselIndex].style.background = 'transparent';
         }
         
@@ -214,7 +214,7 @@ function goToCarouselImage(index, totalImages) {
         if (images[currentCarouselIndex]) {
             images[currentCarouselIndex].style.display = 'block';
         }
-        if (indicators[currentCarouselIndex]) {
+        if (indicators && indicators[currentCarouselIndex]) {
             indicators[currentCarouselIndex].style.background = 'white';
         }
     } catch (error) {
@@ -294,8 +294,19 @@ function initializeFilters() {
 
 // Show project details in modal
 function showProjectDetails(project) {
+    if (!project) {
+        console.error('Project data is null or undefined');
+        return;
+    }
+    
     // Reset carousel index when opening new modal
     currentCarouselIndex = 0;
+    
+    // Remove any existing modals
+    const existingModal = document.querySelector('.project-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
     
     const modal = document.createElement('div');
     modal.className = 'project-modal';
@@ -429,10 +440,21 @@ function showProjectDetails(project) {
 
 // Close modal
 function closeProjectModal() {
-    const modal = document.querySelector('.project-modal');
-    if (modal) {
-        modal.remove();
-        document.body.style.overflow = 'auto';
+    try {
+        const modal = document.querySelector('.project-modal');
+        if (modal) {
+            modal.remove();
+        }
+        
+        // Reset body overflow
+        if (document.body) {
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Reset carousel index
+        currentCarouselIndex = 0;
+    } catch (error) {
+        console.error('Error closing modal:', error);
     }
 }
 
