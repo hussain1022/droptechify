@@ -308,14 +308,28 @@ img {
     }
 
     /* Mobile Image Carousel */
-    .carousel-container {
-        height: 280px !important;
-        border-radius: 12px;
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-        position: relative;
-        width: 100%;
-    }
+   .carousel-container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    border-radius: 12px;
+    background: #f8f9fa;
+    overflow: hidden;
+    height: auto; /* remove fixed height */
+}
+
+.carousel-container img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
 
     .carousel-container img {
         width: 100% !important;
