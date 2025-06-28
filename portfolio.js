@@ -124,21 +124,21 @@ function createImageCarousel(project) {
     }
     
     return `
-        <div class="carousel-container" style="position: relative; width: 100%; height: 400px; border-radius: 10px; overflow: hidden;">
+        <div class="carousel-container" style="position: relative; width: 100%; height: 280px; border-radius: 12px; overflow: hidden; background: #f8f9fa;">
             <div class="carousel-images" id="carousel-images">
                 ${validImages.map((img, index) => `
                     <img src="${img}" 
                          alt="${project.title} - Image ${index + 1}" 
-                         style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: ${index === 0 ? 'block' : 'none'};"
+                         style="width: 100%; height: 100%; object-fit: contain; object-position: center; display: ${index === 0 ? 'block' : 'none'}; background: #f8f9fa;"
                          data-index="${index}"
                          onerror="this.src='${getDefaultProjectImage(project.category)}'">
                 `).join('')}
             </div>
             ${validImages.length > 1 ? `
-                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${validImages.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8); color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; transition: all 0.3s ease;">
+                <button class="carousel-btn prev-btn" onclick="changeCarouselImage(-1, ${validImages.length})" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; transition: all 0.3s ease;">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${validImages.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8); color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; transition: all 0.3s ease;">
+                <button class="carousel-btn next-btn" onclick="changeCarouselImage(1, ${validImages.length})" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; font-size: 16px; z-index: 10; transition: all 0.3s ease;">
                     <i class="fas fa-chevron-right"></i>
                 </button>
                 <div class="carousel-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
@@ -310,7 +310,12 @@ function showProjectDetails(project) {
     
     const modal = document.createElement('div');
     modal.className = 'project-modal';
+    modal.onclick = (e) => {
+        if (e.target === modal) closeProjectModal();
+    };
+    
     modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeProjectModal()"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h2>${project.title}</h2>
@@ -323,29 +328,29 @@ function showProjectDetails(project) {
                     ${createImageCarousel(project)}
                 </div>
                 <div class="project-details">
-                    <div class="project-rating">
+                    <div class="project-rating" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
                         <span class="stars">${'⭐'.repeat(project.rating || 5)}</span>
                         <span class="rating-text">(${project.rating || 5}.0)</span>
                     </div>
-                    <p class="project-description">${project.description || ''}</p>
-                    <div class="project-info-grid">
-                        <div class="info-item">
-                            <strong>Category:</strong> ${project.category}
+                    <p class="project-description" style="font-size: 16px; line-height: 1.6; margin-bottom: 1.5rem; color: #555;">${project.description || ''}</p>
+                    <div class="project-info-grid" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                        <div class="info-item" style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: #333;">Category:</strong> ${project.category}
                         </div>
-                        <div class="info-item">
-                            <strong>Duration:</strong> ${project.duration || 'N/A'}
+                        <div class="info-item" style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: #333;">Duration:</strong> ${project.duration || 'N/A'}
                         </div>
-                        <div class="info-item">
-                            <strong>Technologies:</strong>
-                            <div class="tech-stack">
-                                ${(project.technologies || []).map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
+                        <div class="info-item" style="padding: 0.8rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong style="display: block; margin-bottom: 0.5rem; color: #333;">Technologies:</strong>
+                            <div class="tech-stack" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;">
+                                ${(project.technologies || []).map(tech => `<span class="tech-badge" style="font-size: 11px; padding: 0.3rem 0.6rem; border-radius: 12px; background: rgba(102, 126, 234, 0.1); color: #667eea; border: 1px solid rgba(102, 126, 234, 0.2);">${tech}</span>`).join('')}
                             </div>
                         </div>
                     </div>
-                    <div style="text-align: center; margin-top: 2rem;">
+                    <div style="text-align: center; margin-top: 1.5rem;">
                         <a href="https://wa.me/923030273718?text=Hi! I'm interested in a project similar to ${encodeURIComponent(project.title)}" 
                            target="_blank" 
-                           style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                           style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 1.5rem; margin-top: 1.5rem; border-radius: 25px; font-size: 14px; font-weight: 600; text-decoration: none; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; width: 100%; box-sizing: border-box;">
                             <i class="fab fa-whatsapp"></i> Get Similar Project
                         </a>
                     </div>
