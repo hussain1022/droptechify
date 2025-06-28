@@ -239,80 +239,114 @@ img {
         left: 0;
         width: 100vw;
         height: 100vh;
-        padding: 0.5rem;
+        padding: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 10000;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
     }
 
     .modal-content {
-        width: 100%;
+        width: 95%;
         max-width: 95vw;
-        max-height: 95vh;
-        margin: 0;
-        padding: 1rem;
-        border-radius: 12px;
+        max-height: 90vh;
+        margin: auto;
+        padding: 1.5rem;
+        border-radius: 15px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         position: relative;
         background: white;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(0);
     }
 
     .modal-header {
-        padding: 1rem 1rem 0.5rem;
+        padding: 0 0 1rem 0;
         margin-bottom: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
     }
 
     .modal-header h2 {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         line-height: 1.3;
         margin: 0;
         padding-right: 2.5rem;
         word-wrap: break-word;
+        color: #2d3748;
+        font-weight: 600;
     }
 
     .close-modal {
         position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
         z-index: 10001;
+        background: rgba(0,0,0,0.1);
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .close-modal:hover {
+        background: rgba(0,0,0,0.2);
     }
 
     /* Mobile Image Carousel */
     .carousel-container {
-        height: 220px !important;
-        border-radius: 8px;
+        height: 250px !important;
+        border-radius: 12px;
         overflow: hidden;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        width: 100%;
     }
 
     .carousel-container img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
+        background: #f8f9fa;
     }
 
     .carousel-btn {
-        width: 35px !important;
-        height: 35px !important;
-        padding: 8px !important;
-        font-size: 14px !important;
+        width: 40px !important;
+        height: 40px !important;
+        padding: 10px !important;
+        font-size: 16px !important;
+        background: rgba(0,0,0,0.7) !important;
+        border: none !important;
+        border-radius: 50% !important;
+        color: white !important;
+        cursor: pointer !important;
     }
 
     .carousel-indicators {
-        bottom: 8px !important;
+        bottom: 12px !important;
     }
 
     .carousel-indicators button {
-        width: 8px !important;
-        height: 8px !important;
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+        border: 2px solid white !important;
+        cursor: pointer !important;
     }
 
     /* Project Details Mobile */
@@ -1994,6 +2028,8 @@ section:last-of-type {
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
 }
 
 .modal-overlay {
@@ -2002,22 +2038,23 @@ section:last-of-type {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
+    background: transparent;
 }
 
 .modal-content {
     position: relative;
     background: white;
     border-radius: 20px;
-    max-width: 800px;
+    max-width: 850px;
     max-height: 90vh;
     overflow-y: auto;
-    margin: 0;
+    margin: auto;
     animation: modalSlideIn 0.3s ease;
     width: 100%;
     padding: 2rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-close {
