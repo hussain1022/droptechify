@@ -565,10 +565,10 @@ function handleMultipleImageUpload(input) {
             return;
         }
         
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            console.warn(`❌ File ${file.name} is too large (max 5MB)`);
-            showMessage(`Image ${file.name} is too large. Max size is 5MB.`, 'error');
+        // Validate file size (max 15MB)
+        if (file.size > 15 * 1024 * 1024) {
+            console.warn(`❌ File ${file.name} is too large (max 15MB)`);
+            showMessage(`Image ${file.name} is too large. Max size is 15MB.`, 'error');
             processedCount++;
             if (processedCount === files.length) {
                 finishImageProcessing(imageUrls);
@@ -576,28 +576,41 @@ function handleMultipleImageUpload(input) {
             return;
         }
         
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            imageUrls[index] = e.target.result;
-            processedCount++;
+        // Compress image if larger than 8MB
+        if (file.size > 8 * 1024 * 1024) {
+            compressImage(file, (compressedDataUrl) => {
+                imageUrls[index] = compressedDataUrl;
+                processedCount++;
+                console.log(`✅ Compressed and processed image ${processedCount}/${files.length}`);
+                
+                if (processedCount === files.length) {
+                    finishImageProcessing(imageUrls);
+                }
+            });
+        } else {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imageUrls[index] = e.target.result;
+                processedCount++;
+                
+                console.log(`✅ Processed image ${processedCount}/${files.length}`);
+                
+                // When all files are processed
+                if (processedCount === files.length) {
+                    finishImageProcessing(imageUrls);
+                }
+            };
             
-            console.log(`✅ Processed image ${processedCount}/${files.length}`);
+            reader.onerror = function() {
+                console.error(`❌ Error reading file ${file.name}`);
+                processedCount++;
+                if (processedCount === files.length) {
+                    finishImageProcessing(imageUrls);
+                }
+            };
             
-            // When all files are processed
-            if (processedCount === files.length) {
-                finishImageProcessing(imageUrls);
-            }
-        };
-        
-        reader.onerror = function() {
-            console.error(`❌ Error reading file ${file.name}`);
-            processedCount++;
-            if (processedCount === files.length) {
-                finishImageProcessing(imageUrls);
-            }
-        };
-        
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        }
     });
 }
 
@@ -699,6 +712,24 @@ function removeImage(index) {
     displayImagePreviews(imageUrls);
 }
 
+// Handle dropped files
+function handleDroppedFiles(event) {
+    const files = Array.from(event.dataTransfer.files);
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    
+    if (imageFiles.length === 0) {
+        showMessage('Please drop only image files', 'error');
+        return;
+    }
+    
+    // Create a fake input element to reuse existing upload function
+    const fakeInput = {
+        files: imageFiles
+    };
+    
+    handleMultipleImageUpload(fakeInput);
+}
+
 // Clear all images
 function clearAllImages() {
     document.getElementById('project-images').value = '';
@@ -707,6 +738,52 @@ function clearAllImages() {
 }
 
 
+
+// Image compression function
+function compressImage(file, callback, quality = 0.8) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = function() {
+        // Calculate new dimensions (max 1920x1080)
+        let { width, height } = img;
+        const maxWidth = 1920;
+        const maxHeight = 1080;
+        
+        if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            width *= ratio;
+            height *= ratio;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Convert to data URL with compression
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        callback(compressedDataUrl);
+    };
+    
+    img.onerror = function() {
+        console.error('Error loading image for compression');
+        // Fallback to original file
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            callback(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    };
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
 // Make functions globally available
 window.showSection = showSection;
@@ -717,6 +794,7 @@ window.deleteReview = deleteReview;
 window.logout = logout;
 window.saveSettings = saveSettings;
 window.handleMultipleImageUpload = handleMultipleImageUpload;
+window.handleDroppedFiles = handleDroppedFiles;
 window.clearAllImages = clearAllImages;
 window.removeImage = removeImage;
 
