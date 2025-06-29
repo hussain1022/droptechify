@@ -483,14 +483,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="project-category">Category</label>
-                                <select id="project-category" required>
-                                    <option value="">Select Category</option>
-                                    <option value="python">Python Development</option>
-                                    <option value="web-scraping">Web Scraping</option>
-                                    <option value="bot">Bot Development</option>
-                                    <option value="web-dev">Web Development</option>
-                                    <option value="automation">Automation</option>
-                                </select>
+                                <input type="text" id="project-category" required placeholder="Enter project category (e.g., Python Development, Web Scraping, Bot Development)" list="category-suggestions">
+                                <datalist id="category-suggestions">
+                                    <option value="Python Development">
+                                    <option value="Web Scraping">
+                                    <option value="Bot Development">
+                                    <option value="Web Development">
+                                    <option value="Automation">
+                                    <option value="AI/ML Development">
+                                    <option value="Data Analysis">
+                                    <option value="API Development">
+                                    <option value="Mobile App Development">
+                                    <option value="Desktop Application">
+                                </datalist>
                             </div>
                         </div>
 
@@ -521,15 +526,20 @@
 
                         <div class="form-group">
                             <label for="project-images">Project Images</label>
-                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                <input type="file" id="project-images-file" accept="image/*" multiple onchange="handleMultipleImageUpload(this)" style="flex: 1;">
-                                <button type="button" onclick="document.getElementById('project-images-file').click()" style="padding: 10px 15px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; white-space: nowrap;">
+                            <div class="image-upload-area" style="border: 2px dashed #667eea; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 10px; background: #f8f9ff; transition: all 0.3s ease;" 
+                                 ondragover="event.preventDefault(); this.style.borderColor='#5a67d8'; this.style.background='#e6f3ff';" 
+                                 ondragleave="this.style.borderColor='#667eea'; this.style.background='#f8f9ff';"
+                                 ondrop="event.preventDefault(); this.style.borderColor='#667eea'; this.style.background='#f8f9ff'; handleDroppedFiles(event);">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #667eea; margin-bottom: 10px;"></i>
+                                <p style="margin: 10px 0; color: #667eea; font-weight: 500;">Drag & Drop images here or click to browse</p>
+                                <input type="file" id="project-images-file" accept="image/*,.webp,.svg" multiple onchange="handleMultipleImageUpload(this)" style="display: none;">
+                                <button type="button" onclick="document.getElementById('project-images-file').click()" style="padding: 12px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">
                                     <i class="fas fa-upload"></i> Browse Images
                                 </button>
                             </div>
                             <textarea id="project-images" placeholder="Or enter image URLs (one per line)" rows="3" style="margin-bottom: 10px;"></textarea>
                             <div style="font-size: 12px; color: #666; margin-bottom: 10px;">
-                                📝 Tips: Upload multiple images at once. Max size: 5MB per image. Supported formats: JPG, PNG, GIF, WebP
+                                📝 Tips: Upload multiple images at once. Max size: 15MB per image. Supported formats: JPG, PNG, GIF, WebP, SVG
                             </div>
                             <div id="images-preview" style="margin-top: 15px; display: none;">
                                 <div style="margin-bottom: 10px; font-weight: 600; color: #333;">Image Preview:</div>
