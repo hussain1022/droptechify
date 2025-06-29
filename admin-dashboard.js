@@ -13,6 +13,13 @@ import {
     query,
     getDoc 
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { 
+    getStorage, 
+    ref, 
+    uploadBytes, 
+    getDownloadURL, 
+    deleteObject 
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -28,6 +35,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // Global variables
 let editingProjectId = null;
@@ -109,7 +117,7 @@ async function handleProjectSubmit(e) {
     console.log('📤 Submitting project...');
 
     const formData = new FormData(e.target);
-    // Process multiple images
+    // Process multiple images (Firebase Storage URLs)
     const imagesText = document.getElementById('project-images').value;
     const imageUrls = imagesText ? imagesText.split('\n').filter(url => url.trim()) : [];
     
@@ -125,6 +133,15 @@ async function handleProjectSubmit(e) {
         dateAdded: new Date(),
         status: 'published'
     };
+    
+    // Log project data size for debugging
+    const dataSize = JSON.stringify(projectData).length;
+    console.log(`📊 Project data size: ${dataSize} bytes (limit: ~1MB)`);
+    
+    if (dataSize > 900000) { // 900KB warning
+        console.warn('⚠️ Project data approaching 1MB limit');
+        showMessage('Warning: Project data is large. Consider reducing image URLs.', 'warning');
+    }
 
     console.log('📋 Project data:', projectData);
 
@@ -537,90 +554,97 @@ function getDefaultProjectImage(category) {
     return defaultImages[category] || defaultImages['python'];
 }
 
-// Multiple image upload handling for projects
-function handleMultipleImageUpload(input) {
+// Multiple image upload handling for projects using Firebase Storage
+async function handleMultipleImageUpload(input) {
     const files = Array.from(input.files);
     
     if (files.length === 0) return;
     
-    console.log(`📸 Processing ${files.length} images...`);
+    console.log(`📸 Uploading ${files.length} images to Firebase Storage...`);
     
     // Show loading state
     const preview = document.getElementById('images-preview');
     const container = document.getElementById('preview-container');
-    container.innerHTML = '<div style="padding: 20px; text-align: center;">Processing images...</div>';
+    container.innerHTML = '<div style="padding: 20px; text-align: center;"><i class="fas fa-spinner fa-spin"></i> Uploading images to Firebase Storage...</div>';
     preview.style.display = 'block';
     
     const imageUrls = [];
     let processedCount = 0;
+    let hasErrors = false;
     
-    files.forEach((file, index) => {
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
         // Validate file type
         if (!file.type.startsWith('image/')) {
             console.warn(`❌ File ${file.name} is not an image`);
             processedCount++;
-            if (processedCount === files.length) {
-                finishImageProcessing(imageUrls);
-            }
-            return;
+            continue;
         }
         
-        // Validate file size (max 15MB)
-        if (file.size > 15 * 1024 * 1024) {
-            console.warn(`❌ File ${file.name} is too large (max 15MB)`);
-            showMessage(`Image ${file.name} is too large. Max size is 15MB.`, 'error');
+        // Validate file size (max 10MB for Firebase Storage)
+        if (file.size > 10 * 1024 * 1024) {
+            console.warn(`❌ File ${file.name} is too large (max 10MB)`);
+            showMessage(`Image ${file.name} is too large. Max size is 10MB.`, 'error');
+            hasErrors = true;
             processedCount++;
-            if (processedCount === files.length) {
-                finishImageProcessing(imageUrls);
-            }
-            return;
+            continue;
         }
         
-        // Compress image if larger than 8MB
-        if (file.size > 8 * 1024 * 1024) {
-            compressImage(file, (compressedDataUrl) => {
-                imageUrls[index] = compressedDataUrl;
-                processedCount++;
-                console.log(`✅ Compressed and processed image ${processedCount}/${files.length}`);
-                
-                if (processedCount === files.length) {
-                    finishImageProcessing(imageUrls);
-                }
-            });
-        } else {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imageUrls[index] = e.target.result;
-                processedCount++;
-                
-                console.log(`✅ Processed image ${processedCount}/${files.length}`);
-                
-                // When all files are processed
-                if (processedCount === files.length) {
-                    finishImageProcessing(imageUrls);
-                }
-            };
+        try {
+            // Upload to Firebase Storage
+            const downloadURL = await uploadImageToFirebase(file);
+            imageUrls.push(downloadURL);
+            processedCount++;
             
-            reader.onerror = function() {
-                console.error(`❌ Error reading file ${file.name}`);
-                processedCount++;
-                if (processedCount === files.length) {
-                    finishImageProcessing(imageUrls);
-                }
-            };
+            console.log(`✅ Uploaded image ${processedCount}/${files.length}: ${file.name}`);
             
-            reader.readAsDataURL(file);
+            // Update progress
+            container.innerHTML = `<div style="padding: 20px; text-align: center;"><i class="fas fa-spinner fa-spin"></i> Uploading ${processedCount}/${files.length} images...</div>`;
+            
+        } catch (error) {
+            console.error(`❌ Error uploading ${file.name}:`, error);
+            showMessage(`Failed to upload ${file.name}: ${error.message}`, 'error');
+            hasErrors = true;
+            processedCount++;
         }
-    });
+    }
+    
+    // Finish processing
+    finishImageProcessing(imageUrls, hasErrors);
+}
+
+// Upload single image to Firebase Storage
+async function uploadImageToFirebase(file) {
+    try {
+        // Create a unique filename
+        const fileName = `projects/${Date.now()}_${Math.random().toString(36).substring(2)}_${file.name}`;
+        const imageRef = ref(storage, fileName);
+        
+        // Upload file
+        const snapshot = await uploadBytes(imageRef, file);
+        console.log('📤 Image uploaded successfully:', snapshot.metadata.name);
+        
+        // Get download URL
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log('🔗 Download URL generated:', downloadURL);
+        
+        return downloadURL;
+        
+    } catch (error) {
+        console.error('❌ Firebase Storage upload error:', error);
+        throw new Error(`Upload failed: ${error.message}`);
+    }
 }
 
 // Finish image processing
-function finishImageProcessing(imageUrls) {
+function finishImageProcessing(imageUrls, hasErrors = false) {
     // Filter out empty/null URLs
     const validImages = imageUrls.filter(url => url && url.trim());
     
     if (validImages.length === 0) {
-        showMessage('No valid images were processed.', 'error');
+        const message = hasErrors ? 'No images were uploaded due to errors.' : 'No valid images were processed.';
+        showMessage(message, 'error');
         document.getElementById('images-preview').style.display = 'none';
         return;
     }
@@ -632,13 +656,17 @@ function finishImageProcessing(imageUrls) {
     // Combine existing and new images
     const allImages = [...existingUrls, ...validImages];
     
-    // Update textarea
+    // Update textarea with Firebase URLs
     document.getElementById('project-images').value = allImages.join('\n');
     
     // Display previews
     displayImagePreviews(allImages);
     
-    showMessage(`✅ ${validImages.length} images uploaded successfully!`, 'success');
+    const message = hasErrors 
+        ? `⚠️ ${validImages.length} images uploaded (some failed)` 
+        : `✅ ${validImages.length} images uploaded to Firebase Storage!`;
+    
+    showMessage(message, hasErrors ? 'warning' : 'success');
     console.log(`📸 Total images: ${allImages.length}`);
 }
 
@@ -739,50 +767,25 @@ function clearAllImages() {
 
 
 
-// Image compression function
-function compressImage(file, callback, quality = 0.8) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    
-    img.onload = function() {
-        // Calculate new dimensions (max 1920x1080)
-        let { width, height } = img;
-        const maxWidth = 1920;
-        const maxHeight = 1080;
+// Delete image from Firebase Storage
+async function deleteImageFromFirebase(imageUrl) {
+    try {
+        // Extract file path from Firebase Storage URL
+        const url = new URL(imageUrl);
+        const pathMatch = url.pathname.match(/\/o\/(.+)\?/);
         
-        if (width > maxWidth || height > maxHeight) {
-            const ratio = Math.min(maxWidth / width, maxHeight / height);
-            width *= ratio;
-            height *= ratio;
+        if (pathMatch) {
+            const filePath = decodeURIComponent(pathMatch[1]);
+            const imageRef = ref(storage, filePath);
+            
+            await deleteObject(imageRef);
+            console.log('🗑️ Image deleted from Firebase Storage:', filePath);
+            return true;
         }
-        
-        canvas.width = width;
-        canvas.height = height;
-        
-        // Draw and compress
-        ctx.drawImage(img, 0, 0, width, height);
-        
-        // Convert to data URL with compression
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-        callback(compressedDataUrl);
-    };
-    
-    img.onerror = function() {
-        console.error('Error loading image for compression');
-        // Fallback to original file
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            callback(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    };
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+        console.error('❌ Error deleting image from Firebase Storage:', error);
+        return false;
+    }
 }
 
 // Make functions globally available
