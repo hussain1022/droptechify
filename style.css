@@ -26,7 +26,14 @@ body {
 }
 
 img {
-    will-change: transform;
+   will-change: transform;
+  padding: -15px;
+  max-height: 153px;
+  height: auto;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  margin-top: 8px;
+  padding-top: -2px;
 }
 
 .container {
