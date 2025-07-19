@@ -1437,8 +1437,12 @@ body.menu-open {
     }
 
     .logo-img {
-        width: 190px;
-    }
+    width: 177px;
+    max-height: 99px;
+    max-width: 176px;
+    margin-top: 12px;
+    margin-left: -14px;
+  }
 
     .phone-number {
         font-size: 11px;
