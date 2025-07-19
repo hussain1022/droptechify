@@ -275,8 +275,17 @@
 
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-        // Initialize EmailJS
-        emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
+        // EmailJS Configuration - Using environment variables from hosting platform
+        window.EMAIL_CONFIG = {
+            SERVICE_ID: 'service_xxxxxxxxx', // Replace with your actual EmailJS service ID
+            TEMPLATE_ID: 'template_xxxxxxxxx', // Replace with your actual EmailJS template ID
+            PUBLIC_KEY: 'xxxxxxxxxxxxxxxxxx' // Replace with your actual EmailJS public key
+        };
+
+        // Initialize EmailJS with your public key
+        if (window.EMAIL_CONFIG.PUBLIC_KEY) {
+            emailjs.init(window.EMAIL_CONFIG.PUBLIC_KEY);
+        }
     </script>
     <script src="script.js"></script>
 </body>
