@@ -707,6 +707,12 @@
         // Load portfolio projects from Firebase
         async function loadPortfolioFromFirebase() {
             try {
+                // Add timeout for Firebase loading
+                const loadingTimeout = setTimeout(() => {
+                    console.log('Firebase loading timeout, using fallback...');
+                    loadFallbackProjects();
+                }, 5000);
+
                 const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
                 const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
 
@@ -724,7 +730,9 @@
                 const db = getFirestore(app);
                 const querySnapshot = await getDocs(collection(db, 'portfolio'));
 
+                clearTimeout(loadingTimeout);
                 currentProjects = [];
+                
                 querySnapshot.forEach((doc) => {
                     currentProjects.push({
                         id: doc.id,
@@ -737,14 +745,67 @@
                 if (currentProjects.length > 0) {
                     displayProjects(currentProjects);
                 } else {
-                    document.getElementById('portfolioEmpty').style.display = 'block';
+                    loadFallbackProjects();
                 }
 
             } catch (error) {
                 console.error('Error loading portfolio:', error);
-                document.getElementById('portfolioLoading').style.display = 'none';
-                document.getElementById('portfolioEmpty').style.display = 'block';
+                loadFallbackProjects();
             }
+        }
+
+        // Fallback projects if Firebase fails
+        function loadFallbackProjects() {
+            document.getElementById('portfolioLoading').style.display = 'none';
+            
+            currentProjects = [
+                {
+                    id: 'fallback-1',
+                    title: 'E-Commerce Website',
+                    description: 'Modern responsive e-commerce platform with advanced features and seamless user experience.',
+                    image: ['https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+                    technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+                    client: 'TechCorp',
+                    status: 'Completed',
+                    category: 'Web Development',
+                    link: '#'
+                },
+                {
+                    id: 'fallback-2',
+                    title: 'Mobile Banking App',
+                    description: 'Secure and user-friendly mobile banking application with real-time transactions.',
+                    image: ['https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+                    technologies: ['React Native', 'Firebase', 'Redux'],
+                    client: 'FinanceX',
+                    status: 'Completed',
+                    category: 'Mobile Development',
+                    link: '#'
+                },
+                {
+                    id: 'fallback-3',
+                    title: 'Business Dashboard',
+                    description: 'Comprehensive business analytics dashboard with real-time data visualization.',
+                    image: ['https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+                    technologies: ['Vue.js', 'D3.js', 'Express', 'PostgreSQL'],
+                    client: 'DataCorp',
+                    status: 'Completed',
+                    category: 'Web Development',
+                    link: '#'
+                },
+                {
+                    id: 'fallback-4',
+                    title: 'Restaurant Management System',
+                    description: 'Complete restaurant management solution with POS integration and inventory tracking.',
+                    image: ['https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
+                    technologies: ['Laravel', 'MySQL', 'Bootstrap', 'jQuery'],
+                    client: 'FoodTech',
+                    status: 'Completed',
+                    category: 'Web Development',
+                    link: '#'
+                }
+            ];
+
+            displayProjects(currentProjects);
         }
 
         // Display projects in grid
