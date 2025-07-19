@@ -85,7 +85,6 @@ main {
   object-fit: contain;
   transition: transform 0.3s ease;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-  max-width: 278px;
   margin-top: 16px;
 }
 
