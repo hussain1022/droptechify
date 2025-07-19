@@ -80,12 +80,13 @@ main {
 }
 
 .logo-img {
-    width: 200px;
-    height: auto;
-    max-height: 80px;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    width: 320px;
+  height: auto;
+  /*max-height: 80px;*/
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  margin-top: 16px;
 }
 
 .logo-img:hover {
