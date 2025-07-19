@@ -8,10 +8,11 @@
 // 5. Replace the values below with your actual values
 
 const EMAIL_CONFIG = {
-    SERVICE_ID: 'your_service_id', // Replace with your EmailJS service ID
-    TEMPLATE_ID: 'your_template_id', // Replace with your EmailJS template ID
-    PUBLIC_KEY: 'your_public_key' // Replace with your EmailJS public key
+  SERVICE_ID: import.meta.env.VITE_SERVICE_ID,
+  TEMPLATE_ID: import.meta.env.VITE_TEMPLATE_ID,
+  PUBLIC_KEY: import.meta.env.VITE_PUBLIC_KEY
 };
+
 
 // Email template should include these variables:
 // {{from_name}} - Sender's name
