@@ -1301,9 +1301,9 @@ body.menu-open {
     }
 
     .logo-img {
-        width: 160px;
+        width: 220px;
         height: auto;
-        max-height: 65px;
+        max-height: 75px;
     }
 
     .phone-number {
@@ -1437,7 +1437,7 @@ body.menu-open {
     }
 
     .logo-img {
-        width: 140px;
+        width: 190px;
     }
 
     .phone-number {
