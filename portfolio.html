@@ -312,6 +312,101 @@
             color: white;
         }
 
+        /* Image Navigation Buttons */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-button:hover {
+            background: rgba(37, 99, 235, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-button {
+            left: 15px;
+        }
+
+        .next-button {
+            right: 15px;
+        }
+
+        .image-counter {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        /* Portfolio Filters - Updated Styling */
+        .portfolio-filters {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .filter-btn:hover::before,
+        .filter-btn.active::before {
+            left: 0;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: white;
+            border-color: #2563eb;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.3);
+        }
+
         /* Image Gallery */
         .image-gallery {
             margin: 30px 0;
@@ -391,6 +486,31 @@
                 flex-direction: column;
                 align-items: center;
             }
+
+            .nav-button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .prev-button {
+                left: 10px;
+            }
+
+            .next-button {
+                right: 10px;
+            }
+
+            .image-counter {
+                bottom: 10px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .filter-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
         }
 
         /* Empty State */
@@ -456,10 +576,10 @@
     <section class="content-section">
         <div class="container">
             <div class="portfolio-filters">
-                <button class="filter-btn active" data-filter="all">All Projects</button>
-                <button class="filter-btn" data-filter="web">Web Development</button>
-                <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
-                <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th-large"></i>
+                    All Projects
+                </button>
             </div>
 
             <div class="loading" id="portfolioLoading">
@@ -644,9 +764,11 @@
                 projectElement.innerHTML = `
                     <div class="portfolio-image" data-images='${JSON.stringify(images)}' data-current="0">
                         <img src="${mainImage}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x280/2563eb/ffffff?text=${encodeURIComponent(project.title)}'">
-                        <div class="image-counter">1 / ${images.length}</div>
-                        <button class="nav-button prev-button" onclick="navigateImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
-                        <button class="nav-button next-button" onclick="navigateImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
+                        ${images.length > 1 ? `
+                            <div class="image-counter">1 / ${images.length}</div>
+                            <button class="nav-button prev-button" onclick="navigateImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
+                            <button class="nav-button next-button" onclick="navigateImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
+                        ` : ''}
                         <div class="portfolio-overlay">
                             <div class="view-project-btn">
                                 <i class="fas fa-eye"></i>
@@ -797,8 +919,12 @@
                 }
             });
 
+        });
+        
         // Navigate between images in portfolio items
-        function navigateImage(button, direction) {
+        window.navigateImage = function(button, direction) {
+            event.stopPropagation();
+            
             const portfolioImage = button.closest('.portfolio-image');
             const images = JSON.parse(portfolioImage.dataset.images);
             let currentIndex = parseInt(portfolioImage.dataset.current);
@@ -815,9 +941,6 @@
             img.src = images[currentIndex];
             counter.textContent = `${currentIndex + 1} / ${images.length}`;
             portfolioImage.dataset.current = currentIndex;
-
-            // Prevent event bubbling to avoid opening modal
-            event.stopPropagation();
         }
         });
     </script>
