@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Enhanced contact form submission with email functionality
+// Enhanced contact form submission with EmailJS integration
 function handleContactFormSubmit(event) {
     event.preventDefault();
     const form = event.target;
@@ -247,45 +247,22 @@ function handleContactFormSubmit(event) {
             budget: formData.get('budget') || 'Not specified',
             timeline: formData.get('timeline') || 'Not specified',
             message: formData.get('message'),
-            to_email: 'Droptechify@gmail.com'
+            to_email: 'droptechify@gmail.com'
         };
 
-        // Send email notification
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-            .then(() => {
-                submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-                submitBtn.style.background = '#38a169';
+        // Get EmailJS config from window object (set in contact.html)
+        const serviceId = window.EMAIL_CONFIG?.SERVICE_ID;
+        const templateId = window.EMAIL_CONFIG?.TEMPLATE_ID;
 
-                // Also send WhatsApp message
-                const whatsappMessage = `New Contact Form Submission:
+        if (serviceId && templateId) {
+            // Send email notification using EmailJS
+            emailjs.send(serviceId, templateId, templateParams)
+                .then(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                    submitBtn.style.background = '#38a169';
 
-Name: ${templateParams.from_name}
-Email: ${templateParams.from_email}
-Phone: ${templateParams.phone}
-Company: ${templateParams.company}
-Service: ${templateParams.service}
-Budget: ${templateParams.budget}
-Timeline: ${templateParams.timeline}
-
-Message: ${templateParams.message}`;
-
-                const whatsappUrl = `https://wa.me/923030273718?text=${encodeURIComponent(whatsappMessage)}`;
-
-                setTimeout(() => {
-                    window.open(whatsappUrl, '_blank');
-                    form.reset();
-
-                    // Reset button
-                    setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Project Details';
-                        submitBtn.style.background = '';
-                        submitBtn.disabled = false;
-                    }, 2000);
-                }, 1000);
-            })
-            .catch(() => {
-                // Fallback to WhatsApp only if email fails
-                const whatsappMessage = `New Contact Form Submission:
+                    // Redirect to WhatsApp after successful email with user's actual message
+                    const userMessage = encodeURIComponent(`Hi DropTechify,
 
 Name: ${templateParams.from_name}
 Email: ${templateParams.from_email}
@@ -295,25 +272,86 @@ Service: ${templateParams.service}
 Budget: ${templateParams.budget}
 Timeline: ${templateParams.timeline}
 
-Message: ${templateParams.message}`;
+Message: ${templateParams.message}`);
 
-                const whatsappUrl = `https://wa.me/923030273718?text=${encodeURIComponent(whatsappMessage)}`;
+                    const whatsappUrl = `https://wa.me/923030273718?text=${userMessage}`;
 
-                submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-                submitBtn.style.background = '#38a169';
-
-                setTimeout(() => {
-                    window.open(whatsappUrl, '_blank');
-                    form.reset();
-
-                    // Reset button
                     setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Project Details';
-                        submitBtn.style.background = '';
-                        submitBtn.disabled = false;
-                    }, 2000);
-                }, 1000);
-            });
+                        window.open(whatsappUrl, '_blank');
+                        form.reset();
+
+                        // Reset button
+                        setTimeout(() => {
+                            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Project Details';
+                            submitBtn.style.background = '';
+                            submitBtn.disabled = false;
+                        }, 2000);
+                    }, 1500);
+                })
+                .catch((error) => {
+                    console.error('EmailJS Error:', error);
+                    
+                    // Fallback: Show success message and redirect to WhatsApp
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Received!';
+                    submitBtn.style.background = '#38a169';
+
+                    const userMessage = encodeURIComponent(`Hi DropTechify,
+
+Name: ${templateParams.from_name}
+Email: ${templateParams.from_email}
+Phone: ${templateParams.phone}
+Company: ${templateParams.company}
+Service: ${templateParams.service}
+Budget: ${templateParams.budget}
+Timeline: ${templateParams.timeline}
+
+Message: ${templateParams.message}`);
+
+                    const whatsappUrl = `https://wa.me/923030273718?text=${userMessage}`;
+
+                    setTimeout(() => {
+                        window.open(whatsappUrl, '_blank');
+                        form.reset();
+
+                        // Reset button
+                        setTimeout(() => {
+                            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Project Details';
+                            submitBtn.style.background = '';
+                            submitBtn.disabled = false;
+                        }, 2000);
+                    }, 1500);
+                });
+        } else {
+            // No EmailJS config found, just redirect to WhatsApp
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Received!';
+            submitBtn.style.background = '#38a169';
+
+            const userMessage = encodeURIComponent(`Hi DropTechify,
+
+Name: ${formData.get('name')}
+Email: ${formData.get('email')}
+Phone: ${formData.get('phone') || 'Not provided'}
+Company: ${formData.get('company') || 'Not provided'}
+Service: ${formData.get('service')}
+Budget: ${formData.get('budget') || 'Not specified'}
+Timeline: ${formData.get('timeline') || 'Not specified'}
+
+Message: ${formData.get('message')}`);
+
+            const whatsappUrl = `https://wa.me/923030273718?text=${userMessage}`;
+
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                form.reset();
+
+                // Reset button
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Project Details';
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }, 2000);
+            }, 1500);
+        }
     } else {
         submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please fix errors';
         submitBtn.style.background = '#e53e3e';
